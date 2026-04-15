@@ -1,0 +1,5 @@
+# Runtime dependencies
+# (none — uses only the Python 3.11+ stdlib)
+
+# Test/dev dependencies
+pytest>=7.0

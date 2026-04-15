@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kalshi-recommender"
+version = "0.1.0"
+description = "Identify the most interesting open Kalshi bets and explain how to (hypothetically) place them."
+requires-python = ">=3.11"
+authors = [{ name = "Avi" }]
+readme = "README.md"
+license = { text = "MIT" }
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[project.scripts]
+kalshi-recommender = "kalshi_recommender.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["kalshi_recommender*"]
+
+[tool.setuptools.package-data]
+"kalshi_recommender.data" = ["*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
