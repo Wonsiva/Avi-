@@ -5,7 +5,11 @@ from __future__ import annotations
 import argparse
 import sys
 
-from .formatter import format_recommendations
+from .formatter import (
+    format_recommendations,
+    format_recommendations_html,
+    format_recommendations_json,
+)
 from .kalshi_client import (
     DEFAULT_BASE_URL,
     DEFAULT_TIMEOUT,
@@ -15,6 +19,12 @@ from .kalshi_client import (
     filter_tradable,
 )
 from .scoring import score_markets
+
+FORMATTERS = {
+    "text": format_recommendations,
+    "html": format_recommendations_html,
+    "json": format_recommendations_json,
+}
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -72,6 +82,18 @@ def _build_parser() -> argparse.ArgumentParser:
             "API (handy for offline demos and CI)"
         ),
     )
+    parser.add_argument(
+        "--format",
+        choices=sorted(FORMATTERS),
+        default="text",
+        help="output format: text (default), html, or json",
+    )
+    parser.add_argument(
+        "--output",
+        "-o",
+        default=None,
+        help="write output to this file instead of stdout",
+    )
     return parser
 
 
@@ -102,10 +124,17 @@ def main(argv: list[str] | None = None) -> int:
         tradable, top=args.top, min_volume=args.min_volume
     )
     header = (
-        f"Kalshi bet recommender — analyzed {len(tradable):,} tradable "
-        f"markets from {source}."
+        f"Analyzed {len(tradable):,} tradable Kalshi markets from {source}."
     )
-    print(format_recommendations(bets, stake_dollars=args.stake, header=header))
+    formatter = FORMATTERS[args.format]
+    rendered = formatter(bets, stake_dollars=args.stake, header=header)
+    if args.output:
+        with open(args.output, "w", encoding="utf-8") as fh:
+            fh.write(rendered)
+            if not rendered.endswith("\n"):
+                fh.write("\n")
+    else:
+        print(rendered)
     return 0
 
 
