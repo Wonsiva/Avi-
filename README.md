@@ -33,6 +33,13 @@ hypothetical step-by-step instructions for placing each one.
 5. Prints the top picks with category, price, payout multiple, volume,
    and a numbered hypothetical action plan including a direct Kalshi URL.
 
+## I just want to look at the picks
+
+There is a pre-rendered HTML page at [`docs/index.html`](docs/index.html).
+Once you enable GitHub Pages on this repo (one click — see
+**[Publishing the page at a public URL](#publishing-the-page-at-a-public-url)**
+below), that page becomes a real website that auto-refreshes every morning.
+
 ## Install
 
 ```bash
@@ -74,6 +81,18 @@ python -m kalshi_recommender.cli --sample
 | `--base-url URL` | api.elections.kalshi.com | Override the API base URL |
 | `--timeout S` | 10 | HTTP timeout in seconds |
 | `--sample` | off | Use bundled sample data instead of calling the API |
+| `--format` | text | Output format: `text`, `html`, or `json` |
+| `--output PATH` | stdout | Write the output to a file instead of stdout |
+
+### Other output formats
+
+```bash
+# Generate the styled webpage
+kalshi-recommender --format html --output docs/index.html
+
+# Get the raw recommendations as JSON for downstream automation
+kalshi-recommender --format json
+```
 
 ### Example output
 
@@ -101,15 +120,53 @@ Top 3 most interesting Kalshi bets (hypothetical $10 stake per bet)
 [... #2, #3 ...]
 ```
 
+## Publishing the page at a public URL
+
+The repo includes a pre-rendered `docs/index.html` and a GitHub Actions
+workflow (`.github/workflows/refresh-recommendations.yml`) that re-runs
+the recommender every day at **12:00 UTC** and commits the updated page.
+
+To make the page live at a real URL — **one-time setup, no signup, no
+paid services**:
+
+1. Open the repository on github.com.
+2. Click **Settings → Pages** in the left sidebar.
+3. Under **Build and deployment → Source**, choose **Deploy from a branch**.
+4. Set the branch to **`main`** and the folder to **`/docs`**, then click
+   **Save**.
+5. Wait ~30 seconds. GitHub will show the published URL at the top of the
+   same Pages settings page (it looks like
+   `https://<your-username>.github.io/<repo-name>/`).
+
+After the page is live:
+
+* The scheduled workflow refreshes `docs/index.html` daily.
+* You can also click **Actions → Refresh recommendations → Run workflow**
+  to update it on demand. (This is GitHub Actions' built-in
+  `workflow_dispatch` trigger — no extra services required.)
+* Pull requests automatically run the test suite via
+  `.github/workflows/tests.yml`.
+
+> **Note:** GitHub Pages is free for **public** repos. If your repo is
+> private it requires a GitHub Pro/Team plan; in that case run
+> `kalshi-recommender --format html --output index.html` locally and
+> open the file in your browser instead.
+
 ## Project layout
 
 ```
 kalshi_recommender/
   kalshi_client.py    # urllib-based public API client + offline sample loader
   scoring.py          # ranking algorithm (interestingness × liquidity × urgency)
-  formatter.py        # human-friendly report with hypothetical instructions
-  cli.py              # argparse entry point
+  formatter.py        # text / HTML / JSON renderers with action plans
+  cli.py              # argparse entry point with --format and --output
   data/sample_markets.json
+docs/
+  index.html          # pre-rendered, served via GitHub Pages
+  recommendations.json  # (created by the scheduled workflow)
+.github/workflows/
+  refresh-recommendations.yml  # daily re-render of docs/index.html
+  tests.yml                    # pytest on push and PR
 tests/
   test_scoring.py
   test_formatter.py

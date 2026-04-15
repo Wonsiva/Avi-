@@ -1,0 +1,98 @@
+{
+  "generated_at": "2026-04-15T05:18:31+00:00",
+  "header": "Analyzed 15 tradable Kalshi markets from bundled sample data.",
+  "stake_dollars": 10.0,
+  "disclaimer": "This tool is for educational/research purposes only. It does not place real orders, is not investment advice, and the scoring heuristic does not predict outcomes. Always do your own research before risking money.",
+  "recommendations": [
+    {
+      "rank": 1,
+      "ticker": "JOBS-26MAY-200K",
+      "event_ticker": "JOBS-26MAY",
+      "title": "Will the May 2026 nonfarm payrolls report come in above 200K?",
+      "category": "Economics",
+      "side": "YES",
+      "price_cents": 38,
+      "implied_probability": 0.38,
+      "payout_multiple": 1.6316,
+      "profit_per_contract_cents": 62,
+      "volume": 4400,
+      "open_interest": 1900,
+      "close_time": "2026-06-05T12:30:00Z",
+      "score": 0.6625,
+      "components": {
+        "interestingness": 0.6489,
+        "liquidity": 0.9853,
+        "urgency": 1.0363
+      },
+      "market_url": "https://kalshi.com/markets/jobs-26may/jobs-26may-200k",
+      "plan": {
+        "stake_dollars": 10.0,
+        "contracts": 26,
+        "cost_dollars": 9.88,
+        "payout_dollars_if_win": 26.0,
+        "profit_dollars_if_win": 16.12,
+        "loss_dollars_if_lose": 9.88
+      }
+    },
+    {
+      "rank": 2,
+      "ticker": "CPI-26MAY-3.0",
+      "event_ticker": "CPI-26MAY",
+      "title": "Will May 2026 CPI year-over-year print above 3.0%?",
+      "category": "Economics",
+      "side": "YES",
+      "price_cents": 35,
+      "implied_probability": 0.35,
+      "payout_multiple": 1.8571,
+      "profit_per_contract_cents": 65,
+      "volume": 7200,
+      "open_interest": 3300,
+      "close_time": "2026-06-11T13:30:00Z",
+      "score": 0.6608,
+      "components": {
+        "interestingness": 0.6535,
+        "liquidity": 1.0,
+        "urgency": 1.0111
+      },
+      "market_url": "https://kalshi.com/markets/cpi-26may/cpi-26may-3.0",
+      "plan": {
+        "stake_dollars": 10.0,
+        "contracts": 28,
+        "cost_dollars": 9.8,
+        "payout_dollars_if_win": 28.0,
+        "profit_dollars_if_win": 18.2,
+        "loss_dollars_if_lose": 9.8
+      }
+    },
+    {
+      "rank": 3,
+      "ticker": "FEDRATE-26JUN-CUT25",
+      "event_ticker": "FEDRATE-26JUN",
+      "title": "Will the Federal Reserve cut rates by 25bps at the June 2026 meeting?",
+      "category": "Economics",
+      "side": "YES",
+      "price_cents": 28,
+      "implied_probability": 0.28,
+      "payout_multiple": 2.5714,
+      "profit_per_contract_cents": 72,
+      "volume": 18420,
+      "open_interest": 9210,
+      "close_time": "2026-06-17T19:00:00Z",
+      "score": 0.6578,
+      "components": {
+        "interestingness": 0.6578,
+        "liquidity": 1.0,
+        "urgency": 1.0
+      },
+      "market_url": "https://kalshi.com/markets/fedrate-26jun/fedrate-26jun-cut25",
+      "plan": {
+        "stake_dollars": 10.0,
+        "contracts": 35,
+        "cost_dollars": 9.8,
+        "payout_dollars_if_win": 35.0,
+        "profit_dollars_if_win": 25.2,
+        "loss_dollars_if_lose": 9.8
+      }
+    }
+  ]
+}

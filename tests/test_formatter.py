@@ -2,7 +2,14 @@
 
 from __future__ import annotations
 
-from kalshi_recommender.formatter import DISCLAIMER, format_recommendations
+import json
+
+from kalshi_recommender.formatter import (
+    DISCLAIMER,
+    format_recommendations,
+    format_recommendations_html,
+    format_recommendations_json,
+)
 from kalshi_recommender.scoring import ScoredBet
 
 
@@ -66,3 +73,67 @@ def test_format_uses_market_url():
     bet = make_bet(ticker="FEDRATE-25DEC-T4.25", event_ticker="FEDRATE-25DEC")
     out = format_recommendations([bet], stake_dollars=5)
     assert "https://kalshi.com/markets/fedrate-25dec/fedrate-25dec-t4.25" in out
+
+
+# ---------------------------- HTML formatter --------------------------------
+
+def test_html_is_self_contained_and_renders_each_bet():
+    bets = [make_bet(ticker="A"), make_bet(ticker="B")]
+    out = format_recommendations_html(bets, stake_dollars=10)
+    assert out.startswith("<!doctype html>")
+    assert "<style>" in out  # styles inlined, no external dependency
+    assert "BUY YES" in out
+    assert ">A<" in out and ">B<" in out
+    assert DISCLAIMER in out
+
+
+def test_html_handles_empty_list():
+    out = format_recommendations_html([], stake_dollars=10)
+    assert "No tradable Kalshi markets" in out
+    assert DISCLAIMER in out
+
+
+def test_html_escapes_user_visible_strings():
+    bet = make_bet(title="Will <script>alert('xss')</script> happen?")
+    out = format_recommendations_html([bet], stake_dollars=10)
+    assert "<script>alert" not in out
+    assert "&lt;script&gt;alert" in out
+
+
+def test_html_includes_market_url():
+    bet = make_bet(ticker="FEDRATE-25DEC-T4.25", event_ticker="FEDRATE-25DEC")
+    out = format_recommendations_html([bet], stake_dollars=5)
+    assert "https://kalshi.com/markets/fedrate-25dec/fedrate-25dec-t4.25" in out
+
+
+# ---------------------------- JSON formatter --------------------------------
+
+def test_json_output_is_valid_and_structured():
+    bets = [make_bet(ticker="A"), make_bet(ticker="B", side="NO", price_cents=70)]
+    raw = format_recommendations_json(bets, stake_dollars=10, header="hi")
+    payload = json.loads(raw)
+    assert payload["header"] == "hi"
+    assert payload["stake_dollars"] == 10
+    assert payload["disclaimer"] == DISCLAIMER
+    assert len(payload["recommendations"]) == 2
+    first = payload["recommendations"][0]
+    for key in (
+        "rank",
+        "ticker",
+        "side",
+        "price_cents",
+        "implied_probability",
+        "payout_multiple",
+        "market_url",
+        "plan",
+    ):
+        assert key in first
+    assert first["plan"]["contracts"] >= 1
+    assert first["plan"]["cost_dollars"] > 0
+
+
+def test_json_empty_recommendations():
+    raw = format_recommendations_json([], stake_dollars=10)
+    payload = json.loads(raw)
+    assert payload["recommendations"] == []
+    assert payload["disclaimer"] == DISCLAIMER
