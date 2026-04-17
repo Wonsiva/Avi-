@@ -62,25 +62,25 @@ async function getMe(accessToken) {
 }
 
 /**
- * Call Spotify's /recommendations endpoint.
+ * Search tracks with an arbitrary Spotify query string.
  *
- * Spotify limits seeds to a total of 5 across seed_artists / seed_genres /
- * seed_tracks, so the caller is responsible for keeping the combined count ≤5.
+ * Spotify's /recommendations and /audio-features endpoints were deprecated for
+ * new apps in Nov 2024, so the Search API is how we build playlists now. It
+ * supports field filters like `artist:"Name"`, `year:2022-2024`, `genre:"house"`.
  */
-async function getRecommendations(accessToken, params) {
-  const clean = Object.fromEntries(
-    Object.entries(params).filter(
-      ([, v]) => v !== undefined && v !== null && v !== ''
-    )
-  );
-
+async function searchTracks(accessToken, query, { limit = 20, offset = 0 } = {}) {
   const res = await spotifyRequest({
     method: 'get',
-    url: `${API}/recommendations`,
+    url: `${API}/search`,
     headers: { Authorization: `Bearer ${accessToken}` },
-    params: clean,
+    params: {
+      q: query,
+      type: 'track',
+      limit: Math.min(50, Math.max(1, limit)),
+      offset,
+    },
   });
-  return res.data;
+  return res.data.tracks?.items || [];
 }
 
 /** Search for an artist by name — used by Label Mode to resolve artist IDs. */
@@ -102,28 +102,6 @@ async function getTrack(accessToken, trackId) {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   return res.data;
-}
-
-/** Audio features for a batch of tracks — gives us BPM/energy for display. */
-async function getAudioFeatures(accessToken, ids) {
-  if (!ids.length) return [];
-  // API caps ids at 100 per request.
-  const chunks = [];
-  for (let i = 0; i < ids.length; i += 100) {
-    chunks.push(ids.slice(i, i + 100));
-  }
-
-  const results = [];
-  for (const chunk of chunks) {
-    const res = await spotifyRequest({
-      method: 'get',
-      url: `${API}/audio-features`,
-      headers: { Authorization: `Bearer ${accessToken}` },
-      params: { ids: chunk.join(',') },
-    });
-    results.push(...(res.data.audio_features || []));
-  }
-  return results;
 }
 
 /** Create a new playlist on the user's account. */
@@ -167,10 +145,9 @@ module.exports = {
   exchangeCodeForTokens,
   refreshAccessToken,
   getMe,
-  getRecommendations,
+  searchTracks,
   searchArtist,
   getTrack,
-  getAudioFeatures,
   createPlaylist,
   addTracksToPlaylist,
 };
