@@ -1,9 +1,13 @@
 // Tiny backend client. Always uses credentials: 'include' so the session
 // cookie gets sent along. Errors are thrown as Error objects with a `.status`
 // property so components can distinguish 401 from everything else.
+//
+// By default we use *relative* URLs — requests go to the same origin that
+// served the page, and Next.js rewrites /api/* to the Express backend. This
+// keeps cookies and CORS simple. Set NEXT_PUBLIC_API_URL only if you want to
+// hit a backend on a different origin (dev-only; breaks the sessionCookie).
 
-const BASE =
-  process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:4000';
+const BASE = process.env.NEXT_PUBLIC_API_URL || '';
 
 async function request(path, { method = 'GET', body, signal } = {}) {
   const res = await fetch(`${BASE}${path}`, {
