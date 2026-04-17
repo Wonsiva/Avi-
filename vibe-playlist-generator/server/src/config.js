@@ -23,14 +23,14 @@ if (missing.length) {
 
 module.exports = {
   port: Number(process.env.PORT) || 4000,
-  clientUrl: process.env.CLIENT_URL || 'http://localhost:3000',
+  clientUrl: process.env.CLIENT_URL || 'http://127.0.0.1:3000',
 
   spotify: {
     clientId: process.env.SPOTIFY_CLIENT_ID || '',
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET || '',
     redirectUri:
       process.env.SPOTIFY_REDIRECT_URI ||
-      'http://localhost:4000/api/auth/callback',
+      'http://127.0.0.1:4000/api/auth/callback',
 
     // Scopes we need:
     //  - user-read-private / user-read-email: profile

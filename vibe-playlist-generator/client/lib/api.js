@@ -3,7 +3,7 @@
 // property so components can distinguish 401 from everything else.
 
 const BASE =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+  process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:4000';
 
 async function request(path, { method = 'GET', body, signal } = {}) {
   const res = await fetch(`${BASE}${path}`, {
