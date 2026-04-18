@@ -19,7 +19,7 @@ from .kalshi_client import (
     KalshiError,
     filter_tradable,
 )
-from .scoring import score_markets
+from .scoring import MODES, score_markets
 
 FORMATTERS = {
     "text": format_recommendations,
@@ -77,6 +77,17 @@ def _build_parser() -> argparse.ArgumentParser:
         help="HTTP timeout in seconds for Kalshi API calls",
     )
     parser.add_argument(
+        "--mode",
+        choices=MODES,
+        default="best",
+        help=(
+            "recommendation strategy: best (balanced, category-diverse), "
+            "underdog (overlooked longshots with volume), "
+            "momentum (price movers), value (classic sweet-spot), "
+            "safe (high-probability yields). Default: best"
+        ),
+    )
+    parser.add_argument(
         "--sample",
         action="store_true",
         help=(
@@ -123,10 +134,18 @@ def main(argv: list[str] | None = None) -> int:
 
     tradable = filter_tradable(markets)
     bets = score_markets(
-        tradable, top=args.top, min_volume=args.min_volume
+        tradable, top=args.top, min_volume=args.min_volume, mode=args.mode
     )
+    mode_label = {
+        "best": "best overall",
+        "underdog": "overlooked underdogs",
+        "momentum": "momentum plays",
+        "value": "best risk-reward value",
+        "safe": "safer high-probability yields",
+    }.get(args.mode, args.mode)
     header = (
-        f"Analyzed {len(tradable):,} tradable Kalshi markets from {source}."
+        f"Analyzed {len(tradable):,} tradable Kalshi markets from {source}. "
+        f"Mode: {mode_label}."
     )
     formatter = FORMATTERS[args.format]
     rendered = formatter(bets, stake_dollars=args.stake, header=header)

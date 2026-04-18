@@ -7,7 +7,7 @@ place each bet.
 """
 
 from .kalshi_client import KalshiClient, KalshiError
-from .scoring import ScoredBet, score_markets
+from .scoring import MODES, ScoredBet, score_markets
 from .formatter import format_recommendations
 
 __all__ = [

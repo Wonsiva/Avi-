@@ -1,88 +1,94 @@
 # Kalshi Bet Recommender — Today's Top Picks
 
-> Analyzed 15 tradable Kalshi markets from bundled sample data.
+> Analyzed 23 tradable Kalshi markets from bundled sample data. Mode: best overall.
 >
 > Top 3 most interesting bets, sized for a hypothetical **$10** stake per bet.
-> Last updated: **2026-04-18 01:46 UTC**
+> Last updated: **2026-04-18 03:48 UTC**
 
 ---
 
-### #1 — Will the May 2026 nonfarm payrolls report come in above 200K?
+### #1 — Will Solana close above $500 on December 31, 2026?
 
-`JOBS-26MAY-200K` | Economics
+`SOL-500-EOY26` | Crypto
+
+> Overlooked underdog — only 11% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 8.1x payout with 11% chance of winning.
 
 | | |
 |---|---|
-| **Recommended** | BUY **YES** at **38¢** |
-| **Implied probability** | 38.0% |
-| **Potential payout** | **1.63x** your stake |
-| **Profit per contract** | 62¢ |
-| **Closes** | 2026-06-05 12:30 UTC (~48d away) |
-| **24h volume** | 4,400 contracts |
-| **Open interest** | 1,900 |
+| **Recommended** | BUY **YES** at **11¢** |
+| **Implied probability** | 11.0% |
+| **Potential payout** | **8.09x** your stake |
+| **Profit per contract** | 89¢ |
+| **Closes** | 2026-12-31 23:59 UTC (~257d away) |
+| **24h volume** | 4,800 contracts |
+| **Open interest** | 1,800 |
 
 <details>
 <summary>How to place this bet (hypothetically)</summary>
 
 1. Sign in to Kalshi at [kalshi.com](https://kalshi.com)
-2. Open the market: [JOBS-26MAY-200K](https://kalshi.com/markets/jobs-26may/jobs-26may-200k)
-3. Place a **YES** limit order for **26** contracts at **38¢** each (total cost **$9.88**)
-4. If it resolves **YES** → you receive **$26.00** (profit $16.12, a 1.63x return)
-5. If it resolves **NO** → contracts expire worthless (loss $9.88)
+2. Open the market: [SOL-500-EOY26](https://kalshi.com/markets/sol-eoy26/sol-500-eoy26)
+3. Place a **YES** limit order for **90** contracts at **11¢** each (total cost **$9.90**)
+4. If it resolves **YES** → you receive **$90.00** (profit $80.10, a 8.09x return)
+5. If it resolves **NO** → contracts expire worthless (loss $9.90)
 
 </details>
 
 ---
 
-### #2 — Will May 2026 CPI year-over-year print above 3.0%?
+### #2 — Will the WHO declare a new Public Health Emergency of International Concern in 2026?
 
-`CPI-26MAY-3.0` | Economics
+`WHO-PANDEMIC-26` | Health
+
+> Overlooked underdog — only 21% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; strong risk-reward sweet spot at 3.8x payout with 21% chance of winning.
 
 | | |
 |---|---|
-| **Recommended** | BUY **YES** at **35¢** |
-| **Implied probability** | 35.0% |
-| **Potential payout** | **1.86x** your stake |
-| **Profit per contract** | 65¢ |
-| **Closes** | 2026-06-11 13:30 UTC (~54d away) |
-| **24h volume** | 7,200 contracts |
-| **Open interest** | 3,300 |
+| **Recommended** | BUY **YES** at **21¢** |
+| **Implied probability** | 21.0% |
+| **Potential payout** | **3.76x** your stake |
+| **Profit per contract** | 79¢ |
+| **Closes** | 2026-12-31 23:59 UTC (~257d away) |
+| **24h volume** | 5,600 contracts |
+| **Open interest** | 2,300 |
 
 <details>
 <summary>How to place this bet (hypothetically)</summary>
 
 1. Sign in to Kalshi at [kalshi.com](https://kalshi.com)
-2. Open the market: [CPI-26MAY-3.0](https://kalshi.com/markets/cpi-26may/cpi-26may-3.0)
-3. Place a **YES** limit order for **28** contracts at **35¢** each (total cost **$9.80**)
-4. If it resolves **YES** → you receive **$28.00** (profit $18.20, a 1.86x return)
-5. If it resolves **NO** → contracts expire worthless (loss $9.80)
+2. Open the market: [WHO-PANDEMIC-26](https://kalshi.com/markets/who-health-26/who-pandemic-26)
+3. Place a **YES** limit order for **47** contracts at **21¢** each (total cost **$9.87**)
+4. If it resolves **YES** → you receive **$47.00** (profit $37.13, a 3.76x return)
+5. If it resolves **NO** → contracts expire worthless (loss $9.87)
 
 </details>
 
 ---
 
-### #3 — Will the Federal Reserve cut rates by 25bps at the June 2026 meeting?
+### #3 — Will U.S. Q2 2026 GDP growth come in negative (recession signal)?
 
-`FEDRATE-26JUN-CUT25` | Economics
+`GDP-26Q2-NEGATIVE` | Economics
+
+> Overlooked underdog — only 14% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 6.1x payout with 14% chance of winning.
 
 | | |
 |---|---|
-| **Recommended** | BUY **YES** at **28¢** |
-| **Implied probability** | 28.0% |
-| **Potential payout** | **2.57x** your stake |
-| **Profit per contract** | 72¢ |
-| **Closes** | 2026-06-17 19:00 UTC (~60d away) |
-| **24h volume** | 18,420 contracts |
-| **Open interest** | 9,210 |
+| **Recommended** | BUY **YES** at **14¢** |
+| **Implied probability** | 14.0% |
+| **Potential payout** | **6.14x** your stake |
+| **Profit per contract** | 86¢ |
+| **Closes** | 2026-07-30 12:30 UTC (~103d away) |
+| **24h volume** | 11,300 contracts |
+| **Open interest** | 5,100 |
 
 <details>
 <summary>How to place this bet (hypothetically)</summary>
 
 1. Sign in to Kalshi at [kalshi.com](https://kalshi.com)
-2. Open the market: [FEDRATE-26JUN-CUT25](https://kalshi.com/markets/fedrate-26jun/fedrate-26jun-cut25)
-3. Place a **YES** limit order for **35** contracts at **28¢** each (total cost **$9.80**)
-4. If it resolves **YES** → you receive **$35.00** (profit $25.20, a 2.57x return)
-5. If it resolves **NO** → contracts expire worthless (loss $9.80)
+2. Open the market: [GDP-26Q2-NEGATIVE](https://kalshi.com/markets/gdp-26q2/gdp-26q2-negative)
+3. Place a **YES** limit order for **71** contracts at **14¢** each (total cost **$9.94**)
+4. If it resolves **YES** → you receive **$71.00** (profit $61.06, a 6.14x return)
+5. If it resolves **NO** → contracts expire worthless (loss $9.94)
 
 </details>
 

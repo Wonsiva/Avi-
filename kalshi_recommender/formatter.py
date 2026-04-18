@@ -88,6 +88,8 @@ def _format_bet_text(rank: int, bet: ScoredBet, stake_dollars: float) -> str:
     lines.append(f"#{rank}  {bet.ticker}  —  {bet.title}")
     if bet.category:
         lines.append(f"      Category: {bet.category}")
+    if bet.narrative:
+        lines.append(f"      Why: {bet.narrative}")
     lines.append(
         f"      Recommended: BUY {bet.side} at {bet.price_cents}¢ "
         f"(implied probability {bet.implied_probability_pct:.1f}%)"
@@ -98,14 +100,17 @@ def _format_bet_text(rank: int, bet: ScoredBet, stake_dollars: float) -> str:
     )
     lines.append(f"      Market closes: {_format_close_time(bet.close_time)}")
     lines.append(
-        f"      24h volume: {bet.volume:,} contracts  |  "
+        f"      Volume: {bet.volume:,} ({bet.volume_24h:,} last 24h)  |  "
         f"open interest: {bet.open_interest:,}"
     )
+    signals = bet.signals or {}
     lines.append(
         f"      Score: {bet.score:.3f} "
-        f"(interestingness {bet.components.get('interestingness', 0):.2f}, "
-        f"liquidity {bet.components.get('liquidity', 0):.2f}, "
-        f"urgency {bet.components.get('urgency', 0):.2f})"
+        f"(value {signals.get('value', 0):.2f}, "
+        f"underdog {signals.get('underdog', 0):.2f}, "
+        f"momentum {signals.get('momentum', 0):.2f}, "
+        f"activity {signals.get('activity', 0):.2f}, "
+        f"spread {signals.get('spread', 0):.2f})"
     )
     lines.append("")
     lines.append("      How to place this bet (hypothetically):")
@@ -177,10 +182,13 @@ def _bet_to_dict(rank: int, bet: ScoredBet, stake_dollars: float) -> dict:
         "payout_multiple": round(bet.payout_multiple, 4),
         "profit_per_contract_cents": bet.profit_per_contract_cents,
         "volume": bet.volume,
+        "volume_24h": bet.volume_24h,
         "open_interest": bet.open_interest,
         "close_time": bet.close_time,
         "score": round(bet.score, 4),
-        "components": {k: round(v, 4) for k, v in bet.components.items()},
+        "signals": {k: round(v, 4) for k, v in bet.signals.items()},
+        "narrative": bet.narrative,
+        "mode": bet.mode,
         "market_url": plan["market_url"],
         "plan": {
             "stake_dollars": stake_dollars,
@@ -262,6 +270,8 @@ h1 { margin: 0 0 8px; font-size: 28px; }
 .plan li { margin: 4px 0; font-size: 14px; }
 .plan a { color: var(--accent); text-decoration: none; word-break: break-all; }
 .plan a:hover { text-decoration: underline; }
+.narrative { background: linear-gradient(135deg, #1e3a5f, #1e293b); border-left: 3px solid var(--accent);
+  padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 14px; line-height: 1.5; }
 .score { color: var(--muted); font-size: 12px; margin-top: 10px; }
 footer { margin-top: 32px; padding-top: 18px; border-top: 1px solid var(--border);
   color: var(--muted); font-size: 13px; }
@@ -275,6 +285,7 @@ def _format_bet_html(rank: int, bet: ScoredBet, stake_dollars: float) -> str:
     ticker = html.escape(bet.ticker)
     category = html.escape(bet.category) if bet.category else ""
     market_url = html.escape(plan["market_url"], quote=True)
+    narrative = html.escape(bet.narrative) if bet.narrative else ""
     other_side = plan["other_side"]
     return f"""
 <article class="bet">
@@ -288,6 +299,8 @@ def _format_bet_html(rank: int, bet: ScoredBet, stake_dollars: float) -> str:
       <span class="ticker">{ticker}</span>
     </div>
   </div>
+
+  {f'<div class="narrative">{narrative}</div>' if narrative else ''}
 
   <div class="facts">
     <div class="fact">
@@ -329,9 +342,11 @@ def _format_bet_html(rank: int, bet: ScoredBet, stake_dollars: float) -> str:
 
   <div class="score">
     Score {bet.score:.3f}
-    &middot; interestingness {bet.components.get('interestingness', 0):.2f}
-    &middot; liquidity {bet.components.get('liquidity', 0):.2f}
-    &middot; urgency {bet.components.get('urgency', 0):.2f}
+    &middot; value {bet.signals.get('value', 0):.2f}
+    &middot; underdog {bet.signals.get('underdog', 0):.2f}
+    &middot; momentum {bet.signals.get('momentum', 0):.2f}
+    &middot; activity {bet.signals.get('activity', 0):.2f}
+    &middot; spread {bet.signals.get('spread', 0):.2f}
   </div>
 </article>
 """.strip()
@@ -401,9 +416,12 @@ def _format_bet_markdown(rank: int, bet: ScoredBet, stake_dollars: float) -> str
     category = f" | {bet.category}" if bet.category else ""
     side_emoji = "+" if bet.side == "YES" else "-"
 
+    narrative = bet.narrative or ""
     return f"""### #{rank} — {bet.title}
 
 `{bet.ticker}`{category}
+
+> {narrative}
 
 | | |
 |---|---|
