@@ -3,9 +3,10 @@
 Three output formats are supported so the same recommender can drive a CLI,
 a static webpage, and downstream automation:
 
-* :func:`format_recommendations`        – plain text report
-* :func:`format_recommendations_html`   – self-contained HTML page
-* :func:`format_recommendations_json`   – machine-readable JSON
+* :func:`format_recommendations`            – plain text report
+* :func:`format_recommendations_html`       – self-contained HTML page
+* :func:`format_recommendations_json`       – machine-readable JSON
+* :func:`format_recommendations_markdown`   – GitHub-flavored Markdown
 
 All three formats include an explicit educational-only disclaimer; the app
 never connects to a brokerage and never moves money.
@@ -387,3 +388,79 @@ def format_recommendations_html(
 </body>
 </html>
 """
+
+
+# --------------------------------------------------------------------------- #
+# Markdown format (renders on GitHub's repo page — no Pages setup needed)     #
+# --------------------------------------------------------------------------- #
+
+def _format_bet_markdown(rank: int, bet: ScoredBet, stake_dollars: float) -> str:
+    plan = _bet_plan(bet, stake_dollars)
+    other_side = plan["other_side"]
+    market_url = plan["market_url"]
+    category = f" | {bet.category}" if bet.category else ""
+    side_emoji = "+" if bet.side == "YES" else "-"
+
+    return f"""### #{rank} — {bet.title}
+
+`{bet.ticker}`{category}
+
+| | |
+|---|---|
+| **Recommended** | BUY **{bet.side}** at **{bet.price_cents}¢** |
+| **Implied probability** | {bet.implied_probability_pct:.1f}% |
+| **Potential payout** | **{bet.payout_multiple:.2f}x** your stake |
+| **Profit per contract** | {bet.profit_per_contract_cents}¢ |
+| **Closes** | {_format_close_time(bet.close_time)} |
+| **24h volume** | {bet.volume:,} contracts |
+| **Open interest** | {bet.open_interest:,} |
+
+<details>
+<summary>How to place this bet (hypothetically)</summary>
+
+1. Sign in to Kalshi at [kalshi.com](https://kalshi.com)
+2. Open the market: [{bet.ticker}]({market_url})
+3. Place a **{bet.side}** limit order for **{plan['contracts']}** contracts at **{bet.price_cents}¢** each (total cost **${plan['cost_dollars']:.2f}**)
+4. If it resolves **{bet.side}** → you receive **${plan['payout_dollars']:.2f}** (profit ${plan['profit_dollars']:.2f}, a {bet.payout_multiple:.2f}x return)
+5. If it resolves **{other_side}** → contracts expire worthless (loss ${plan['cost_dollars']:.2f})
+
+</details>"""
+
+
+def format_recommendations_markdown(
+    bets: Iterable[ScoredBet],
+    *,
+    stake_dollars: float = 10.0,
+    header: str | None = None,
+) -> str:
+    """Format the ranked list of bets as GitHub-flavored Markdown."""
+    bets = list(bets)
+    generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    out: list[str] = []
+
+    out.append("# Kalshi Bet Recommender — Today's Top Picks")
+    out.append("")
+    if header:
+        out.append(f"> {header}")
+        out.append(">")
+    out.append(
+        f"> Top {len(bets)} most interesting bets, "
+        f"sized for a hypothetical **${stake_dollars:.0f}** stake per bet."
+    )
+    out.append(f"> Last updated: **{generated}**")
+    out.append("")
+
+    if not bets:
+        out.append("No tradable Kalshi markets matched the current filters.")
+    else:
+        out.append("---")
+        out.append("")
+        for i, bet in enumerate(bets, start=1):
+            out.append(_format_bet_markdown(i, bet, stake_dollars))
+            out.append("")
+            out.append("---")
+            out.append("")
+
+    out.append(f"*{DISCLAIMER}*")
+    out.append("")
+    return "\n".join(out)
