@@ -65,16 +65,24 @@ jobs:
               || kalshi-recommender --sample --format json --output docs/recommendations.json
           fi
           touch docs/.nojekyll
+          # Also update PICKS.md at the repo root so the picks are visible
+          # directly on the GitHub repo page (no Pages setup needed).
+          if [ "${USE_SAMPLE:-false}" = "true" ]; then
+            kalshi-recommender --sample --format markdown --output PICKS.md
+          else
+            kalshi-recommender --format markdown --output PICKS.md \
+              || kalshi-recommender --sample --format markdown --output PICKS.md
+          fi
 
       - name: Commit if changed
         run: |
           set -euo pipefail
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet docs/; then
-            echo "No changes to docs/; nothing to commit."
+          if git diff --quiet docs/ PICKS.md; then
+            echo "No changes; nothing to commit."
             exit 0
           fi
-          git add docs/
+          git add docs/ PICKS.md
           git commit -m "Refresh Kalshi recommendations ($(date -u +%Y-%m-%dT%H:%MZ))"
           git push

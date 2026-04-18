@@ -9,6 +9,7 @@ from .formatter import (
     format_recommendations,
     format_recommendations_html,
     format_recommendations_json,
+    format_recommendations_markdown,
 )
 from .kalshi_client import (
     DEFAULT_BASE_URL,
@@ -24,6 +25,7 @@ FORMATTERS = {
     "text": format_recommendations,
     "html": format_recommendations_html,
     "json": format_recommendations_json,
+    "markdown": format_recommendations_markdown,
 }
 
 

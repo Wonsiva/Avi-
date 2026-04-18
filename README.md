@@ -1,5 +1,7 @@
 # Kalshi bet recommender
 
+## [View Today's Top Picks](PICKS.md)
+
 A tiny Python app that pulls live market data from [Kalshi](https://kalshi.com),
 ranks every open binary market by an "upside relative to likelihood"
 heuristic, and prints the **top 3 most interesting bets** along with
