@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avi Snow — Spotify Outreach</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 11.8C10.3 11 13.7 10.8 16 12M9 15c1.8-.7 4.2-.7 6 0M10 8.5c1.3-.4 3.7-.4 5 0"/></svg>
+      Avi Snow · Outreach
+    </div>
+    <nav>
+      <button class="tab-btn active" data-tab="curators">Curator Finder</button>
+      <button class="tab-btn" data-tab="tracker">Outreach Tracker</button>
+      <button class="tab-btn" data-tab="blogs">Blogs &amp; Platforms</button>
+      <button class="tab-btn" data-tab="analytics">Analytics</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ── Curator Finder ── -->
+    <section id="tab-curators" class="tab-panel active">
+      <div class="panel-header">
+        <div>
+          <h2>Curator Finder</h2>
+          <p class="subtitle">Find playlist curators on Spotify who feature similar artists</p>
+        </div>
+        <div class="search-bar">
+          <input id="artist-input" type="text" value="Avi Snow" placeholder="Artist name" />
+          <button id="search-btn" class="btn-primary">Search</button>
+        </div>
+      </div>
+
+      <div id="artist-card" class="artist-card hidden"></div>
+      <div id="curator-status" class="status-msg"></div>
+
+      <div id="curator-results" class="hidden">
+        <div class="results-toolbar">
+          <span id="curator-count" class="count-badge"></span>
+          <button id="save-all-btn" class="btn-secondary">Save All to Tracker</button>
+        </div>
+        <div class="table-wrap">
+          <table id="curator-table">
+            <thead>
+              <tr>
+                <th>Playlist</th>
+                <th>Curator</th>
+                <th class="right">Followers</th>
+                <th>Found via</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Outreach Tracker ── -->
+    <section id="tab-tracker" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Outreach Tracker</h2>
+          <p class="subtitle">Manage and track all your outreach efforts</p>
+        </div>
+        <button id="add-entry-btn" class="btn-primary">+ Add Entry</button>
+      </div>
+
+      <div class="filter-bar">
+        <select id="filter-status">
+          <option value="">All statuses</option>
+          <option value="identified">Identified</option>
+          <option value="contacted">Contacted</option>
+          <option value="added">Added</option>
+          <option value="declined">Declined</option>
+          <option value="no_response">No Response</option>
+        </select>
+        <select id="filter-type">
+          <option value="">All types</option>
+          <option value="playlist_curator">Playlist Curator</option>
+          <option value="blog">Blog</option>
+          <option value="platform">Platform</option>
+          <option value="community">Community</option>
+        </select>
+        <input id="filter-search" type="text" placeholder="Search by name…" />
+      </div>
+
+      <div class="table-wrap">
+        <table id="tracker-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Name</th>
+              <th>Platform</th>
+              <th>Status</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="tracker-empty" class="empty-msg hidden">No entries yet. Use the Curator Finder to get started.</p>
+    </section>
+
+    <!-- ── Blogs & Platforms ── -->
+    <section id="tab-blogs" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Blogs &amp; Platforms</h2>
+          <p class="subtitle">Recommended submission channels for music promotion</p>
+        </div>
+      </div>
+      <div id="blog-grid" class="blog-grid"></div>
+    </section>
+
+    <!-- ── Analytics ── -->
+    <section id="tab-analytics" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Analytics</h2>
+          <p class="subtitle">Track your outreach progress over time</p>
+        </div>
+      </div>
+      <div class="stats-cards" id="stats-cards"></div>
+      <div class="charts-grid">
+        <div class="chart-box">
+          <h3>By Status</h3>
+          <canvas id="chart-status"></canvas>
+        </div>
+        <div class="chart-box">
+          <h3>By Type</h3>
+          <canvas id="chart-type"></canvas>
+        </div>
+        <div class="chart-box wide">
+          <h3>Outreach Over Time</h3>
+          <canvas id="chart-timeline"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add/Edit Modal -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">Add Entry</h3>
+        <button class="modal-close" id="modal-close-btn">✕</button>
+      </div>
+      <form id="entry-form">
+        <input type="hidden" id="form-id" />
+        <div class="form-row">
+          <label>Type</label>
+          <select id="form-type">
+            <option value="playlist_curator">Playlist Curator</option>
+            <option value="blog">Blog</option>
+            <option value="platform">Platform</option>
+            <option value="community">Community</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Name</label>
+          <input id="form-name" type="text" required placeholder="Playlist or blog name" />
+        </div>
+        <div class="form-row">
+          <label>Contact / URL</label>
+          <input id="form-contact" type="text" placeholder="https://…" />
+        </div>
+        <div class="form-row">
+          <label>Platform</label>
+          <input id="form-platform" type="text" placeholder="spotify, web, email…" />
+        </div>
+        <div class="form-row">
+          <label>Status</label>
+          <select id="form-status">
+            <option value="identified">Identified</option>
+            <option value="contacted">Contacted</option>
+            <option value="added">Added</option>
+            <option value="declined">Declined</option>
+            <option value="no_response">No Response</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Notes</label>
+          <textarea id="form-notes" rows="3" placeholder="Any notes…"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
