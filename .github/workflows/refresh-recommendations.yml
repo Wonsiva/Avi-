@@ -1,7 +1,7 @@
 name: Refresh recommendations
 
 # Re-runs the recommender against live Kalshi data and commits the updated
-# docs/index.html so the static GitHub Pages site stays fresh. Triggered:
+# docs/index.html, docs/recommendations.json, and PICKS.md. Triggered:
 #   * automatically every day at 12:00 UTC (~8am ET / 7am CT)
 #   * manually via the "Run workflow" button in the Actions tab
 #   * automatically when this workflow file or the recommender code changes
@@ -41,38 +41,34 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Regenerate docs/index.html
+      - name: Regenerate output files
         env:
           USE_SAMPLE: ${{ github.event.inputs.use_sample }}
         run: |
           set -euo pipefail
           mkdir -p docs
-          if [ "${USE_SAMPLE:-false}" = "true" ]; then
-            kalshi-recommender --sample --format html --output docs/index.html
-          else
-            # Fall back to sample data if the live API call fails so the
-            # site never goes blank.
-            if ! kalshi-recommender --format html --output docs/index.html; then
-              echo "Live Kalshi API call failed; falling back to sample data."
-              kalshi-recommender --sample --format html --output docs/index.html
-            fi
-          fi
-          # Also publish a JSON sidecar for anyone who wants the raw picks.
-          if [ "${USE_SAMPLE:-false}" = "true" ]; then
-            kalshi-recommender --sample --format json --output docs/recommendations.json
-          else
-            kalshi-recommender --format json --output docs/recommendations.json \
-              || kalshi-recommender --sample --format json --output docs/recommendations.json
-          fi
           touch docs/.nojekyll
-          # Also update PICKS.md at the repo root so the picks are visible
-          # directly on the GitHub repo page (no Pages setup needed).
-          if [ "${USE_SAMPLE:-false}" = "true" ]; then
-            kalshi-recommender --sample --format markdown --output PICKS.md
-          else
-            kalshi-recommender --format markdown --output PICKS.md \
-              || kalshi-recommender --sample --format markdown --output PICKS.md
-          fi
+
+          # Helper: try live Kalshi, fall back to sample data if live call
+          # fails OR returns no recommendations. --fail-if-empty makes the
+          # CLI exit non-zero when the result would be "No tradable
+          # markets" so we know to fall back instead of publishing an
+          # empty page.
+          render() {
+            local fmt="$1" out="$2"
+            if [ "${USE_SAMPLE:-false}" = "true" ]; then
+              kalshi-recommender --sample --format "$fmt" --output "$out" --verbose
+              return
+            fi
+            if ! kalshi-recommender --format "$fmt" --output "$out" --verbose --fail-if-empty; then
+              echo "Live Kalshi fetch for $fmt failed or yielded no picks; falling back to sample data."
+              kalshi-recommender --sample --format "$fmt" --output "$out" --verbose
+            fi
+          }
+
+          render html docs/index.html
+          render json docs/recommendations.json
+          render markdown PICKS.md
 
       - name: Commit if changed
         run: |

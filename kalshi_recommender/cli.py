@@ -107,6 +107,21 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help="write output to this file instead of stdout",
     )
+    parser.add_argument(
+        "--fail-if-empty",
+        action="store_true",
+        help=(
+            "exit with status 3 if no recommendations were produced. "
+            "Used by CI/workflows so an empty live-API response doesn't "
+            "overwrite a good static file."
+        ),
+    )
+    parser.add_argument(
+        "--verbose",
+        "-v",
+        action="store_true",
+        help="print diagnostic info to stderr",
+    )
     return parser
 
 
@@ -133,9 +148,31 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     tradable = filter_tradable(markets)
+    if args.verbose:
+        print(
+            f"[diagnostic] fetched {len(markets):,} markets, "
+            f"{len(tradable):,} passed the tradable filter",
+            file=sys.stderr,
+        )
     bets = score_markets(
         tradable, top=args.top, min_volume=args.min_volume, mode=args.mode
     )
+    if args.verbose:
+        print(
+            f"[diagnostic] mode={args.mode} min_volume={args.min_volume} "
+            f"-> {len(bets)} recommendation(s)",
+            file=sys.stderr,
+        )
+
+    if args.fail_if_empty and not bets:
+        print(
+            "Error: no recommendations produced (fetched "
+            f"{len(markets):,} markets, {len(tradable):,} tradable). "
+            "Not writing output because --fail-if-empty was set.",
+            file=sys.stderr,
+        )
+        return 3
+
     mode_label = {
         "best": "best overall",
         "underdog": "overlooked underdogs",

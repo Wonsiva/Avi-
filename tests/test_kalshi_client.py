@@ -15,23 +15,33 @@ def test_load_sample_returns_markets():
         assert key in sample, f"sample market missing {key}"
 
 
-def test_filter_tradable_drops_closed_and_extreme():
+def test_filter_tradable_keeps_open_and_drops_closed():
     markets = [
         {"ticker": "OK", "status": "open", "yes_ask": 30, "no_ask": 71},
         {"ticker": "ACTIVE", "status": "active", "yes_ask": 25, "no_ask": 76},
+        {"ticker": "INIT", "status": "initialized", "yes_ask": 40, "no_ask": 61},
         {"ticker": "CLOSED", "status": "closed", "yes_ask": 30, "no_ask": 71},
-        {"ticker": "EXTREME-LOW", "status": "open", "yes_ask": 1, "no_ask": 99},
-        {"ticker": "EXTREME-HIGH", "status": "open", "yes_ask": 99, "no_ask": 1},
-        {"ticker": "MISSING", "status": "open"},
+        {"ticker": "SETTLED", "status": "settled", "yes_ask": 30, "no_ask": 71},
     ]
     out = filter_tradable(markets)
     tickers = {m["ticker"] for m in out}
-    assert tickers == {"OK", "ACTIVE"}
+    assert tickers == {"OK", "ACTIVE", "INIT"}
+
+
+def test_filter_tradable_drops_extremes_only_when_both_sides_bad():
+    # Both sides at extremes → dropped.
+    both_bad = {"ticker": "BOTH-BAD", "status": "open", "yes_ask": 1, "no_ask": 1}
+    # One side in range → kept (we can still recommend that side).
+    one_ok = {"ticker": "ONE-OK", "status": "open", "yes_ask": 1, "no_ask": 50}
+    # No prices at all → dropped.
+    missing = {"ticker": "MISSING", "status": "open"}
+    out = filter_tradable([both_bad, one_ok, missing])
+    assert [m["ticker"] for m in out] == ["ONE-OK"]
 
 
 def test_filter_tradable_handles_non_numeric_prices():
     markets = [
-        {"ticker": "BAD", "status": "open", "yes_ask": "thirty", "no_ask": 71},
+        {"ticker": "BAD", "status": "open", "yes_ask": "thirty", "no_ask": "seventy"},
         {"ticker": "OK", "status": "open", "yes_ask": 30, "no_ask": 71},
     ]
     assert [m["ticker"] for m in filter_tradable(markets)] == ["OK"]

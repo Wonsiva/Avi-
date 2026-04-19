@@ -121,29 +121,29 @@ class KalshiClient:
 
 
 def filter_tradable(markets: Iterable[dict]) -> list[dict]:
-    """Keep only markets that are open, binary, and have a usable order book.
+    """Keep only markets that are open and have a usable order book.
 
     A market is considered tradable here if:
 
-    * its status is ``open`` or ``active``
-    * it has a positive ``yes_ask`` strictly between 1 and 99 cents
-    * it has a positive ``no_ask`` strictly between 1 and 99 cents
+    * its status looks "active" (``open``, ``active``, or ``initialized``)
+    * at least one of ``yes_ask`` / ``no_ask`` is a number strictly
+      between 1 and 99 cents
 
-    Markets at the extremes (1 or 99) are skipped because they offer either
-    no upside or no realistic chance of winning.
+    Markets at the extremes (1 or 99) are skipped for that side because
+    they offer either no upside or no realistic chance of winning, but
+    we'll still keep the market if the *other* side is in range.
     """
+    active_statuses = {"open", "active", "initialized", "initializing"}
     out: list[dict] = []
     for m in markets:
         status = (m.get("status") or "").lower()
-        if status not in {"open", "active"}:
+        if status not in active_statuses:
             continue
         yes_ask = m.get("yes_ask")
         no_ask = m.get("no_ask")
-        if not isinstance(yes_ask, (int, float)) or not isinstance(
-            no_ask, (int, float)
-        ):
-            continue
-        if not (1 < yes_ask < 100) or not (1 < no_ask < 100):
+        yes_ok = isinstance(yes_ask, (int, float)) and 1 < yes_ask < 100
+        no_ok = isinstance(no_ask, (int, float)) and 1 < no_ask < 100
+        if not (yes_ok or no_ok):
             continue
         out.append(m)
     return out
