@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-26T13:04:31+00:00",
+  "generated_at": "2026-04-27T13:50:49+00:00",
   "header": "Analyzed 0 tradable Kalshi markets from live Kalshi API (https://api.elections.kalshi.com/trade-api/v2).",
   "stake_dollars": 10.0,
   "disclaimer": "This tool is for educational/research purposes only. It does not place real orders, is not investment advice, and the scoring heuristic does not predict outcomes. Always do your own research before risking money.",
