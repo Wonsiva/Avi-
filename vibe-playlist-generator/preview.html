@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Playlist Generator — Preview</title>
+<style>
+:root {
+  --bg: #0b0c0f;
+  --bg-1: #121419;
+  --bg-2: #181b22;
+  --bg-3: #21252e;
+  --border: #2a2f3a;
+  --text: #e9ecf1;
+  --text-dim: #8a93a6;
+  --accent: #ff6a3d;
+  --accent-2: #8ef0c0;
+  --danger: #ff5a5a;
+  --radius: 10px;
+  --font: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg); color: var(--text); font-family: var(--font);
+  font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+input, select { font-family: inherit; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 36px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-mark {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), #ffb37a);
+  display: grid; place-items: center; color: #111; font-weight: 800; font-size: 16px;
+}
+.brand h1 { font-size: 18px; letter-spacing: 0.3px; }
+.brand small { color: var(--text-dim); font-size: 12px; display: block; }
+.profile { display: flex; align-items: center; gap: 10px; color: var(--text-dim); font-size: 13px; }
+.profile-pic { width: 28px; height: 28px; border-radius: 50%; background: var(--bg-3); }
+
+.grid { display: grid; grid-template-columns: 360px 1fr; gap: 24px; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+.panel { background: var(--bg-1); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
+.panel h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 1.4px; color: var(--text-dim); margin: 0 0 18px; }
+
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 6px; letter-spacing: 0.4px; text-transform: uppercase; }
+.field input, .field select {
+  width: 100%; padding: 10px 12px; background: var(--bg-2); color: var(--text);
+  border: 1px solid var(--border); border-radius: 8px; outline: none;
+}
+.field input:focus, .field select:focus { border-color: var(--accent); }
+
+.row { display: flex; gap: 10px; }
+.row .field { flex: 1; }
+
+.slider { width: 100%; -webkit-appearance: none; height: 4px; border-radius: 4px; background: var(--bg-3); outline: none; }
+.slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid #111; }
+.slider-row { display: flex; align-items: center; gap: 12px; }
+.slider-row .value { width: 28px; text-align: center; color: var(--accent); font-weight: 700; }
+
+.toggle { display: flex; align-items: center; gap: 10px; color: var(--text-dim); font-size: 13px; margin-bottom: 10px; cursor: pointer; }
+.toggle input { accent-color: var(--accent); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 11px 16px; background: var(--accent); color: #111; border: none;
+  border-radius: 8px; font-weight: 700; letter-spacing: 0.3px;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn.ghost:hover { border-color: var(--accent); }
+.btn.block { width: 100%; padding: 14px; }
+
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.divider { height: 1px; background: var(--border); margin: 18px 0; }
+
+.meta-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.pill { font-size: 12px; padding: 5px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 999px; color: var(--text-dim); }
+.pill.accent { color: var(--accent); border-color: var(--accent); }
+
+.track-list { display: flex; flex-direction: column; gap: 10px; }
+.track {
+  display: grid; grid-template-columns: 56px 1fr auto; gap: 14px; align-items: center;
+  background: var(--bg-1); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px;
+}
+.track img { width: 56px; height: 56px; border-radius: 6px; object-fit: cover; background: var(--bg-3); }
+.track-main { min-width: 0; }
+.track-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.track-artist { font-size: 13px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.track-stats { display: flex; gap: 14px; font-size: 12px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+.track-stats strong { color: var(--text); font-weight: 600; }
+
+.banner { padding: 12px 16px; border-radius: 8px; background: var(--bg-2); border: 1px solid var(--border); margin-bottom: 16px; font-size: 13px; color: var(--text-dim); }
+.banner.ok { border-color: var(--accent-2); color: var(--accent-2); }
+
+.embed { margin-top: 18px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+
+.mode-toggle { display: flex; gap: 10px; margin-bottom: 16px; }
+.mode-btn { flex: 1; padding: 10px; background: transparent; color: var(--text); border: 1px solid var(--border); border-radius: 8px; font-weight: 600; font-size: 13px; text-align: center; }
+.mode-btn.active { border-color: var(--accent); color: var(--accent); }
+
+.preview-badge {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--accent); color: #111; padding: 10px 24px; border-radius: 999px;
+  font-weight: 700; font-size: 13px; letter-spacing: 0.5px; z-index: 999;
+  box-shadow: 0 4px 20px rgba(255, 106, 61, 0.4);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header class="header">
+    <div class="brand">
+      <div class="brand-mark">V</div>
+      <div>
+        <h1>Vibe Playlist Generator</h1>
+        <small>curated sets for Afro House · Melodic Tech · Deep House</small>
+      </div>
+    </div>
+    <div class="profile">
+      <div class="profile-pic"></div>
+      <span>Avi Snow</span>
+      <button class="btn ghost" style="padding: 6px 12px; font-size: 12px;">Log out</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- LEFT PANEL: VIBE FORM -->
+    <form class="panel" onsubmit="return false;">
+      <h2>Vibe</h2>
+
+      <div class="mode-toggle">
+        <div class="mode-btn active">Vibe Form</div>
+        <div class="mode-btn">Track-Alike</div>
+      </div>
+
+      <div class="field">
+        <label>Genre</label>
+        <select>
+          <option selected>Afro House</option>
+          <option>Melodic Tech</option>
+          <option>Deep House</option>
+          <option>Organic House</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Mood</label>
+        <select>
+          <option selected>hypnotic</option>
+          <option>emotional</option>
+          <option>dark</option>
+          <option>uplifting</option>
+          <option>dreamy</option>
+          <option>driving</option>
+          <option>warm</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Energy</label>
+        <div class="slider-row">
+          <input class="slider" type="range" min="1" max="10" value="7">
+          <span class="value">7</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>BPM min</label>
+          <input type="number" placeholder="auto" value="120">
+        </div>
+        <div class="field">
+          <label>BPM max</label>
+          <input type="number" placeholder="auto" value="124">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Artist seed (optional)</label>
+        <input placeholder="e.g. Keinemusik" value="AMÉMÉ">
+      </div>
+
+      <div class="field">
+        <label>Label Mode (optional)</label>
+        <select>
+          <option>— none —</option>
+          <option>MoBlack Records</option>
+          <option selected>Keinemusik</option>
+          <option>Dawn Patrol</option>
+        </select>
+      </div>
+
+      <label class="toggle">
+        <input type="checkbox">
+        Bias toward underground artists
+      </label>
+
+      <div class="divider"></div>
+
+      <div class="stack">
+        <button class="btn block" onclick="alert('This is a static preview. The real app generates playlists via the Spotify API.')">Generate playlist</button>
+        <button class="btn ghost block" onclick="alert('DJ Set Mode generates a smooth BPM/energy ramp for live sets.')">DJ Set Mode</button>
+      </div>
+    </form>
+
+    <!-- RIGHT PANEL: RESULTS -->
+    <section class="panel">
+      <h2>Result</h2>
+
+      <div class="banner ok">
+        Saved to Spotify: <a href="#">Afro House · hypnotic · DJ Set</a>
+      </div>
+
+      <div class="meta-pills">
+        <span class="pill accent">Afro House</span>
+        <span class="pill">hypnotic</span>
+        <span class="pill">energy 7/10</span>
+        <span class="pill">120-124 BPM</span>
+        <span class="pill">label: Keinemusik</span>
+        <span class="pill">DJ Set</span>
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <button class="btn">Save Playlist to My Spotify Account</button>
+      </div>
+
+      <div class="track-list" id="trackList"></div>
+
+      <div class="embed">
+        <div style="background: var(--bg-2); height: 152px; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 13px;">
+          Spotify Embedded Player appears here
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="preview-badge">STATIC PREVIEW — Connect Spotify in the real app to generate live playlists</div>
+
+<script>
+// Mock track data — representative of what the real app generates
+const mockTracks = [
+  { name: "Richa", artists: "AMÉMÉ, Avi Snow, Idd Aziz", album: "Richa", pop: 52 },
+  { name: "Mwaki", artists: "&ME", album: "Mwaki", pop: 78 },
+  { name: "The Calling", artists: "Rampa, Chuala", album: "The Calling", pop: 45 },
+  { name: "Sondela", artists: "Adam Port, Alan Dixon, Fatoumata Diawara", album: "Sondela", pop: 41 },
+  { name: "Lobster in Paradise", artists: "Rampa", album: "Lobster in Paradise", pop: 38 },
+  { name: "Voyager", artists: "MoBlack, Gruwski", album: "Voyager", pop: 29 },
+  { name: "Izulu", artists: "Keinemusik, Moojo", album: "Izulu", pop: 44 },
+  { name: "Saudade", artists: "Acid Pauli", album: "BLD", pop: 33 },
+  { name: "Surrender", artists: "Bedouin", album: "Temple of Dreams", pop: 31 },
+  { name: "Nana", artists: "Caiiro", album: "Agora", pop: 35 },
+  { name: "Stranger", artists: "Mind Against", album: "Stranger", pop: 42 },
+  { name: "Walking With Elephants", artists: "Ten Walls", album: "Walking With Elephants", pop: 58 },
+  { name: "Moja", artists: "Enoo Napa", album: "Drones", pop: 27 },
+  { name: "Rose Rouge", artists: "St Germain", album: "Tourist", pop: 54 },
+  { name: "Robot Heart", artists: "Monolink", album: "Under Darkening Skies", pop: 39 },
+  { name: "Sawt", artists: "Bedouin", album: "Temple of Dreams", pop: 30 },
+  { name: "La Mezcla", artists: "&ME, Rampa, Adam Port", album: "La Mezcla", pop: 46 },
+  { name: "Mali", artists: "Atmos Blaq", album: "Mali", pop: 24 },
+  { name: "Horizon", artists: "Be Svendsen", album: "Between a Smile and a Tear", pop: 28 },
+  { name: "I Can't Lose", artists: "Adriatique, Marino Canal", album: "I Can't Lose", pop: 41 },
+];
+
+const colors = ['#ff6a3d','#8ef0c0','#b48eff','#ff5a8a','#5ac8fa','#ffd75a','#ff8a5c','#5affc8'];
+
+function generateAlbumArt(name) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 56; canvas.height = 56;
+  const ctx = canvas.getContext('2d');
+  const hash = name.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const c1 = colors[hash % colors.length];
+  const c2 = colors[(hash + 3) % colors.length];
+  const gradient = ctx.createLinearGradient(0, 0, 56, 56);
+  gradient.addColorStop(0, c1);
+  gradient.addColorStop(1, c2);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 56, 56);
+  ctx.fillStyle = 'rgba(0,0,0,0.25)';
+  ctx.font = 'bold 22px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(name.charAt(0).toUpperCase(), 28, 30);
+  return canvas.toDataURL();
+}
+
+const list = document.getElementById('trackList');
+mockTracks.forEach((t, i) => {
+  const bpm = 118 + Math.floor(Math.random() * 8);
+  const energy = 45 + Math.floor(Math.random() * 50);
+  const dance = 55 + Math.floor(Math.random() * 40);
+  list.innerHTML += `
+    <div class="track">
+      <img src="${generateAlbumArt(t.name)}" alt="${t.album}">
+      <div class="track-main">
+        <div class="track-name">${t.name}</div>
+        <div class="track-artist">${t.artists}</div>
+      </div>
+      <div class="track-stats">
+        <span><strong>${bpm} BPM</strong></span>
+        <span>E <strong>${energy}</strong></span>
+        <span>D <strong>${dance}</strong></span>
+      </div>
+    </div>`;
+});
+
+document.querySelector('.slider').addEventListener('input', function() {
+  this.parentElement.querySelector('.value').textContent = this.value;
+});
+</script>
+</body>
+</html>
