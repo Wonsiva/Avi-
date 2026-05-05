@@ -23,7 +23,7 @@ if (missing.length) {
 
 module.exports = {
   port: Number(process.env.PORT) || 4000,
-  clientUrl: process.env.CLIENT_URL || 'http://127.0.0.1:3000',
+  clientUrl: process.env.CLIENT_URL || 'http://127.0.0.1:4000',
 
   spotify: {
     clientId: process.env.SPOTIFY_CLIENT_ID || '',

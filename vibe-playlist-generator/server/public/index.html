@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Playlist Generator</title>
+<style>
+:root{--bg:#0b0c0f;--bg-1:#121419;--bg-2:#181b22;--bg-3:#21252e;--border:#2a2f3a;--text:#e9ecf1;--text-dim:#8a93a6;--accent:#ff6a3d;--accent-2:#8ef0c0;--danger:#ff5a5a;--radius:10px;--font:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+input,select{font-family:inherit}
+.container{max-width:1100px;margin:0 auto;padding:40px 24px 80px}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px;flex-wrap:wrap;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#ffb37a);display:grid;place-items:center;color:#111;font-weight:800;font-size:16px}
+.brand h1{font-size:18px;letter-spacing:.3px}
+.brand small{color:var(--text-dim);font-size:12px;display:block}
+.profile{display:flex;align-items:center;gap:10px;color:var(--text-dim);font-size:13px}
+.profile img{width:28px;height:28px;border-radius:50%}
+.grid{display:grid;grid-template-columns:360px 1fr;gap:24px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--bg-1);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+.panel h2{font-size:14px;text-transform:uppercase;letter-spacing:1.4px;color:var(--text-dim);margin:0 0 18px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:6px;letter-spacing:.4px;text-transform:uppercase}
+.field input,.field select{width:100%;padding:10px 12px;background:var(--bg-2);color:var(--text);border:1px solid var(--border);border-radius:8px;outline:none}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.row{display:flex;gap:10px}
+.row .field{flex:1}
+.slider{width:100%;-webkit-appearance:none;height:4px;border-radius:4px;background:var(--bg-3);outline:none}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid #111}
+.slider-row{display:flex;align-items:center;gap:12px}
+.slider-row .value{width:28px;text-align:center;color:var(--accent);font-weight:700}
+.toggle{display:flex;align-items:center;gap:10px;color:var(--text-dim);font-size:13px;margin-bottom:10px;cursor:pointer}
+.toggle input{accent-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;background:var(--accent);color:#111;border:none;border-radius:8px;font-weight:700;letter-spacing:.3px}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn.ghost:hover{border-color:var(--accent)}
+.btn.block{width:100%;padding:14px}
+.stack{display:flex;flex-direction:column;gap:10px}
+.divider{height:1px;background:var(--border);margin:18px 0}
+.meta-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.pill{font-size:12px;padding:5px 10px;background:var(--bg-2);border:1px solid var(--border);border-radius:999px;color:var(--text-dim)}
+.pill.accent{color:var(--accent);border-color:var(--accent)}
+.track-list{display:flex;flex-direction:column;gap:10px}
+.track{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;background:var(--bg-1);border:1px solid var(--border);border-radius:10px;padding:10px 14px}
+.track img{width:56px;height:56px;border-radius:6px;object-fit:cover;background:var(--bg-3)}
+.track-main{min-width:0}
+.track-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track-name a{color:var(--text)}
+.track-artist{font-size:13px;color:var(--text-dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track-stats{display:flex;gap:14px;font-size:12px;color:var(--text-dim)}
+.track-stats strong{color:var(--text);font-weight:600}
+.banner{padding:12px 16px;border-radius:8px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:16px;font-size:13px;color:var(--text-dim)}
+.banner.ok{border-color:var(--accent-2);color:var(--accent-2)}
+.banner.err{border-color:var(--danger);color:var(--danger)}
+.empty{text-align:center;padding:60px 30px;color:var(--text-dim)}
+.empty h3{color:var(--text);margin-bottom:10px}
+.embed{margin-top:18px;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.loader{display:inline-block;width:14px;height:14px;border:2px solid #1114;border-top-color:#111;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#app{min-height:100vh}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// Single-page app — all API calls go to the SAME origin (no CORS, no cookie issues)
+const state = { me: null, loading: true, busy: false, error: null, result: null, saved: null };
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, {
+    method: opts.method || 'GET',
+    headers: opts.body ? { 'Content-Type': 'application/json' } : undefined,
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  const text = await res.text();
+  let data = null;
+  try { data = JSON.parse(text); } catch { data = { raw: text }; }
+  if (!res.ok) {
+    const err = new Error(data?.message || data?.error || res.statusText);
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
+function render() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="container">
+      <header class="header">
+        <div class="brand">
+          <div class="brand-mark">V</div>
+          <div>
+            <h1>Vibe Playlist Generator</h1>
+            <small>curated sets for Afro House · Melodic Tech · Deep House</small>
+          </div>
+        </div>
+        <div class="profile">
+          ${state.me ? `
+            ${state.me.image ? `<img src="${state.me.image}" alt="">` : ''}
+            <span>${state.me.displayName}</span>
+            <button class="btn ghost" onclick="doLogout()">Log out</button>
+          ` : (state.loading ? '' : `<a class="btn" href="/api/auth/login">Connect Spotify</a>`)}
+        </div>
+      </header>
+      ${!state.me && !state.loading ? `
+        <div class="panel empty">
+          <h3>Connect Spotify to start generating playlists</h3>
+          <p>We use the official Spotify Web API. Your tokens are stored in a secure session cookie.</p>
+          <div style="margin-top:18px"><a class="btn" href="/api/auth/login">Connect Spotify</a></div>
+        </div>
+      ` : ''}
+      ${state.me ? `
+        <div class="grid">
+          <form class="panel" onsubmit="doGenerate(event)">
+            <h2>Vibe</h2>
+            <div class="field"><label>Genre</label>
+              <select id="genre">
+                <option value="afro-house">Afro House</option>
+                <option value="melodic-tech">Melodic Tech</option>
+                <option value="deep-house">Deep House</option>
+                <option value="organic-house">Organic House</option>
+              </select>
+            </div>
+            <div class="field"><label>Mood</label>
+              <select id="mood">
+                <option value="hypnotic">hypnotic</option>
+                <option value="emotional">emotional</option>
+                <option value="dark">dark</option>
+                <option value="uplifting">uplifting</option>
+                <option value="dreamy">dreamy</option>
+                <option value="driving">driving</option>
+                <option value="warm">warm</option>
+              </select>
+            </div>
+            <div class="field"><label>Energy</label>
+              <div class="slider-row">
+                <input class="slider" type="range" min="1" max="10" value="6" id="energy" oninput="document.getElementById('energyVal').textContent=this.value">
+                <span class="value" id="energyVal">6</span>
+              </div>
+            </div>
+            <div class="field"><label>Artist seed (optional)</label>
+              <input id="artistSeed" placeholder="e.g. Keinemusik">
+            </div>
+            <div class="field"><label>Label Mode</label>
+              <select id="label">
+                <option value="">— none —</option>
+                <option value="moblack">MoBlack Records</option>
+                <option value="keinemusik">Keinemusik</option>
+                <option value="dawn-patrol">Dawn Patrol</option>
+              </select>
+            </div>
+            <label class="toggle"><input type="checkbox" id="underground"> Bias toward underground artists</label>
+            <div class="divider"></div>
+            <div class="stack">
+              <button type="submit" class="btn block" ${state.busy ? 'disabled' : ''}>
+                ${state.busy ? '<span class="loader"></span>' : ''} Generate playlist
+              </button>
+              <button type="button" class="btn ghost block" onclick="doDjSet()" ${state.busy ? 'disabled' : ''}>
+                DJ Set Mode
+              </button>
+            </div>
+          </form>
+          <section class="panel">
+            <h2>Result</h2>
+            ${state.error ? `<div class="banner err">${state.error}</div>` : ''}
+            ${state.saved ? `<div class="banner ok">Saved to Spotify: <a href="${state.saved.url}" target="_blank">${state.saved.name || 'playlist'}</a></div>` : ''}
+            ${!state.result && !state.busy ? `<div class="empty"><h3>No playlist yet</h3><p>Pick a vibe and hit Generate playlist.</p></div>` : ''}
+            ${state.busy && !state.result ? `<div class="empty"><h3>Generating…</h3><p>Asking Spotify for the good stuff.</p></div>` : ''}
+            ${state.result ? renderResult() : ''}
+          </section>
+        </div>
+      ` : ''}
+    </div>`;
+}
+
+function renderResult() {
+  const { tracks, meta } = state.result;
+  const pills = [];
+  if (meta?.genre) pills.push({ t: meta.genre, a: true });
+  if (meta?.mood) pills.push({ t: meta.mood });
+  if (meta?.energy) pills.push({ t: `energy ${meta.energy}/10` });
+  if (meta?.label) pills.push({ t: `label: ${meta.label}` });
+  if (meta?.underground) pills.push({ t: 'underground' });
+  if (meta?.djSet) pills.push({ t: 'DJ Set' });
+
+  let html = `<div class="meta-pills">${pills.map(p => `<span class="pill ${p.a ? 'accent' : ''}">${p.t}</span>`).join('')}</div>`;
+
+  if (!tracks || tracks.length === 0) {
+    html += `<div class="banner err">No tracks found. Try a different genre or artist seed.</div>`;
+    return html;
+  }
+
+  html += `<div style="margin-bottom:14px"><button class="btn" onclick="doSave()">Save Playlist to My Spotify Account</button></div>`;
+  html += `<div class="track-list">`;
+  for (const item of tracks) {
+    const t = item.track;
+    const img = t.album?.image || '';
+    const artists = (t.artists || []).map(a => a.name).join(', ');
+    html += `
+      <div class="track">
+        <img src="${img}" alt="" onerror="this.style.visibility='hidden'">
+        <div class="track-main">
+          <div class="track-name"><a href="${t.url || '#'}" target="_blank">${t.name}</a></div>
+          <div class="track-artist">${artists}</div>
+        </div>
+        <div class="track-stats"><span>pop <strong>${t.popularity ?? '—'}</strong></span></div>
+      </div>`;
+  }
+  html += `</div>`;
+
+  if (tracks[0]?.track?.id) {
+    html += `<div class="embed"><iframe src="https://open.spotify.com/embed/track/${tracks[0].track.id}?theme=0" width="100%" height="152" frameborder="0" allow="autoplay; clipboard-write; encrypted-media" loading="lazy"></iframe></div>`;
+  }
+  return html;
+}
+
+function getFormData() {
+  return {
+    genre: document.getElementById('genre')?.value || 'afro-house',
+    mood: document.getElementById('mood')?.value || 'hypnotic',
+    energy: Number(document.getElementById('energy')?.value || 6),
+    artistSeed: document.getElementById('artistSeed')?.value?.trim() || undefined,
+    label: document.getElementById('label')?.value || null,
+    underground: document.getElementById('underground')?.checked || false,
+    limit: 20,
+  };
+}
+
+async function doGenerate(e) {
+  if (e) e.preventDefault();
+  state.busy = true; state.error = null; state.result = null; state.saved = null;
+  render();
+  try {
+    state.result = await api('/api/recommendations/generate', { method: 'POST', body: getFormData() });
+  } catch (err) {
+    state.error = err.message;
+    if (err.status === 401) { state.me = null; }
+  }
+  state.busy = false;
+  render();
+}
+
+async function doDjSet() {
+  state.busy = true; state.error = null; state.result = null; state.saved = null;
+  render();
+  try {
+    state.result = await api('/api/recommendations/dj-set', { method: 'POST', body: { ...getFormData(), length: 30 } });
+  } catch (err) {
+    state.error = err.message;
+    if (err.status === 401) { state.me = null; }
+  }
+  state.busy = false;
+  render();
+}
+
+async function doSave() {
+  if (!state.result?.tracks?.length) return;
+  state.busy = true; state.error = null;
+  render();
+  try {
+    const uris = state.result.tracks.map(t => t.track.uri).filter(Boolean);
+    const meta = state.result.meta;
+    const name = [meta?.genre, meta?.mood, meta?.djSet ? 'DJ Set' : ''].filter(Boolean).join(' · ');
+    state.saved = await api('/api/playlist/save', { method: 'POST', body: { name, uris, isPublic: false } });
+  } catch (err) {
+    state.error = err.message;
+  }
+  state.busy = false;
+  render();
+}
+
+async function doLogout() {
+  await api('/api/auth/logout', { method: 'POST' });
+  state.me = null; state.result = null; state.saved = null;
+  render();
+}
+
+async function init() {
+  try {
+    state.me = await api('/api/auth/me');
+  } catch { state.me = null; }
+  state.loading = false;
+  render();
+}
+
+init();
+</script>
+</body>
+</html>

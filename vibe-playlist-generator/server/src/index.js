@@ -49,8 +49,10 @@ app.use(
   })
 );
 
-// Health check — useful for load balancers and for the frontend to sanity-check
-// that the backend is reachable before attempting auth.
+// Serve the single-page frontend from /public
+const path = require('path');
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, service: 'vibe-playlist-server' });
 });
