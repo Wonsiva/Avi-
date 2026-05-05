@@ -16,7 +16,17 @@ const app = express();
 
 app.use(
   cors({
-    origin: config.clientUrl,
+    origin: function (origin, callback) {
+      // Accept requests from any localhost / 127.0.0.1 origin regardless of port.
+      if (
+        !origin ||
+        /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+      ) {
+        callback(null, true);
+      } else {
+        callback(null, false);
+      }
+    },
     credentials: true,
   })
 );
