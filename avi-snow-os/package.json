@@ -1,0 +1,32 @@
+{
+  "name": "avi-snow-os",
+  "version": "0.1.0",
+  "description": "Personal marketing + content engine for Avi Snow. Local CLI that generates on-brand content across every channel — in Avi's voice.",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "avi": "./src/cli.ts"
+  },
+  "scripts": {
+    "avi": "tsx src/cli.ts",
+    "caption": "tsx src/cli.ts caption",
+    "release-campaign": "tsx src/cli.ts release-campaign",
+    "newsletter": "tsx src/cli.ts newsletter",
+    "sync-pitch": "tsx src/cli.ts sync-pitch",
+    "promoter-email": "tsx src/cli.ts promoter-email",
+    "epk": "tsx src/cli.ts epk",
+    "investor-update": "tsx src/cli.ts investor-update"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.1",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
