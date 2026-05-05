@@ -171,17 +171,25 @@ export default function Home() {
                 <>
                   <MetaPills meta={result.meta} />
 
-                  <div className="stack" style={{ marginBottom: 14 }}>
-                    <button
-                      className="btn"
-                      onClick={handleSave}
-                      disabled={busy || !result.tracks.length}
-                    >
-                      Save Playlist to My Spotify Account
-                    </button>
-                  </div>
+                  {result.tracks.length === 0 ? (
+                    <div className="banner err">
+                      No tracks found. Try a different genre, mood, or artist seed.
+                    </div>
+                  ) : (
+                    <>
+                      <div className="stack" style={{ marginBottom: 14 }}>
+                        <button
+                          className="btn"
+                          onClick={handleSave}
+                          disabled={busy || !result.tracks.length}
+                        >
+                          Save Playlist to My Spotify Account
+                        </button>
+                      </div>
 
-                  <TrackList tracks={result.tracks} />
+                      <TrackList tracks={result.tracks} />
+                    </>
+                  )}
 
                   <EmbedPlayer
                     playlistId={saved?.id}

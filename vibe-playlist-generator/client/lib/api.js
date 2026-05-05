@@ -10,6 +10,7 @@
 const BASE = process.env.NEXT_PUBLIC_API_URL || '';
 
 async function request(path, { method = 'GET', body, signal } = {}) {
+  console.log(`[api] ${method} ${BASE}${path}`);
   const res = await fetch(`${BASE}${path}`, {
     method,
     credentials: 'include',
@@ -17,6 +18,7 @@ async function request(path, { method = 'GET', body, signal } = {}) {
     body: body ? JSON.stringify(body) : undefined,
     signal,
   });
+  console.log(`[api] ${method} ${path} → ${res.status}`);
 
   let data = null;
   const text = await res.text();

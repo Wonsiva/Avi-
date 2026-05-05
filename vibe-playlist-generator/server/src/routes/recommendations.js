@@ -1,13 +1,7 @@
-// Recommendation endpoints.
+// Recommendation endpoints — powered by Spotify's Search API.
 //
 // Spotify deprecated /recommendations and /audio-features for apps created
-// after 27 Nov 2024, so we generate playlists via the Search API instead.
-// The tradeoff: no audio-feature targeting (energy, valence, tempo) — we
-// lean on curated seed artists + text queries for vibe accuracy.
-//
-//  POST /api/recommendations/generate    — vibe form
-//  POST /api/recommendations/track-alike — "more like this track"
-//  POST /api/recommendations/dj-set      — larger, shuffled pool
+// after 27 Nov 2024. We use Search + artist catalogues instead.
 
 const express = require('express');
 
@@ -22,7 +16,6 @@ const { getLabel } = require('../utils/labelPresets');
 
 const router = express.Router();
 
-// Cache artist name → id to avoid hammering /search on every generate call.
 const artistIdCache = new Map();
 
 async function resolveArtistIds(accessToken, names) {
@@ -38,30 +31,24 @@ async function resolveArtistIds(accessToken, names) {
         artistIdCache.set(name, artist.id);
         out.push({ id: artist.id, name: artist.name });
       }
-    } catch (_err) {
-      // A single bad seed shouldn't kill the whole request.
+    } catch (err) {
+      console.log(`[vibe] artist resolve failed for "${name}":`, err.message);
     }
   }
   return out;
 }
 
-/** Extract the track ID from a Spotify URL, URI, or bare ID. */
 function parseTrackId(input) {
   if (!input) return null;
   const s = String(input).trim();
-
   const uri = s.match(/spotify:track:([a-zA-Z0-9]{22})/);
   if (uri) return uri[1];
-
   const url = s.match(/open\.spotify\.com\/track\/([a-zA-Z0-9]{22})/);
   if (url) return url[1];
-
   if (/^[a-zA-Z0-9]{22}$/.test(s)) return s;
-
   return null;
 }
 
-/** Fisher-Yates shuffle. */
 function shuffle(arr) {
   const out = [...arr];
   for (let i = out.length - 1; i > 0; i--) {
@@ -71,19 +58,15 @@ function shuffle(arr) {
   return out;
 }
 
-/** Dedupe tracks by id. */
 function dedupeById(tracks) {
   const seen = new Set();
-  const out = [];
-  for (const t of tracks) {
-    if (!t?.id || seen.has(t.id)) continue;
+  return tracks.filter((t) => {
+    if (!t?.id || seen.has(t.id)) return false;
     seen.add(t.id);
-    out.push(t);
-  }
-  return out;
+    return true;
+  });
 }
 
-/** Normalise a Spotify track object for the frontend. */
 function normalizeTrack(t) {
   return {
     track: {
@@ -99,18 +82,10 @@ function normalizeTrack(t) {
         image: t.album?.images?.[0]?.url || null,
       },
     },
-    // Audio features are deprecated for new apps — return nulls so the UI
-    // renders "—" rather than breaking.
     features: { energy: null, danceability: null, valence: null, tempo: null },
   };
 }
 
-/**
- * Build the vibe-form track pool by:
- *   1. Searching each seed artist's catalogue
- *   2. Running a free-text search with genre + mood keywords
- * Then deduping and shuffling.
- */
 async function buildVibePool(accessToken, body) {
   const {
     genre = 'afro-house',
@@ -124,46 +99,49 @@ async function buildVibePool(accessToken, body) {
   const preset = getPreset(genre);
   const labelPreset = label ? getLabel(label) : null;
 
-  const seedNames = (labelPreset?.artists || preset.seedArtists).slice(0, 4);
+  const seedNames = [...(labelPreset?.artists || preset.seedArtists).slice(0, 4)];
   if (artistSeed) seedNames.unshift(artistSeed);
 
-  const resolved = await resolveArtistIds(accessToken, seedNames);
-  const seedArtists = resolved.slice(0, 5);
+  console.log(`[vibe] generating: genre=${genre} mood=${mood} seeds=${seedNames.join(', ')}`);
 
-  // Per-artist search: use the artist: filter to pull their top catalogue.
+  const resolved = await resolveArtistIds(accessToken, seedNames);
+  console.log(`[vibe] resolved ${resolved.length} artists: ${resolved.map(a => a.name).join(', ')}`);
+
   const pool = [];
-  for (const artist of seedArtists) {
+
+  // Search by each artist name (simpler query — no field filter)
+  for (const artist of resolved.slice(0, 5)) {
     try {
-      const tracks = await searchTracks(
-        accessToken,
-        `artist:"${artist.name}"`,
-        { limit: 20 }
-      );
+      const tracks = await searchTracks(accessToken, artist.name, { limit: 15 });
+      console.log(`[vibe]   "${artist.name}" → ${tracks.length} tracks`);
       pool.push(...tracks);
-    } catch (_err) {
-      // Skip artists that fail search.
+    } catch (err) {
+      console.log(`[vibe]   "${artist.name}" search failed:`, err.message);
     }
   }
 
-  // Text search on the genre label to widen the pool with tracks we might
-  // otherwise miss. Also fold mood in as a loose keyword match.
+  // Broader genre/mood text search
+  const textQuery = `${preset.label} ${mood}`;
   try {
-    const textQ = [preset.label, mood].filter(Boolean).join(' ');
-    const textHits = await searchTracks(accessToken, textQ, { limit: 30 });
+    const textHits = await searchTracks(accessToken, textQuery, { limit: 30 });
+    console.log(`[vibe]   text search "${textQuery}" → ${textHits.length} tracks`);
     pool.push(...textHits);
-  } catch (_err) {
-    /* ignore */
+  } catch (err) {
+    console.log(`[vibe]   text search failed:`, err.message);
   }
 
   let deduped = dedupeById(pool);
+  console.log(`[vibe] total pool: ${pool.length}, after dedupe: ${deduped.length}`);
 
-  // Underground bias — filter out higher-popularity tracks.
   if (underground) {
     deduped = deduped.filter((t) => (t.popularity ?? 100) <= 45);
+    console.log(`[vibe] after underground filter: ${deduped.length}`);
   }
 
   const shuffled = shuffle(deduped);
   const sliced = shuffled.slice(0, Math.max(1, Math.min(100, Number(limit) || 20)));
+
+  console.log(`[vibe] returning ${sliced.length} tracks`);
 
   return {
     tracks: sliced.map(normalizeTrack),
@@ -174,16 +152,44 @@ async function buildVibePool(accessToken, body) {
       underground,
       label: labelPreset?.label || null,
       bpm: { min: preset.bpm.min, max: preset.bpm.max },
-      engine: 'search',
+      trackCount: sliced.length,
     },
   };
 }
 
+// Diagnostic endpoint — hit this in your browser to test if search works.
+// GET /api/recommendations/test
+router.get('/test', requireAuth, async (req, res, next) => {
+  try {
+    console.log('[vibe] /test endpoint hit — searching for "Keinemusik"...');
+    const tracks = await searchTracks(req.accessToken, 'Keinemusik', { limit: 5 });
+    console.log(`[vibe] /test got ${tracks.length} tracks`);
+    res.json({
+      ok: true,
+      message: `Search returned ${tracks.length} tracks`,
+      tracks: tracks.map((t) => ({
+        name: t.name,
+        artist: t.artists?.[0]?.name,
+        id: t.id,
+      })),
+    });
+  } catch (err) {
+    console.log('[vibe] /test error:', err.message);
+    res.status(500).json({
+      ok: false,
+      error: err.message,
+      details: err.response?.data || null,
+    });
+  }
+});
+
 router.post('/generate', requireAuth, async (req, res, next) => {
   try {
+    console.log('[vibe] POST /generate received');
     const result = await buildVibePool(req.accessToken, req.body);
     res.json(result);
   } catch (err) {
+    console.log('[vibe] /generate error:', err.message);
     next(err);
   }
 });
@@ -200,46 +206,22 @@ router.post('/track-alike', requireAuth, async (req, res, next) => {
 
     const source = await getTrack(req.accessToken, trackId);
     const primaryArtist = source.artists?.[0]?.name;
-
     const limit = Math.max(1, Math.min(50, Number(req.body?.limit) || 20));
 
-    // Pull the artist's other tracks + a text search on the track name's words
-    // to find similar-sounding songs.
     const pool = [];
-
     if (primaryArtist) {
       try {
-        const byArtist = await searchTracks(
-          req.accessToken,
-          `artist:"${primaryArtist}"`,
-          { limit: 30 }
-        );
+        const byArtist = await searchTracks(req.accessToken, primaryArtist, { limit: 30 });
         pool.push(...byArtist);
       } catch (_err) {}
     }
 
-    try {
-      // Strip punctuation, use the first couple of meaningful words as a query.
-      const keywords = (source.name || '')
-        .replace(/\(.+?\)|\[.+?\]/g, ' ')
-        .split(/\s+/)
-        .filter((w) => w.length > 2)
-        .slice(0, 3)
-        .join(' ');
-      if (keywords) {
-        const text = await searchTracks(req.accessToken, keywords, { limit: 20 });
-        pool.push(...text);
-      }
-    } catch (_err) {}
-
     let deduped = dedupeById(pool).filter((t) => t.id !== trackId);
-
     if (req.body?.underground) {
       deduped = deduped.filter((t) => (t.popularity ?? 100) <= 45);
     }
 
     const tracks = shuffle(deduped).slice(0, limit).map(normalizeTrack);
-
     res.json({
       meta: {
         source: {
@@ -248,7 +230,6 @@ router.post('/track-alike', requireAuth, async (req, res, next) => {
           image: source.album?.images?.[0]?.url || null,
           url: source.external_urls?.spotify || null,
         },
-        engine: 'search',
       },
       tracks,
     });
@@ -260,15 +241,10 @@ router.post('/track-alike', requireAuth, async (req, res, next) => {
 router.post('/dj-set', requireAuth, async (req, res, next) => {
   try {
     const length = Math.max(8, Math.min(60, Number(req.body?.length) || 30));
-
-    // Build a bigger pool, then take the requested length. Without audio
-    // features we can't order by BPM/energy ramp any more — the pool is
-    // shuffled so consecutive tracks are varied.
     const result = await buildVibePool(req.accessToken, {
       ...req.body,
       limit: Math.min(100, length * 2),
     });
-
     res.json({
       meta: { ...result.meta, djSet: true, length: Math.min(length, result.tracks.length) },
       tracks: result.tracks.slice(0, length),
