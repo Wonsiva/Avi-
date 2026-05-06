@@ -3,340 +3,457 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Avi Snow — Outreach App</title>
+<title>Avi Snow — Artist Hub</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --green: #1db954;
-    --bg: #0d0d0d;
-    --surface: #181818;
-    --surface2: #242424;
-    --border: #2a2a2a;
-    --text: #e8e8e8;
-    --muted: #888;
-  }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; min-height: 100vh; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --green: #1db954; --green-dim: rgba(29,185,84,.12); --green-dark: #17a349;
+  --bg: #0a0a0a; --surface: #161616; --surface2: #1e1e1e; --surface3: #252525;
+  --border: #282828; --text: #f0f0f0; --muted: #777; --muted2: #555;
+  --yellow: #f5c842; --blue: #5b9bd5; --purple: #9b7fe8; --red: #e05555;
+  --radius: 12px; --font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; min-height: 100vh; }
 
-  /* Header */
-  header { display: flex; align-items: center; justify-content: space-between; padding: 0 28px; height: 60px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; gap: 12px; flex-wrap: wrap; }
-  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; color: var(--green); }
-  nav { display: flex; gap: 4px; }
-  .tab-btn { background: none; border: none; color: var(--muted); font-size: 13px; padding: 8px 14px; border-radius: 8px; cursor: pointer; transition: all .15s; white-space: nowrap; font-family: inherit; }
-  .tab-btn:hover { color: var(--text); background: var(--surface2); }
-  .tab-btn.active { color: var(--green); background: rgba(29,185,84,.12); }
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-  /* Layout */
-  main { padding: 28px; max-width: 1200px; margin: 0 auto; }
-  .panel { display: none; }
-  .panel.active { display: block; }
+/* Header */
+header { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; background: rgba(10,10,10,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; gap: 12px; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 15px; color: var(--green); letter-spacing: -.02em; white-space: nowrap; }
+.logo-snow { font-size: 18px; }
+nav { display: flex; gap: 2px; }
+.tab-btn { background: none; border: none; color: var(--muted); font-size: 13px; padding: 7px 13px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500; transition: all .15s; white-space: nowrap; }
+.tab-btn:hover { color: var(--text); background: var(--surface2); }
+.tab-btn.active { color: var(--green); background: var(--green-dim); font-weight: 600; }
+.tab-btn .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--red); margin-left: 5px; vertical-align: middle; }
 
-  /* Panel header */
-  .panel-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
-  h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
-  .sub { color: var(--muted); font-size: 13px; }
+/* Main */
+main { padding: 24px; max-width: 1100px; margin: 0 auto; }
+.panel { display: none; } .panel.active { display: block; }
 
-  /* Buttons */
-  .btn-green { background: var(--green); color: #000; border: none; border-radius: 8px; padding: 9px 18px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; }
-  .btn-green:hover { background: #17a349; }
-  .btn-grey { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 9px 18px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; }
-  .btn-grey:hover { background: #2e2e2e; }
-  .btn-text { background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px 8px; border-radius: 6px; font-size: 13px; font-family: inherit; }
-  .btn-text:hover { color: var(--text); background: var(--surface2); }
+/* Section headers */
+.section-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
 
-  /* Search bar */
-  .search-bar { display: flex; gap: 8px; }
-  .search-bar input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; padding: 9px 14px; width: 200px; outline: none; }
-  .search-bar input:focus { border-color: var(--green); }
+/* Buttons */
+.btn { border: none; border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .15s; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.btn-green { background: var(--green); color: #000; } .btn-green:hover { background: var(--green-dark); }
+.btn-grey { background: var(--surface3); color: var(--text); border: 1px solid var(--border); } .btn-grey:hover { background: #2c2c2c; }
+.btn-ghost { background: none; color: var(--muted); border: 1px solid var(--border); } .btn-ghost:hover { color: var(--text); border-color: #444; }
+.btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 7px; }
+.btn-xs { padding: 4px 10px; font-size: 11px; border-radius: 6px; }
+.icon-btn { background: none; border: none; color: var(--muted); cursor: pointer; padding: 5px; border-radius: 6px; font-size: 15px; transition: all .15s; line-height: 1; }
+.icon-btn:hover { color: var(--text); background: var(--surface3); }
 
-  /* Artist card */
-  .artist-card { display: flex; align-items: center; gap: 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; margin-bottom: 20px; }
-  .artist-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #1db954, #0d5c2e); display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; }
-  .artist-card h3 { font-size: 18px; font-weight: 700; }
-  .artist-card p { color: var(--muted); margin-top: 5px; font-size: 13px; }
+/* Cards */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+.card-hover { transition: border-color .15s, transform .15s; }
+.card-hover:hover { border-color: #3a3a3a; transform: translateY(-1px); }
 
-  /* Toolbar */
-  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .count { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; font-size: 12px; color: var(--muted); }
+/* Tags / Chips */
+.chip { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.chip-green { background: var(--green-dim); color: var(--green); }
+.chip-yellow { background: rgba(245,200,66,.12); color: var(--yellow); }
+.chip-blue { background: rgba(91,155,213,.12); color: var(--blue); }
+.chip-purple { background: rgba(155,127,232,.12); color: var(--purple); }
+.chip-red { background: rgba(224,85,85,.12); color: var(--red); }
+.chip-grey { background: var(--surface3); color: var(--muted); }
 
-  /* Table */
-  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
-  table { width: 100%; border-collapse: collapse; }
-  thead { background: var(--surface); }
-  th { text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); white-space: nowrap; }
-  td { padding: 11px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr { background: var(--surface); }
-  tbody tr:nth-child(even) { background: #1a1a1a; }
-  tbody tr:hover { background: var(--surface2); }
-  .right { text-align: right; }
-  a.gl { color: var(--green); text-decoration: none; font-size: 13px; }
-  a.gl:hover { text-decoration: underline; }
+/* Priority dot */
+.priority { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.p-high { background: var(--red); } .p-med { background: var(--yellow); } .p-low { background: var(--blue); }
 
-  /* Status badges */
-  .badge { display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
-  .s-identified  { background: #1a2a3a; color: #5ba3d9; }
-  .s-contacted   { background: #1a2a1a; color: #6dbb7a; }
-  .s-added       { background: #1a3a1a; color: #1db954; }
-  .s-declined    { background: #2a1a1a; color: #e07070; }
-  .s-no_response { background: #2a2a1a; color: #c8a84b; }
+/* Table */
+.table-wrap { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+thead { background: var(--surface); }
+th { text-align: left; padding: 11px 14px; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--border); white-space: nowrap; }
+td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr { background: var(--surface); transition: background .1s; }
+tbody tr:hover { background: var(--surface2); }
+.td-muted { color: var(--muted); font-size: 13px; }
 
-  /* Filters */
-  .filters { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-  .filters select, .filters input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; padding: 8px 12px; outline: none; }
-  .filters input { flex: 1; min-width: 160px; }
+/* Status select */
+.status-sel { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 4px 8px; font-size: 12px; outline: none; font-family: inherit; cursor: pointer; }
 
-  /* Blog grid */
-  .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
-  .blog-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; transition: border-color .15s; }
-  .blog-card:hover { border-color: var(--green); }
-  .blog-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
-  .blog-card h4 { font-size: 15px; font-weight: 700; }
-  .blog-card .genres { font-size: 12px; color: var(--muted); }
-  .visit-btn { display: block; margin-top: 4px; padding: 7px 14px; background: rgba(29,185,84,.1); color: var(--green); border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 600; text-align: center; }
-  .visit-btn:hover { background: rgba(29,185,84,.2); }
-  .save-btn { background: var(--surface2); color: var(--muted); border: none; border-radius: 6px; padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: color .15s; }
-  .save-btn:hover { color: var(--text); }
-  .save-btn.saved { color: var(--green); }
+/* Progress bar */
+.prog-track { background: var(--surface3); border-radius: 4px; height: 6px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 4px; background: var(--green); transition: width .5s; }
 
-  /* Stats */
-  .stat-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; margin-bottom: 24px; }
-  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; text-align: center; }
-  .stat-num { font-size: 34px; font-weight: 800; color: var(--green); }
-  .stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .05em; }
+/* Input / Form */
+input[type=text], input[type=date], select, textarea {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text); font-size: 14px; padding: 10px 12px; outline: none;
+  font-family: inherit; transition: border-color .15s; width: 100%;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--green); }
+textarea { resize: vertical; }
+label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+.form-row { margin-bottom: 14px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
-  /* Charts */
-  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .chart-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
-  .chart-box.wide { grid-column: 1 / -1; }
-  .chart-box h3 { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 18px; text-transform: uppercase; letter-spacing: .05em; }
-  .bar-chart { display: flex; flex-direction: column; gap: 10px; }
-  .bar-row { display: flex; align-items: center; gap: 10px; }
-  .bar-label { width: 110px; font-size: 12px; color: var(--muted); text-align: right; flex-shrink: 0; }
-  .bar-track { flex: 1; background: var(--surface2); border-radius: 4px; height: 22px; overflow: hidden; }
-  .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #000; transition: width .6s ease; }
-  .bar-val { width: 30px; font-size: 12px; color: var(--muted); text-align: right; }
-  .donut-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-  .donut-legend { display: flex; flex-direction: column; gap: 8px; }
-  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .timeline { display: flex; align-items: flex-end; gap: 12px; height: 100px; }
-  .timeline-bar { flex: 1; border-radius: 4px 4px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 4px; }
-  .timeline-num { font-size: 11px; font-weight: 700; color: #000; }
-  .timeline-labels { display: flex; gap: 12px; margin-top: 8px; }
-  .timeline-lbl { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+/* Modal */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
+.overlay.hidden { display: none; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 500px; padding: 28px; max-height: 90vh; overflow-y: auto; }
+.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+.modal-head h3 { font-size: 18px; font-weight: 700; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
 
-  /* Modal */
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.75); display: flex; align-items: center; justify-content: center; z-index: 200; }
-  .overlay.hidden { display: none; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 100%; max-width: 460px; padding: 28px; }
-  .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
-  .modal-head h3 { font-size: 17px; font-weight: 700; }
-  .close-btn { background: none; border: none; color: var(--muted); font-size: 18px; cursor: pointer; padding: 2px 8px; border-radius: 6px; }
-  .close-btn:hover { color: var(--text); }
-  .form-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-  .form-row label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-  .form-row input, .form-row select, .form-row textarea { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; padding: 10px 13px; outline: none; font-family: inherit; resize: vertical; }
-  .form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: var(--green); }
-  .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+/* Toast */
+#toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--green); color: var(--green); padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 13px; z-index: 999; box-shadow: 0 8px 24px rgba(0,0,0,.5); transition: all .3s; opacity: 0; transform: translateY(8px); pointer-events: none; }
+#toast.show { opacity: 1; transform: translateY(0); }
 
-  /* Toast */
-  #toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #000; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 13px; z-index: 999; box-shadow: 0 4px 12px rgba(0,0,0,.4); transition: opacity .3s; opacity: 0; pointer-events: none; }
-  #toast.show { opacity: 1; }
+/* Utils */
+.hidden { display: none !important; }
+.flex { display: flex; align-items: center; } .gap4 { gap: 4px; } .gap8 { gap: 8px; } .gap12 { gap: 12px; } .gap16 { gap: 16px; }
+.between { justify-content: space-between; }
+.wrap { flex-wrap: wrap; }
+.grow { flex: 1; }
+.bold { font-weight: 700; }
+.small { font-size: 12px; }
+.muted { color: var(--muted); }
+.green { color: var(--green); }
+.yellow { color: var(--yellow); }
+.red { color: var(--red); }
+.mt4 { margin-top: 4px; } .mt8 { margin-top: 8px; } .mt12 { margin-top: 12px; } .mt16 { margin-top: 16px; } .mt20 { margin-top: 20px; } .mt24 { margin-top: 24px; }
+.mb12 { margin-bottom: 12px; } .mb16 { margin-bottom: 16px; } .mb20 { margin-bottom: 20px; }
 
-  .empty { text-align: center; color: var(--muted); padding: 48px; }
-  .hidden { display: none !important; }
+/* ── DASHBOARD ── */
+.greeting { margin-bottom: 24px; }
+.greeting h1 { font-size: 26px; font-weight: 800; letter-spacing: -.03em; }
+.greeting p { color: var(--muted); margin-top: 4px; font-size: 14px; }
 
-  @media (max-width: 680px) {
-    header { height: auto; padding: 12px 16px; }
-    nav { overflow-x: auto; width: 100%; }
-    main { padding: 16px; }
-    .charts-grid { grid-template-columns: 1fr; }
-    .chart-box.wide { grid-column: auto; }
-  }
+.stats-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+.stat-box .num { font-size: 30px; font-weight: 800; line-height: 1; }
+.stat-box .lbl { font-size: 11px; color: var(--muted); margin-top: 5px; text-transform: uppercase; letter-spacing: .06em; }
+.stat-box .sub { font-size: 11px; margin-top: 3px; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+/* Action items */
+.action-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.action-item:last-child { border-bottom: none; }
+.action-icon { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.action-text { flex: 1; }
+.action-text strong { font-size: 13px; font-weight: 600; display: block; }
+.action-text span { font-size: 12px; color: var(--muted); }
+
+/* Win items */
+.win-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.win-item:last-child { border-bottom: none; }
+.win-emoji { font-size: 18px; }
+.win-text strong { font-size: 13px; display: block; }
+.win-text span { font-size: 11px; color: var(--muted); }
+
+/* ── PIPELINE ── */
+.pipeline-stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+.stage-col { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; min-height: 200px; }
+.stage-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.stage-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.stage-count { background: var(--surface3); color: var(--muted); border-radius: 20px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
+.pitch-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 9px; padding: 12px; margin-bottom: 8px; cursor: pointer; transition: all .15s; }
+.pitch-card:hover { border-color: #3a3a3a; background: var(--surface3); }
+.pitch-card .pc-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.pitch-card .pc-meta { font-size: 11px; color: var(--muted); }
+.pitch-card .pc-due { font-size: 11px; margin-top: 6px; display: flex; align-items: center; gap: 4px; }
+.overdue { color: var(--red); }
+.due-soon { color: var(--yellow); }
+.on-track { color: var(--green); }
+
+/* ── SUBMIT ── */
+.platform-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.platform-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: border-color .15s; }
+.platform-card:hover { border-color: #3a3a3a; }
+.plat-top { display: flex; align-items: center; gap: 12px; }
+.plat-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.plat-name { font-size: 15px; font-weight: 700; }
+.plat-type { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.plat-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.plat-stats { display: flex; gap: 16px; }
+.plat-stat { text-align: center; }
+.plat-stat .val { font-size: 14px; font-weight: 700; color: var(--text); }
+.plat-stat .key { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.plat-btns { display: flex; gap: 8px; margin-top: 4px; }
+
+/* ── PLAYLISTS ── */
+.playlist-card { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.playlist-card:last-child { border-bottom: none; }
+.playlist-art { width: 48px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.playlist-info { flex: 1; }
+.playlist-info strong { font-size: 14px; font-weight: 600; display: block; }
+.playlist-info span { font-size: 12px; color: var(--muted); margin-top: 2px; display: block; }
+.playlist-reach { text-align: right; flex-shrink: 0; }
+.playlist-reach .reach-num { font-size: 16px; font-weight: 700; color: var(--green); }
+.playlist-reach .reach-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+
+/* ── RELEASE ── */
+.release-header { background: linear-gradient(135deg, rgba(29,185,84,.15), rgba(29,185,84,.05)); border: 1px solid rgba(29,185,84,.2); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 24px; }
+.release-header h3 { font-size: 20px; font-weight: 800; }
+.release-header .days { font-size: 13px; color: var(--green); margin-top: 4px; font-weight: 600; }
+.checklist { display: flex; flex-direction: column; gap: 1px; }
+.check-item { display: flex; align-items: flex-start; gap: 12px; padding: 13px 16px; background: var(--surface); border-radius: 0; transition: background .1s; }
+.check-item:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+.check-item:last-child { border-radius: 0 0 var(--radius) var(--radius); border-bottom: none; }
+.check-item + .check-item { border-top: 1px solid var(--border); }
+.check-item:hover { background: var(--surface2); }
+.check-box { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 5px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all .15s; }
+.check-box.checked { background: var(--green); border-color: var(--green); }
+.check-box.checked::after { content: '✓'; font-size: 11px; color: #000; font-weight: 800; }
+.check-content { flex: 1; }
+.check-content strong { font-size: 13px; font-weight: 600; display: block; }
+.check-content p { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+.check-item.done .check-content strong { text-decoration: line-through; color: var(--muted); }
+.check-phase { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: 20px 0 8px; color: var(--muted); }
+
+@media (max-width: 800px) {
+  header { height: auto; padding: 10px 16px; flex-wrap: wrap; }
+  nav { overflow-x: auto; }
+  main { padding: 16px; }
+  .two-col, .three-col { grid-template-columns: 1fr; }
+  .pipeline-stages { grid-template-columns: 1fr 1fr; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 500px) {
+  .pipeline-stages { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="10"/>
-      <path d="M8 11.8C10.3 11 13.7 10.8 16 12M9 15c1.8-.7 4.2-.7 6 0M10 8.5c1.3-.4 3.7-.4 5 0"/>
-    </svg>
-    Avi Snow · Outreach
-  </div>
+  <div class="logo"><span class="logo-snow">❄️</span> Avi Snow</div>
   <nav>
-    <button class="tab-btn active" onclick="showTab('curators')">Curator Finder</button>
-    <button class="tab-btn" onclick="showTab('tracker')">Outreach Tracker</button>
-    <button class="tab-btn" onclick="showTab('blogs')">Blogs &amp; Platforms</button>
-    <button class="tab-btn" onclick="showTab('analytics')">Analytics</button>
+    <button class="tab-btn active" onclick="showTab('home', this)">Home</button>
+    <button class="tab-btn" onclick="showTab('pipeline', this)">Pipeline <span class="dot"></span></button>
+    <button class="tab-btn" onclick="showTab('submit', this)">Submit</button>
+    <button class="tab-btn" onclick="showTab('playlists', this)">My Playlists</button>
+    <button class="tab-btn" onclick="showTab('release', this)">Release Plan</button>
   </nav>
 </header>
 
 <main>
 
-  <!-- CURATOR FINDER -->
-  <div id="panel-curators" class="panel active">
-    <div class="panel-top">
-      <div>
-        <h2>Curator Finder</h2>
-        <p class="sub">Find playlist curators on Spotify who feature similar artists</p>
-      </div>
-      <div class="search-bar">
-        <input id="artist-input" type="text" value="Avi Snow" placeholder="Artist name" />
-        <button class="btn-green" onclick="runSearch()">Search</button>
-      </div>
-    </div>
+<!-- ════════════════════════════════════════ HOME ════════════════════════════ -->
+<div id="panel-home" class="panel active">
+  <div class="greeting">
+    <h1 id="greeting-text">Good morning, Avi 👋</h1>
+    <p id="greeting-date"></p>
+  </div>
 
-    <div id="curator-content" class="hidden">
-      <div class="artist-card">
-        <div class="artist-avatar">❄️</div>
-        <div>
-          <h3>Avi Snow</h3>
-          <p>1,240 followers &nbsp;·&nbsp; indie pop, alternative, folk</p>
-          <p style="margin-top:6px">Related artists: Phoebe Bridgers, Novo Amor, Sufjan Stevens, Fleet Foxes</p>
-        </div>
-      </div>
-      <div class="toolbar">
-        <span class="count">8 curators found</span>
-        <button class="btn-grey" onclick="saveAll()">Save All to Tracker</button>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th>Playlist</th><th>Curator</th><th class="right">Followers</th><th>Found Via</th><th></th>
-          </tr></thead>
-          <tbody id="curator-tbody"></tbody>
-        </table>
-      </div>
-    </div>
+  <!-- Stats -->
+  <div class="stats-row" id="home-stats"></div>
 
-    <div id="curator-empty" style="text-align:center;color:var(--muted);padding:60px 0;font-size:15px">
-      Enter an artist name and click <strong style="color:var(--text)">Search</strong> to find playlist curators
+  <div class="two-col">
+    <!-- Today's actions -->
+    <div class="card">
+      <div class="section-title">Do this today</div>
+      <div id="today-actions"></div>
+    </div>
+    <!-- Recent wins -->
+    <div class="card">
+      <div class="section-title">Recent wins 🏆</div>
+      <div id="recent-wins"></div>
     </div>
   </div>
 
-  <!-- OUTREACH TRACKER -->
-  <div id="panel-tracker" class="panel">
-    <div class="panel-top">
-      <div>
-        <h2>Outreach Tracker</h2>
-        <p class="sub">Manage and track all your outreach efforts</p>
-      </div>
-      <button class="btn-green" onclick="openModal(null)">+ Add Entry</button>
+  <!-- Follow-up alerts -->
+  <div class="card mt16" id="followup-card">
+    <div class="flex between mb12">
+      <div class="section-title" style="margin-bottom:0">Follow-up needed</div>
+      <span class="chip chip-red" id="followup-count"></span>
     </div>
-    <div class="filters">
-      <select id="f-status" onchange="renderTracker()">
-        <option value="">All statuses</option>
-        <option value="identified">Identified</option>
-        <option value="contacted">Contacted</option>
-        <option value="added">Added</option>
-        <option value="declined">Declined</option>
-        <option value="no_response">No Response</option>
-      </select>
-      <select id="f-type" onchange="renderTracker()">
-        <option value="">All types</option>
-        <option value="playlist_curator">Playlist Curator</option>
-        <option value="blog">Blog</option>
-        <option value="platform">Platform</option>
-        <option value="community">Community</option>
-      </select>
-      <input id="f-search" type="text" placeholder="Search by name…" oninput="renderTracker()" />
+    <div id="followup-list"></div>
+  </div>
+
+  <!-- Quick reach stats -->
+  <div class="card mt16">
+    <div class="section-title">Your current reach</div>
+    <div class="flex gap16 wrap mt8" id="reach-summary"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ PIPELINE ════════════════════════ -->
+<div id="panel-pipeline" class="panel">
+  <div class="flex between mb20 wrap gap12">
+    <div>
+      <h2 style="font-size:22px;font-weight:800;letter-spacing:-.02em">Pitch Pipeline</h2>
+      <p class="muted small mt4">Track every curator from discovery to placement</p>
     </div>
+    <button class="btn btn-green" onclick="openPitchModal(null)">+ Add Curator</button>
+  </div>
+
+  <div class="pipeline-stages" id="pipeline-board"></div>
+
+  <div class="mt20">
+    <div class="section-title">All pitches</div>
     <div class="table-wrap">
       <table>
         <thead><tr>
-          <th>Date</th><th>Type</th><th>Name</th><th>Platform</th><th>Status</th><th>Notes</th><th></th>
+          <th></th><th>Curator / Playlist</th><th>Followers</th><th>Contacted</th><th>Follow-up</th><th>Status</th><th>Notes</th><th></th>
         </tr></thead>
-        <tbody id="tracker-tbody"></tbody>
+        <tbody id="pipeline-tbody"></tbody>
       </table>
     </div>
-    <p id="tracker-empty" class="empty hidden">No entries yet. Use Curator Finder to get started.</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ SUBMIT ═════════════════════════ -->
+<div id="panel-submit" class="panel">
+  <div class="mb20">
+    <h2 style="font-size:22px;font-weight:800;letter-spacing:-.02em">Submit Your Music</h2>
+    <p class="muted small mt4">Every platform you need, with what to know before you pitch</p>
+  </div>
+  <div class="platform-grid" id="platform-grid"></div>
+</div>
+
+<!-- ════════════════════════════════════════ PLAYLISTS ══════════════════════ -->
+<div id="panel-playlists" class="panel">
+  <div class="flex between mb20 wrap gap12">
+    <div>
+      <h2 style="font-size:22px;font-weight:800;letter-spacing:-.02em">My Playlists</h2>
+      <p class="muted small mt4">Playlists you're currently on — your active reach</p>
+    </div>
+    <button class="btn btn-green" onclick="openPlaylistModal(null)">+ Add Playlist</button>
   </div>
 
-  <!-- BLOGS & PLATFORMS -->
-  <div id="panel-blogs" class="panel">
-    <div class="panel-top">
-      <div>
-        <h2>Blogs &amp; Platforms</h2>
-        <p class="sub">Recommended submission channels for music promotion</p>
-      </div>
-    </div>
-    <div class="blog-grid" id="blog-grid"></div>
+  <div class="card mb16" id="reach-card">
+    <div class="flex gap16 wrap" id="reach-stats"></div>
   </div>
 
-  <!-- ANALYTICS -->
-  <div id="panel-analytics" class="panel">
-    <div class="panel-top">
-      <div>
-        <h2>Analytics</h2>
-        <p class="sub">Track your outreach progress over time</p>
-      </div>
+  <div class="card">
+    <div id="playlist-list"></div>
+    <p id="playlist-empty" class="hidden" style="text-align:center;color:var(--muted);padding:40px">No playlists yet. Add the ones you're already on, or use the Pipeline to get new ones.</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ RELEASE ════════════════════════ -->
+<div id="panel-release" class="panel">
+  <div class="flex between mb20 wrap gap12">
+    <div>
+      <h2 style="font-size:22px;font-weight:800;letter-spacing:-.02em">Release Plan</h2>
+      <p class="muted small mt4">Everything you need to do before and after your next drop</p>
     </div>
-    <div class="stat-cards" id="stat-cards"></div>
-    <div class="charts-grid">
-      <div class="chart-box">
-        <h3>By Status</h3>
-        <div id="chart-status"></div>
-      </div>
-      <div class="chart-box">
-        <h3>By Type</h3>
-        <div id="chart-type"></div>
-      </div>
-      <div class="chart-box wide">
-        <h3>Outreach Over Time</h3>
-        <div id="chart-timeline"></div>
-      </div>
+    <div class="flex gap8">
+      <input type="text" id="release-title" placeholder="Release title" style="width:160px;padding:8px 12px;font-size:13px" />
+      <input type="date" id="release-date" style="width:150px;padding:8px 12px;font-size:13px" />
+      <button class="btn btn-grey btn-sm" onclick="updateRelease()">Set</button>
     </div>
   </div>
+
+  <div class="release-header" id="release-header">
+    <h3 id="release-name">Set your next release above ↑</h3>
+    <div class="days" id="release-countdown"></div>
+  </div>
+
+  <div class="flex gap8 mb16">
+    <span class="chip chip-green" id="prog-label"></span>
+    <div class="prog-track grow mt4" style="margin-top:6px"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+
+  <div id="checklist-wrap"></div>
+</div>
 
 </main>
 
-<!-- Modal -->
-<div id="overlay" class="overlay hidden" onclick="if(event.target===this)closeModal()">
+<!-- Pipeline Modal -->
+<div id="pitch-overlay" class="overlay hidden" onclick="if(event.target===this)closePitchModal()">
   <div class="modal">
     <div class="modal-head">
-      <h3 id="modal-title">Add Entry</h3>
-      <button class="close-btn" onclick="closeModal()">✕</button>
+      <h3 id="pitch-modal-title">Add Curator</h3>
+      <button class="icon-btn" onclick="closePitchModal()">✕</button>
     </div>
-    <div class="form-row">
-      <label>Type</label>
-      <select id="f-mtype">
-        <option value="playlist_curator">Playlist Curator</option>
-        <option value="blog">Blog</option>
-        <option value="platform">Platform</option>
-        <option value="community">Community</option>
-      </select>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>Playlist Name</label>
+        <input id="pm-name" type="text" placeholder="e.g. Indie Fresh Picks" />
+      </div>
+      <div class="form-row">
+        <label>Curator Handle</label>
+        <input id="pm-curator" type="text" placeholder="e.g. @melodymaven" />
+      </div>
     </div>
-    <div class="form-row">
-      <label>Name</label>
-      <input id="f-mname" type="text" placeholder="Playlist or blog name" />
+    <div class="form-grid">
+      <div class="form-row">
+        <label>Followers</label>
+        <input id="pm-followers" type="text" placeholder="e.g. 48,200" />
+      </div>
+      <div class="form-row">
+        <label>Contact / Link</label>
+        <input id="pm-contact" type="text" placeholder="https://…" />
+      </div>
     </div>
-    <div class="form-row">
-      <label>Contact / URL</label>
-      <input id="f-mcontact" type="text" placeholder="https://…" />
-    </div>
-    <div class="form-row">
-      <label>Platform</label>
-      <input id="f-mplatform" type="text" placeholder="spotify, web, email…" />
+    <div class="form-grid">
+      <div class="form-row">
+        <label>Date Contacted</label>
+        <input id="pm-contacted" type="date" />
+      </div>
+      <div class="form-row">
+        <label>Follow-up Date</label>
+        <input id="pm-followup" type="date" />
+      </div>
     </div>
     <div class="form-row">
       <label>Status</label>
-      <select id="f-mstatus">
-        <option value="identified">Identified</option>
-        <option value="contacted">Contacted</option>
-        <option value="added">Added</option>
-        <option value="declined">Declined</option>
-        <option value="no_response">No Response</option>
+      <select id="pm-status">
+        <option value="identified">Identified — haven't reached out yet</option>
+        <option value="pitched">Pitched — waiting to hear back</option>
+        <option value="added">Added ✓ — I'm on the playlist!</option>
+        <option value="declined">Declined — not a fit</option>
       </select>
     </div>
     <div class="form-row">
       <label>Notes</label>
-      <textarea id="f-mnotes" rows="3" placeholder="Any notes…"></textarea>
+      <textarea id="pm-notes" rows="3" placeholder="What did you say? What did they say? Any details…"></textarea>
     </div>
-    <div class="form-actions">
-      <button class="btn-grey" onclick="closeModal()">Cancel</button>
-      <button class="btn-green" onclick="saveEntry()">Save</button>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closePitchModal()">Cancel</button>
+      <button class="btn btn-green" onclick="savePitch()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Playlist Modal -->
+<div id="pl-overlay" class="overlay hidden" onclick="if(event.target===this)closePlModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Add Playlist I'm On</h3>
+      <button class="icon-btn" onclick="closePlModal()">✕</button>
+    </div>
+    <div class="form-row">
+      <label>Playlist Name</label>
+      <input id="plm-name" type="text" placeholder="e.g. Indie Fresh Picks" />
+    </div>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>Curator</label>
+        <input id="plm-curator" type="text" placeholder="Curator name" />
+      </div>
+      <div class="form-row">
+        <label>Followers</label>
+        <input id="plm-followers" type="text" placeholder="e.g. 48000" />
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>Date Added</label>
+        <input id="plm-date" type="date" />
+      </div>
+      <div class="form-row">
+        <label>Playlist Link</label>
+        <input id="plm-link" type="text" placeholder="https://open.spotify.com/…" />
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Emoji / Color</label>
+      <input id="plm-emoji" type="text" placeholder="🎵" style="width:80px" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closePlModal()">Cancel</button>
+      <button class="btn btn-green" onclick="savePlaylist()">Save</button>
     </div>
   </div>
 </div>
@@ -344,281 +461,429 @@
 <div id="toast"></div>
 
 <script>
-// ── Data ─────────────────────────────────────────────────────────────────────
-const CURATORS = [
-  { name:"Indie Fresh Picks",       curator:"melodymaven",   followers:48200, via:"Avi Snow" },
-  { name:"Chill Vibes Only",        curator:"chillcurator",  followers:31500, via:"Avi Snow" },
-  { name:"New Indie Discoveries",   curator:"indieworld",    followers:22100, via:"Phoebe Bridgers" },
-  { name:"Morning Coffee Music",    curator:"jazzhandspl",   followers:18900, via:"Novo Amor" },
-  { name:"Folk & Soul Sessions",    curator:"folkfanatic",   followers:14300, via:"Novo Amor" },
-  { name:"Bedroom Pop Gems",        curator:"bedroombeats",  followers:11200, via:"Avi Snow" },
-  { name:"Late Night Indie",        curator:"nightowlmusic", followers:9800,  via:"Phoebe Bridgers" },
-  { name:"Acoustic Stories",        curator:"acousticvibes", followers:7600,  via:"Novo Amor" },
+// ════════════════════════════════ DATA ═══════════════════════════════════════
+
+let pitches = [
+  { id:'p1', name:'Indie Fresh Picks',      curator:'melodymaven',   followers:48200, contact:'#', contacted:'2026-04-20', followup:'2026-05-04', status:'pitched',     notes:'Sent IG DM. They asked for a link.' },
+  { id:'p2', name:'Chill Vibes Only',        curator:'chillcurator',  followers:31500, contact:'#', contacted:'2026-05-01', followup:'2026-05-15', status:'pitched',     notes:'Submitted via SubmitHub.' },
+  { id:'p3', name:'New Indie Discoveries',   curator:'indieworld',    followers:22100, contact:'#', contacted:'',           followup:'',           status:'identified',  notes:'Found via Phoebe Bridgers search.' },
+  { id:'p4', name:'Morning Coffee Music',    curator:'jazzhandspl',   followers:18900, contact:'#', contacted:'2026-04-10', followup:'2026-04-24', status:'declined',    notes:'Said not accepting submissions RN.' },
+  { id:'p5', name:'Folk & Soul Sessions',    curator:'folkfanatic',   followers:14300, contact:'#', contacted:'2026-04-28', followup:'2026-05-12', status:'pitched',     notes:'Cold DM on Spotify.' },
+  { id:'p6', name:'Bedroom Pop Gems',        curator:'bedroombeats',  followers:11200, contact:'#', contacted:'2026-03-15', followup:'2026-03-29', status:'added',       notes:'Added Mar 22!' },
+  { id:'p7', name:'Late Night Indie',        curator:'nightowlmusic', followers:9800,  contact:'#', contacted:'2026-04-05', followup:'2026-04-19', status:'added',       notes:'Featured track added.' },
+  { id:'p8', name:'Acoustic Stories',        curator:'acousticvibes', followers:7600,  contact:'#', contacted:'',           followup:'',           status:'identified',  notes:'' },
 ];
 
-const BLOGS = [
-  { name:"SubmitHub",         url:"https://submithub.com",                  type:"platform",  genres:"All genres" },
-  { name:"Groover",           url:"https://groover.co",                     type:"platform",  genres:"All genres" },
-  { name:"Playlist Push",     url:"https://playlistpush.com",               type:"platform",  genres:"All genres" },
-  { name:"Fluence",           url:"https://fluence.io",                     type:"platform",  genres:"All genres" },
-  { name:"Indie Shuffle",     url:"https://www.indieshuffle.com/submit",    type:"blog",      genres:"Indie, Pop, Alternative" },
-  { name:"Hilly Dilly",       url:"https://hillydilly.com",                 type:"blog",      genres:"Indie, Pop" },
-  { name:"The Wild Honey Pie",url:"https://thewildhoneypie.com/submit",     type:"blog",      genres:"Indie, Folk" },
-  { name:"Ones To Watch",     url:"https://www.ones2watch.com",             type:"blog",      genres:"Pop, Indie, R&B" },
-  { name:"Earmilk",           url:"https://www.earmilk.com/submit",         type:"blog",      genres:"Electronic, Indie" },
-  { name:"Soundigest",        url:"https://soundigest.com/submit-music",    type:"blog",      genres:"Indie, Pop" },
-  { name:"r/indieheads",      url:"https://reddit.com/r/indieheads",        type:"community", genres:"Indie, Alternative" },
-  { name:"r/spotify",         url:"https://reddit.com/r/spotify",           type:"community", genres:"All genres" },
-  { name:"r/WeAreTheMusicMakers", url:"https://reddit.com/r/WeAreTheMusicMakers", type:"community", genres:"All genres" },
+let playlists = [
+  { id:'pl1', name:'Bedroom Pop Gems',  curator:'bedroombeats',  followers:11200, dateAdded:'2026-03-22', link:'#', emoji:'🛏️' },
+  { id:'pl2', name:'Late Night Indie',  curator:'nightowlmusic', followers:9800,  dateAdded:'2026-04-05', link:'#', emoji:'🌙' },
+  { id:'pl3', name:'Soft Sounds Daily', curator:'softbeats',     followers:6400,  dateAdded:'2026-02-10', link:'#', emoji:'☁️' },
 ];
 
-let log = [
-  { id:"1", date:"2026-04-10", type:"playlist_curator", name:"Indie Fresh Picks",  contact:"#", platform:"spotify", status:"contacted",   notes:"Sent DM via Instagram" },
-  { id:"2", date:"2026-04-12", type:"platform",         name:"SubmitHub",           contact:"#", platform:"web",     status:"contacted",   notes:"Submitted 3 tracks" },
-  { id:"3", date:"2026-04-15", type:"blog",             name:"Indie Shuffle",       contact:"#", platform:"web",     status:"added",       notes:"Featured on homepage!" },
-  { id:"4", date:"2026-04-18", type:"playlist_curator", name:"Chill Vibes Only",   contact:"#", platform:"spotify", status:"identified",  notes:"" },
-  { id:"5", date:"2026-04-20", type:"community",        name:"r/indieheads",        contact:"#", platform:"reddit",  status:"contacted",   notes:"Posted new release" },
-  { id:"6", date:"2026-04-25", type:"playlist_curator", name:"Morning Coffee Music",contact:"#", platform:"spotify", status:"declined",    notes:"Not accepting submissions" },
-  { id:"7", date:"2026-05-01", type:"blog",             name:"Hilly Dilly",         contact:"#", platform:"web",     status:"no_response", notes:"Submitted 2 weeks ago" },
-  { id:"8", date:"2026-05-03", type:"platform",         name:"Groover",             contact:"#", platform:"web",     status:"identified",  notes:"" },
+let editingPitchId = null;
+let editingPlId = null;
+
+const CHECKLIST = [
+  { phase:'6 Weeks Before', items:[
+    { id:'c1',  text:'Finish mastering',          tip:'Make sure your track sounds great on Spotify — check the loudness normalization (-14 LUFS target).' },
+    { id:'c2',  text:'Upload to distributor',      tip:'Use DistroKid, TuneCore, or CD Baby. Set release date 3–4 weeks out to give time for pitching.' },
+    { id:'c3',  text:'Pitch to Spotify Editorial', tip:'Open Spotify for Artists → go to "Music" → your unreleased track → click "Pitch a Song". Do this ASAP after upload.' },
+  ]},
+  { phase:'4 Weeks Before', items:[
+    { id:'c4',  text:'Submit to SubmitHub',        tip:'Target 10–20 curators. Write a personal note for each — generic pitches get ignored.' },
+    { id:'c5',  text:'Submit to Groover',          tip:'Groover guarantees feedback. Great for getting honest curator reactions and potential adds.' },
+    { id:'c6',  text:'Email 5 music blogs',        tip:'Research which blogs cover your genre. Personalize each email with a line about their recent posts.' },
+  ]},
+  { phase:'2 Weeks Before', items:[
+    { id:'c7',  text:'Post on socials (tease)',    tip:'Short clip or studio snippet. Don\'t reveal the whole song — build curiosity.' },
+    { id:'c8',  text:'DM playlist curators',       tip:'Reach out to curators in your pipeline who haven\'t responded. Keep it short and genuine.' },
+    { id:'c9',  text:'Tell your existing fans',    tip:'Email list, Discord, Patreon — whoever follows you closely. They\'ll save and share on day 1.' },
+  ]},
+  { phase:'Release Day', items:[
+    { id:'c10', text:'Share everywhere',           tip:'All social platforms, stories, reels. Ask friends and family to save (not just stream) — saves boost algorithmic reach.' },
+    { id:'c11', text:'Post in Reddit communities', tip:'r/indieheads, r/spotify, genre-specific subs. Be genuine, not spammy.' },
+    { id:'c12', text:'Thank curators who added you', tip:'A quick thank-you DM goes a long way and builds a relationship for future releases.' },
+  ]},
+  { phase:'After Release', items:[
+    { id:'c13', text:'Follow up with no-responses', tip:'Wait 2 weeks then send a polite follow-up. Most curators are just busy, not ignoring you.' },
+    { id:'c14', text:'Pitch to Playlist Push',     tip:'Now that you have streaming data, Playlist Push works better with proof of traction.' },
+    { id:'c15', text:'Note what worked',           tip:'Which platforms drove the most adds? Which pitches got replies? Use this for your next release.' },
+  ]},
 ];
 
-let editingId = null;
-const savedCurators = new Set();
+let checkState = JSON.parse(localStorage.getItem('avi-checks') || '{}');
+let releaseData = JSON.parse(localStorage.getItem('avi-release') || '{"title":"","date":""}');
 
-// ── Tabs ─────────────────────────────────────────────────────────────────────
-function showTab(name) {
+const PLATFORMS = [
+  { name:'Spotify for Artists', icon:'🎧', type:'Editorial Pitch', color:'#1db954',
+    desc:'Pitch directly to Spotify\'s editorial team for playlist consideration. FREE — and the highest-value pitch you can make. Do this FIRST.',
+    cost:'Free', turnaround:'Before release', url:'https://artists.spotify.com',
+    tip:'Only available for unreleased songs. Pitch at least 7 days before release date.' },
+  { name:'SubmitHub', icon:'📬', type:'Curator Platform', color:'#5b9bd5',
+    desc:'Send your track to hundreds of independent playlist curators and blogs. Pay per submission — curators must listen and respond.',
+    cost:'$1–3/submit', turnaround:'1–5 days', url:'https://www.submithub.com',
+    tip:'Write a personal note for each curator. Generic pitches get skipped.' },
+  { name:'Groover', icon:'🎚️', type:'Curator Platform', color:'#9b7fe8',
+    desc:'Guaranteed feedback from curators, labels, and blogs. Even if they don\'t add you, you get a response.',
+    cost:'€2/submit', turnaround:'7 days', url:'https://groover.co',
+    tip:'Great for early-career artists who need feedback to improve their pitch.' },
+  { name:'Playlist Push', icon:'📈', type:'Curator Network', color:'#f5c842',
+    desc:'Algorithm-matched curator network. Works best once you have some streaming history to show curators.',
+    cost:'$300+/campaign', turnaround:'2 weeks', url:'https://playlistpush.com',
+    tip:'Higher investment but can result in dozens of adds from one campaign.' },
+  { name:'Fluence', icon:'⚡', type:'Creator Platform', color:'#e05555',
+    desc:'Submit to curators, TikTok creators, and media contacts. Good for getting your song into video content.',
+    cost:'$1–5/submit', turnaround:'3–7 days', url:'https://fluence.io',
+    tip:'Target TikTok creators to get sync opportunities alongside playlist adds.' },
+  { name:'Indie Shuffle', icon:'🔀', type:'Music Blog', color:'#5b9bd5',
+    desc:'Indie music blog with a strong following. Getting featured here drives Spotify listeners organically.',
+    cost:'Free', turnaround:'1–3 weeks', url:'https://www.indieshuffle.com/submit',
+    tip:'They only feature music they genuinely love. Be selective — make sure your track is a great fit.' },
+  { name:'r/indieheads', icon:'🟠', type:'Community', color:'#ff4500',
+    desc:'Reddit community for indie music fans. Post your release, do a "New Music Friday" thread, engage genuinely.',
+    cost:'Free', turnaround:'Immediate', url:'https://reddit.com/r/indieheads',
+    tip:'Be a real member of the community, not just a self-promoter. Comment on other posts too.' },
+  { name:'Hive', icon:'🐝', type:'Fan Platform', color:'#f5c842',
+    desc:'A music-first social network where fans discover new artists. Great for building an early fanbase organically.',
+    cost:'Free', turnaround:'Ongoing', url:'https://hivesocial.app',
+    tip:'Post consistently and engage with other artists. The algorithm favors genuine interaction.' },
+];
+
+// ════════════════════════════════ TABS ═══════════════════════════════════════
+
+function showTab(name, btn) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
-  event.currentTarget.classList.add('active');
-  if (name === 'analytics') renderAnalytics();
+  btn.classList.add('active');
+  if (name === 'home') renderHome();
+  if (name === 'pipeline') renderPipeline();
+  if (name === 'playlists') renderPlaylists();
 }
 
-// ── Curator Finder ────────────────────────────────────────────────────────────
-function runSearch() {
-  const btn = document.querySelector('#panel-curators .btn-green');
-  btn.textContent = 'Searching…';
-  btn.disabled = true;
-  setTimeout(() => {
-    renderCurators();
-    document.getElementById('curator-empty').classList.add('hidden');
-    document.getElementById('curator-content').classList.remove('hidden');
-    btn.textContent = 'Search';
-    btn.disabled = false;
-  }, 900);
-}
+// ════════════════════════════════ HOME ═══════════════════════════════════════
 
-function renderCurators() {
-  const tbody = document.getElementById('curator-tbody');
-  tbody.innerHTML = CURATORS.map((c, i) => `
-    <tr>
-      <td><span style="color:#1db954;font-size:13px">${c.name}</span></td>
-      <td><span style="color:#1db954;font-size:13px">${c.curator}</span></td>
-      <td class="right">${c.followers.toLocaleString()}</td>
-      <td style="color:var(--muted)">${c.via}</td>
-      <td>
-        <button class="btn-text" id="save-c-${i}" onclick="saveCurator(${i})">
-          ${savedCurators.has(i) ? 'Saved ✓' : 'Save'}
-        </button>
-      </td>
-    </tr>`).join('');
-}
+function renderHome() {
+  const now = new Date();
+  const hours = now.getHours();
+  const greet = hours < 12 ? 'Good morning' : hours < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('greeting-text').textContent = greet + ', Avi 👋';
+  document.getElementById('greeting-date').textContent = now.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
 
-function saveCurator(i) {
-  savedCurators.add(i);
-  const c = CURATORS[i];
-  addToLog({ type:'playlist_curator', name:c.name, contact:'#', platform:'spotify', status:'identified', notes:`Curator: ${c.curator} | Followers: ${c.followers.toLocaleString()}` });
-  document.getElementById('save-c-' + i).textContent = 'Saved ✓';
-  toast('Saved to tracker');
-}
+  const added = pitches.filter(p => p.status === 'added').length;
+  const pitched = pitches.filter(p => p.status === 'pitched').length;
+  const totalReach = playlists.reduce((s, p) => s + num(p.followers), 0);
+  const overdue = getOverdue();
 
-function saveAll() {
-  CURATORS.forEach((_, i) => { if (!savedCurators.has(i)) saveCurator(i); });
-  toast('All curators saved to tracker');
-}
+  document.getElementById('home-stats').innerHTML = [
+    { num: playlists.length,   lbl: 'Playlists On',     sub: `<span class="green">${totalReach.toLocaleString()} total reach</span>`, color: '#1db954' },
+    { num: pitched,            lbl: 'Active Pitches',   sub: `Waiting to hear back`, color: '#f5c842' },
+    { num: pitches.filter(p=>p.status==='identified').length, lbl: 'To Pitch Next', sub: 'Ready to reach out', color: '#5b9bd5' },
+    { num: overdue.length,     lbl: 'Follow-ups Due',   sub: overdue.length ? `<span class="red">Needs attention</span>` : `<span class="green">All good!</span>`, color: overdue.length ? '#e05555' : '#1db954' },
+  ].map(s => `
+    <div class="stat-box">
+      <div class="num" style="color:${s.color}">${s.num}</div>
+      <div class="lbl">${s.lbl}</div>
+      <div class="sub">${s.sub}</div>
+    </div>`).join('');
 
-// ── Tracker ───────────────────────────────────────────────────────────────────
-function renderTracker() {
-  const fs = document.getElementById('f-status').value;
-  const ft = document.getElementById('f-type').value;
-  const fq = document.getElementById('f-search').value.toLowerCase();
-  const rows = log.filter(e =>
-    (!fs || e.status === fs) && (!ft || e.type === ft) &&
-    (!fq || e.name.toLowerCase().includes(fq))
-  );
-  const tbody = document.getElementById('tracker-tbody');
-  const empty = document.getElementById('tracker-empty');
-  if (!rows.length) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
-  empty.classList.add('hidden');
-  const typeColor = { playlist_curator:'#a78bfa', blog:'#5ba3d9', platform:'#1db954', community:'#c8a84b' };
-  tbody.innerHTML = rows.map(e => `
-    <tr>
-      <td style="color:var(--muted);white-space:nowrap">${e.date}</td>
-      <td><span style="font-size:10px;font-weight:700;text-transform:uppercase;color:${typeColor[e.type]||'#888'}">${e.type}</span></td>
-      <td><span style="color:#1db954;font-size:13px">${e.name}</span></td>
-      <td style="color:var(--muted)">${e.platform}</td>
-      <td>
-        <select onchange="updateStatus('${e.id}',this.value)" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:4px 8px;font-size:12px;outline:none;font-family:inherit">
-          ${['identified','contacted','added','declined','no_response'].map(s => `<option value="${s}" ${e.status===s?'selected':''}>${s}</option>`).join('')}
-        </select>
-      </td>
-      <td style="color:var(--muted);font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.notes}">${e.notes}</td>
-      <td>
-        <button class="btn-text" onclick="openModal('${e.id}')">Edit</button>
-        <button class="btn-text" style="color:var(--muted)" onmouseover="this.style.color='#e25454'" onmouseout="this.style.color='var(--muted)'" onclick="deleteEntry('${e.id}')">Del</button>
-      </td>
-    </tr>`).join('');
-}
+  // Today's actions
+  const actions = [];
+  const identified = pitches.filter(p => p.status === 'identified');
+  if (identified.length) actions.push({ icon:'🎯', bg:'rgba(91,155,213,.15)', title:`Pitch ${identified[0].name}`, sub:`You have ${identified.length} curator${identified.length>1?'s':''} ready to reach out to` });
+  if (overdue.length) actions.push({ icon:'⏰', bg:'rgba(224,85,85,.15)', title:`Follow up with ${overdue[0].name}`, sub:`${overdue.length} follow-up${overdue.length>1?'s':''} are overdue` });
+  const pd = releaseData.date ? daysUntil(releaseData.date) : null;
+  if (pd !== null && pd <= 14) actions.push({ icon:'🚀', bg:'rgba(29,185,84,.15)', title:`Release in ${pd} days — finish your checklist`, sub:`${releaseData.title || 'Your release'} is coming up fast` });
+  if (!actions.length) actions.push({ icon:'✅', bg:'rgba(29,185,84,.15)', title:'You\'re all caught up!', sub:'No urgent actions right now. Keep pitching.' });
 
-function updateStatus(id, status) {
-  const e = log.find(x => x.id === id);
-  if (e) { e.status = status; renderAnalytics(); }
-}
+  document.getElementById('today-actions').innerHTML = actions.map(a => `
+    <div class="action-item">
+      <div class="action-icon" style="background:${a.bg}">${a.icon}</div>
+      <div class="action-text"><strong>${a.title}</strong><span>${a.sub}</span></div>
+    </div>`).join('');
 
-function deleteEntry(id) {
-  if (!confirm('Delete this entry?')) return;
-  log = log.filter(e => e.id !== id);
-  renderTracker();
-  renderAnalytics();
-}
+  // Recent wins
+  const wins = [...pitches.filter(p=>p.status==='added'), ...playlists].slice(0, 4);
+  document.getElementById('recent-wins').innerHTML = wins.length ? wins.map(w => `
+    <div class="win-item">
+      <span class="win-emoji">🎉</span>
+      <div class="win-text"><strong>${w.name}</strong><span>${w.notes || `Added to playlist · ${w.followers?.toLocaleString()} followers`}</span></div>
+    </div>`).join('') : `<p class="muted small" style="padding:20px 0;text-align:center">Your wins will show up here once you start getting added to playlists.</p>`;
 
-function addToLog(data) {
-  log.push({ id: Date.now().toString(), date: new Date().toISOString().slice(0,10), ...data });
-  renderTracker();
-}
+  // Follow-ups
+  const fu = getOverdue();
+  const fuCard = document.getElementById('followup-card');
+  if (!fu.length) { fuCard.classList.add('hidden'); return; }
+  fuCard.classList.remove('hidden');
+  document.getElementById('followup-count').textContent = fu.length + ' overdue';
+  document.getElementById('followup-list').innerHTML = fu.map(p => `
+    <div class="action-item">
+      <div class="action-icon" style="background:rgba(224,85,85,.15)">⏰</div>
+      <div class="action-text">
+        <strong>${p.name}</strong>
+        <span>Contacted ${p.contacted} · Follow-up was due ${p.followup}</span>
+      </div>
+      <button class="btn btn-ghost btn-xs" onclick="markFollowedUp('${p.id}')">Done</button>
+    </div>`).join('');
 
-// ── Modal ─────────────────────────────────────────────────────────────────────
-function openModal(id) {
-  editingId = id;
-  const e = id ? log.find(x => x.id === id) : null;
-  document.getElementById('modal-title').textContent = e ? 'Edit Entry' : 'Add Entry';
-  document.getElementById('f-mtype').value    = e?.type     || 'playlist_curator';
-  document.getElementById('f-mname').value    = e?.name     || '';
-  document.getElementById('f-mcontact').value = e?.contact  || '';
-  document.getElementById('f-mplatform').value= e?.platform || '';
-  document.getElementById('f-mstatus').value  = e?.status   || 'identified';
-  document.getElementById('f-mnotes').value   = e?.notes    || '';
-  document.getElementById('overlay').classList.remove('hidden');
-}
-
-function closeModal() { document.getElementById('overlay').classList.add('hidden'); editingId = null; }
-
-function saveEntry() {
-  const data = {
-    type:     document.getElementById('f-mtype').value,
-    name:     document.getElementById('f-mname').value.trim(),
-    contact:  document.getElementById('f-mcontact').value.trim(),
-    platform: document.getElementById('f-mplatform').value.trim(),
-    status:   document.getElementById('f-mstatus').value,
-    notes:    document.getElementById('f-mnotes').value.trim(),
-  };
-  if (!data.name) { alert('Name is required'); return; }
-  if (editingId) {
-    const e = log.find(x => x.id === editingId);
-    if (e) Object.assign(e, data);
-  } else {
-    log.push({ id: Date.now().toString(), date: new Date().toISOString().slice(0,10), ...data });
-  }
-  closeModal();
-  renderTracker();
-  renderAnalytics();
-  toast(editingId ? 'Entry updated' : 'Entry added');
-}
-
-// ── Blogs ─────────────────────────────────────────────────────────────────────
-function renderBlogs() {
-  const typeColor = { platform:'#1db954', blog:'#5ba3d9', community:'#c8a84b' };
-  const saved = new Set();
-  document.getElementById('blog-grid').innerHTML = BLOGS.map((b, i) => `
-    <div class="blog-card">
-      <span class="blog-type" style="color:${typeColor[b.type]||'#888'}">${b.type}</span>
-      <h4>${b.name}</h4>
-      <p class="genres">${b.genres}</p>
-      <a href="${b.url}" target="_blank" class="visit-btn">Visit →</a>
-      <button class="save-btn" id="sblog-${i}" onclick="saveBlog(${i},'${b.name}','${b.type}')">Save to Tracker</button>
+  // Reach
+  const totalF = playlists.reduce((s,p) => s + num(p.followers), 0);
+  document.getElementById('reach-summary').innerHTML = [
+    { lbl:'Playlists', val: playlists.length, color: '#1db954' },
+    { lbl:'Combined Followers', val: totalF.toLocaleString(), color: '#f0f0f0' },
+    { lbl:'Pitches Sent', val: pitches.filter(p=>p.contacted).length, color: '#5b9bd5' },
+    { lbl:'Success Rate', val: pitches.length ? Math.round(pitches.filter(p=>p.status==='added').length/pitches.length*100)+'%' : '0%', color: '#9b7fe8' },
+  ].map(r => `
+    <div style="padding:12px 20px;background:var(--surface2);border-radius:10px;text-align:center;flex:1;min-width:100px">
+      <div style="font-size:22px;font-weight:800;color:${r.color}">${r.val}</div>
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:3px">${r.lbl}</div>
     </div>`).join('');
 }
 
-function saveBlog(i, name, type) {
-  addToLog({ type, name, contact: BLOGS[i].url, platform:'web', status:'identified', notes:'' });
-  const btn = document.getElementById('sblog-' + i);
-  btn.textContent = 'Saved ✓';
-  btn.classList.add('saved');
-  toast(name + ' saved to tracker');
+function getOverdue() {
+  const today = new Date().toISOString().slice(0,10);
+  return pitches.filter(p => p.status === 'pitched' && p.followup && p.followup < today);
 }
 
-// ── Analytics ─────────────────────────────────────────────────────────────────
-function renderAnalytics() {
-  const byStatus = {}, byType = {}, byMonth = {};
-  log.forEach(e => {
-    byStatus[e.status] = (byStatus[e.status] || 0) + 1;
-    byType[e.type]     = (byType[e.type]     || 0) + 1;
-    const m = (e.date || '').slice(0, 7);
-    if (m) byMonth[m] = (byMonth[m] || 0) + 1;
-  });
-
-  // Stat cards
-  const statusLabel = { identified:'Identified', contacted:'Contacted', added:'Added ✓', declined:'Declined', no_response:'No Response' };
-  document.getElementById('stat-cards').innerHTML =
-    `<div class="stat-card"><div class="stat-num">${log.length}</div><div class="stat-label">Total</div></div>` +
-    Object.entries(byStatus).map(([s, n]) =>
-      `<div class="stat-card"><div class="stat-num">${n}</div><div class="stat-label">${statusLabel[s]||s}</div></div>`
-    ).join('');
-
-  // Status bars
-  const statusColors = { identified:'#5ba3d9', contacted:'#6dbb7a', added:'#1db954', declined:'#e07070', no_response:'#c8a84b' };
-  const maxS = Math.max(...Object.values(byStatus), 1);
-  document.getElementById('chart-status').innerHTML = `<div class="bar-chart">` +
-    Object.entries(byStatus).map(([s, n]) => `
-      <div class="bar-row">
-        <span class="bar-label">${s.replace('_',' ')}</span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width:${Math.round(n/maxS*100)}%;background:${statusColors[s]||'#888'}">${n}</div>
-        </div>
-        <span class="bar-val">${n}</span>
-      </div>`).join('') + `</div>`;
-
-  // Type bars
-  const typeColors = { playlist_curator:'#a78bfa', blog:'#5ba3d9', platform:'#1db954', community:'#c8a84b' };
-  const maxT = Math.max(...Object.values(byType), 1);
-  document.getElementById('chart-type').innerHTML = `<div class="bar-chart">` +
-    Object.entries(byType).map(([t, n]) => `
-      <div class="bar-row">
-        <span class="bar-label">${t.replace('_',' ')}</span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width:${Math.round(n/maxT*100)}%;background:${typeColors[t]||'#888'}">${n}</div>
-        </div>
-        <span class="bar-val">${n}</span>
-      </div>`).join('') + `</div>`;
-
-  // Timeline
-  const months = Object.keys(byMonth).sort();
-  const maxM = Math.max(...Object.values(byMonth), 1);
-  document.getElementById('chart-timeline').innerHTML =
-    `<div class="timeline">` +
-    months.map(m => {
-      const n = byMonth[m];
-      const h = Math.round(n / maxM * 80) + 20;
-      return `<div class="timeline-bar" style="height:${h}px;background:linear-gradient(to top,#1db954,#17a349)"><span class="timeline-num">${n}</span></div>`;
-    }).join('') +
-    `</div><div class="timeline-labels">` +
-    months.map(m => `<span class="timeline-lbl">${m}</span>`).join('') +
-    `</div>`;
+function markFollowedUp(id) {
+  const p = pitches.find(x => x.id === id);
+  if (p) { p.followup = futureDate(14); toast('Follow-up rescheduled for 2 weeks'); renderHome(); }
 }
 
-// ── Toast ─────────────────────────────────────────────────────────────────────
+// ════════════════════════════════ PIPELINE ═══════════════════════════════════
+
+function renderPipeline() {
+  const stages = [
+    { key:'identified', label:'Identified', color:'#5b9bd5' },
+    { key:'pitched',    label:'Pitched',    color:'#f5c842' },
+    { key:'added',      label:'Added ✓',    color:'#1db954' },
+    { key:'declined',   label:'Declined',   color:'#e05555' },
+  ];
+  const today = new Date().toISOString().slice(0,10);
+
+  document.getElementById('pipeline-board').innerHTML = stages.map(s => {
+    const items = pitches.filter(p => p.status === s.key);
+    return `
+      <div class="stage-col">
+        <div class="stage-header">
+          <span class="stage-name" style="color:${s.color}">${s.label}</span>
+          <span class="stage-count">${items.length}</span>
+        </div>
+        ${items.map(p => {
+          const dueCls = !p.followup ? '' : p.followup < today ? 'overdue' : daysUntil(p.followup) <= 3 ? 'due-soon' : 'on-track';
+          const dueText = !p.followup ? '' : p.followup < today ? '⚠ Overdue' : `Follow up ${p.followup}`;
+          return `
+            <div class="pitch-card" onclick="openPitchModal('${p.id}')">
+              <div class="pc-name">${p.name}</div>
+              <div class="pc-meta">${p.curator} · ${num(p.followers).toLocaleString()} followers</div>
+              ${dueText ? `<div class="pc-due ${dueCls}">⏰ ${dueText}</div>` : ''}
+            </div>`;
+        }).join('')}
+      </div>`;
+  }).join('');
+
+  const tbody = document.getElementById('pipeline-tbody');
+  const pCols = { identified:'#5b9bd5', pitched:'#f5c842', added:'#1db954', declined:'#e05555' };
+  tbody.innerHTML = pitches.map(p => {
+    const dueCls = !p.followup ? '' : p.followup < today ? 'red' : daysUntil(p.followup) <= 3 ? 'yellow' : 'green';
+    return `<tr>
+      <td><div class="priority p-${p.status==='added'?'low':p.status==='pitched'?'med':'high'}"></div></td>
+      <td><div class="bold small">${p.name}</div><div class="muted" style="font-size:11px">${p.curator}</div></td>
+      <td class="td-muted">${num(p.followers).toLocaleString()}</td>
+      <td class="td-muted">${p.contacted || '—'}</td>
+      <td class="${dueCls} small">${p.followup || '—'}</td>
+      <td><span style="font-size:11px;font-weight:700;color:${pCols[p.status]||'#888'};text-transform:uppercase">${p.status}</span></td>
+      <td class="td-muted" style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.notes}">${p.notes||'—'}</td>
+      <td>
+        <button class="icon-btn" onclick="openPitchModal('${p.id}')">✏️</button>
+        <button class="icon-btn" onclick="deletePitch('${p.id}')">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function openPitchModal(id) {
+  editingPitchId = id;
+  const p = id ? pitches.find(x => x.id === id) : null;
+  document.getElementById('pitch-modal-title').textContent = p ? 'Edit Curator' : 'Add Curator';
+  document.getElementById('pm-name').value = p?.name || '';
+  document.getElementById('pm-curator').value = p?.curator || '';
+  document.getElementById('pm-followers').value = p?.followers || '';
+  document.getElementById('pm-contact').value = p?.contact || '';
+  document.getElementById('pm-contacted').value = p?.contacted || '';
+  document.getElementById('pm-followup').value = p?.followup || '';
+  document.getElementById('pm-status').value = p?.status || 'identified';
+  document.getElementById('pm-notes').value = p?.notes || '';
+  document.getElementById('pitch-overlay').classList.remove('hidden');
+}
+function closePitchModal() { document.getElementById('pitch-overlay').classList.add('hidden'); editingPitchId = null; }
+function savePitch() {
+  const data = {
+    name: v('pm-name'), curator: v('pm-curator'), followers: v('pm-followers'),
+    contact: v('pm-contact'), contacted: v('pm-contacted'), followup: v('pm-followup'),
+    status: v('pm-status'), notes: v('pm-notes'),
+  };
+  if (!data.name) { alert('Playlist name is required'); return; }
+  if (editingPitchId) Object.assign(pitches.find(x => x.id === editingPitchId), data);
+  else pitches.unshift({ id:'p'+Date.now(), ...data });
+  closePitchModal();
+  renderPipeline();
+  renderHome();
+  toast(editingPitchId ? 'Curator updated' : 'Curator added');
+}
+function deletePitch(id) {
+  if (!confirm('Remove this pitch?')) return;
+  pitches = pitches.filter(x => x.id !== id);
+  renderPipeline();
+  renderHome();
+}
+
+// ════════════════════════════════ SUBMIT ════════════════════════════════════
+
+function renderSubmit() {
+  document.getElementById('platform-grid').innerHTML = PLATFORMS.map(p => `
+    <div class="platform-card">
+      <div class="plat-top">
+        <div class="plat-icon" style="background:${p.color}22">${p.icon}</div>
+        <div>
+          <div class="plat-name">${p.name}</div>
+          <div class="plat-type">${p.type}</div>
+        </div>
+      </div>
+      <p class="plat-desc">${p.desc}</p>
+      <div class="plat-stats">
+        <div class="plat-stat"><div class="val">${p.cost}</div><div class="key">Cost</div></div>
+        <div class="plat-stat"><div class="val">${p.turnaround}</div><div class="key">Turnaround</div></div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--muted);line-height:1.5">
+        💡 ${p.tip}
+      </div>
+      <div class="plat-btns">
+        <a href="${p.url}" target="_blank" class="btn btn-green btn-sm" style="text-decoration:none;flex:1;justify-content:center">Submit →</a>
+      </div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════ PLAYLISTS ══════════════════════════════════
+
+function renderPlaylists() {
+  const total = playlists.reduce((s,p) => s + num(p.followers), 0);
+  document.getElementById('reach-stats').innerHTML = [
+    { lbl:'Playlists', val: playlists.length, color:'#1db954' },
+    { lbl:'Total Listener Reach', val: total.toLocaleString(), color:'#f0f0f0' },
+    { lbl:'Avg Playlist Size', val: playlists.length ? Math.round(total/playlists.length).toLocaleString() : '0', color:'#5b9bd5' },
+  ].map(r => `
+    <div style="flex:1;min-width:130px;text-align:center;padding:12px">
+      <div style="font-size:26px;font-weight:800;color:${r.color}">${r.val}</div>
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:3px">${r.lbl}</div>
+    </div>`).join('');
+
+  const list = document.getElementById('playlist-list');
+  const empty = document.getElementById('playlist-empty');
+  if (!playlists.length) { list.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  list.innerHTML = [...playlists].sort((a,b) => num(b.followers)-num(a.followers)).map(p => `
+    <div class="playlist-card">
+      <div class="playlist-art" style="background:linear-gradient(135deg,var(--surface3),var(--surface2))">${p.emoji||'🎵'}</div>
+      <div class="playlist-info">
+        <strong>${p.name}</strong>
+        <span>by ${p.curator} · Added ${p.dateAdded}</span>
+        ${p.link && p.link !== '#' ? `<a href="${p.link}" target="_blank" style="font-size:11px;color:var(--green);margin-top:3px;display:block">Open on Spotify →</a>` : ''}
+      </div>
+      <div class="playlist-reach">
+        <div class="reach-num">${num(p.followers).toLocaleString()}</div>
+        <div class="reach-lbl">followers</div>
+      </div>
+      <div style="margin-left:8px">
+        <button class="icon-btn" onclick="removePl('${p.id}')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function openPlaylistModal() { document.getElementById('pl-overlay').classList.remove('hidden'); }
+function closePlModal() { document.getElementById('pl-overlay').classList.add('hidden'); }
+function savePlaylist() {
+  const name = v('plm-name');
+  if (!name) { alert('Name is required'); return; }
+  playlists.push({ id:'pl'+Date.now(), name, curator:v('plm-curator'), followers:v('plm-followers'), dateAdded:v('plm-date'), link:v('plm-link'), emoji:v('plm-emoji')||'🎵' });
+  closePlModal();
+  renderPlaylists();
+  renderHome();
+  toast('Playlist added!');
+}
+function removePl(id) {
+  if (!confirm('Remove this playlist?')) return;
+  playlists = playlists.filter(x => x.id !== id);
+  renderPlaylists();
+  renderHome();
+}
+
+// ════════════════════════════════ RELEASE ═══════════════════════════════════
+
+function renderRelease() {
+  const { title, date } = releaseData;
+  document.getElementById('release-title').value = title;
+  document.getElementById('release-date').value = date;
+  document.getElementById('release-name').textContent = title || 'Set your next release above ↑';
+  if (date) {
+    const d = daysUntil(date);
+    document.getElementById('release-countdown').textContent = d > 0 ? `${d} days until release` : d === 0 ? 'Release day! 🎉' : `Released ${Math.abs(d)} days ago`;
+  }
+
+  const all = CHECKLIST.flatMap(p => p.items);
+  const done = all.filter(i => checkState[i.id]).length;
+  const pct = Math.round(done / all.length * 100);
+  document.getElementById('prog-label').textContent = `${done} / ${all.length} complete`;
+  document.getElementById('prog-fill').style.width = pct + '%';
+
+  document.getElementById('checklist-wrap').innerHTML = CHECKLIST.map(phase => `
+    <div class="check-phase">${phase.phase}</div>
+    <div class="checklist">
+      ${phase.items.map(item => `
+        <div class="check-item ${checkState[item.id] ? 'done' : ''}" id="ci-${item.id}">
+          <div class="check-box ${checkState[item.id] ? 'checked' : ''}" onclick="toggleCheck('${item.id}')"></div>
+          <div class="check-content">
+            <strong>${item.text}</strong>
+            <p>${item.tip}</p>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+function updateRelease() {
+  releaseData = { title: v('release-title'), date: v('release-date') };
+  localStorage.setItem('avi-release', JSON.stringify(releaseData));
+  renderRelease();
+  renderHome();
+  toast('Release updated');
+}
+
+function toggleCheck(id) {
+  checkState[id] = !checkState[id];
+  localStorage.setItem('avi-checks', JSON.stringify(checkState));
+  renderRelease();
+}
+
+// ════════════════════════════════ UTILS ══════════════════════════════════════
+
+function v(id) { return document.getElementById(id)?.value?.trim() || ''; }
+function num(x) { return parseInt(String(x||'0').replace(/[^0-9]/g,'')) || 0; }
+function daysUntil(dateStr) { return Math.round((new Date(dateStr) - new Date(new Date().toDateString())) / 86400000); }
+function futureDate(days) { const d = new Date(); d.setDate(d.getDate()+days); return d.toISOString().slice(0,10); }
+
 function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  clearTimeout(t._to);
+  t._to = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ── Init ──────────────────────────────────────────────────────────────────────
-renderTracker();
-renderBlogs();
-renderAnalytics();
+// ════════════════════════════════ INIT ═══════════════════════════════════════
+
+renderHome();
+renderSubmit();
+renderRelease();
 </script>
 </body>
 </html>
