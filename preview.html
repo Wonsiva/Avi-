@@ -1,452 +1,624 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Avi Snow — Outreach App Preview</title>
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --green: #1db954; --green-dark: #17a349;
-      --bg: #0d0d0d; --surface: #181818; --surface2: #242424;
-      --border: #2a2a2a; --text: #e8e8e8; --muted: #888;
-      --danger: #e25454; --radius: 10px;
-      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; }
-    a { color: var(--green); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Avi Snow — Outreach App</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #1db954;
+    --bg: #0d0d0d;
+    --surface: #181818;
+    --surface2: #242424;
+    --border: #2a2a2a;
+    --text: #e8e8e8;
+    --muted: #888;
+  }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; min-height: 100vh; }
+
+  /* Header */
+  header { display: flex; align-items: center; justify-content: space-between; padding: 0 28px; height: 60px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; gap: 12px; flex-wrap: wrap; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; color: var(--green); }
+  nav { display: flex; gap: 4px; }
+  .tab-btn { background: none; border: none; color: var(--muted); font-size: 13px; padding: 8px 14px; border-radius: 8px; cursor: pointer; transition: all .15s; white-space: nowrap; font-family: inherit; }
+  .tab-btn:hover { color: var(--text); background: var(--surface2); }
+  .tab-btn.active { color: var(--green); background: rgba(29,185,84,.12); }
+
+  /* Layout */
+  main { padding: 28px; max-width: 1200px; margin: 0 auto; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* Panel header */
+  .panel-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
+  h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .sub { color: var(--muted); font-size: 13px; }
+
+  /* Buttons */
+  .btn-green { background: var(--green); color: #000; border: none; border-radius: 8px; padding: 9px 18px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .btn-green:hover { background: #17a349; }
+  .btn-grey { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 9px 18px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .btn-grey:hover { background: #2e2e2e; }
+  .btn-text { background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px 8px; border-radius: 6px; font-size: 13px; font-family: inherit; }
+  .btn-text:hover { color: var(--text); background: var(--surface2); }
+
+  /* Search bar */
+  .search-bar { display: flex; gap: 8px; }
+  .search-bar input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; padding: 9px 14px; width: 200px; outline: none; }
+  .search-bar input:focus { border-color: var(--green); }
+
+  /* Artist card */
+  .artist-card { display: flex; align-items: center; gap: 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; margin-bottom: 20px; }
+  .artist-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #1db954, #0d5c2e); display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; }
+  .artist-card h3 { font-size: 18px; font-weight: 700; }
+  .artist-card p { color: var(--muted); margin-top: 5px; font-size: 13px; }
+
+  /* Toolbar */
+  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .count { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; font-size: 12px; color: var(--muted); }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--surface); }
+  th { text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr { background: var(--surface); }
+  tbody tr:nth-child(even) { background: #1a1a1a; }
+  tbody tr:hover { background: var(--surface2); }
+  .right { text-align: right; }
+  a.gl { color: var(--green); text-decoration: none; font-size: 13px; }
+  a.gl:hover { text-decoration: underline; }
+
+  /* Status badges */
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+  .s-identified  { background: #1a2a3a; color: #5ba3d9; }
+  .s-contacted   { background: #1a2a1a; color: #6dbb7a; }
+  .s-added       { background: #1a3a1a; color: #1db954; }
+  .s-declined    { background: #2a1a1a; color: #e07070; }
+  .s-no_response { background: #2a2a1a; color: #c8a84b; }
+
+  /* Filters */
+  .filters { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .filters select, .filters input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; padding: 8px 12px; outline: none; }
+  .filters input { flex: 1; min-width: 160px; }
+
+  /* Blog grid */
+  .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+  .blog-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; transition: border-color .15s; }
+  .blog-card:hover { border-color: var(--green); }
+  .blog-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .blog-card h4 { font-size: 15px; font-weight: 700; }
+  .blog-card .genres { font-size: 12px; color: var(--muted); }
+  .visit-btn { display: block; margin-top: 4px; padding: 7px 14px; background: rgba(29,185,84,.1); color: var(--green); border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 600; text-align: center; }
+  .visit-btn:hover { background: rgba(29,185,84,.2); }
+  .save-btn { background: var(--surface2); color: var(--muted); border: none; border-radius: 6px; padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: color .15s; }
+  .save-btn:hover { color: var(--text); }
+  .save-btn.saved { color: var(--green); }
+
+  /* Stats */
+  .stat-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; text-align: center; }
+  .stat-num { font-size: 34px; font-weight: 800; color: var(--green); }
+  .stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .05em; }
+
+  /* Charts */
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .chart-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .chart-box.wide { grid-column: 1 / -1; }
+  .chart-box h3 { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 18px; text-transform: uppercase; letter-spacing: .05em; }
+  .bar-chart { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; }
+  .bar-label { width: 110px; font-size: 12px; color: var(--muted); text-align: right; flex-shrink: 0; }
+  .bar-track { flex: 1; background: var(--surface2); border-radius: 4px; height: 22px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #000; transition: width .6s ease; }
+  .bar-val { width: 30px; font-size: 12px; color: var(--muted); text-align: right; }
+  .donut-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .donut-legend { display: flex; flex-direction: column; gap: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .timeline { display: flex; align-items: flex-end; gap: 12px; height: 100px; }
+  .timeline-bar { flex: 1; border-radius: 4px 4px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 4px; }
+  .timeline-num { font-size: 11px; font-weight: 700; color: #000; }
+  .timeline-labels { display: flex; gap: 12px; margin-top: 8px; }
+  .timeline-lbl { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+
+  /* Modal */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.75); display: flex; align-items: center; justify-content: center; z-index: 200; }
+  .overlay.hidden { display: none; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 100%; max-width: 460px; padding: 28px; }
+  .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+  .modal-head h3 { font-size: 17px; font-weight: 700; }
+  .close-btn { background: none; border: none; color: var(--muted); font-size: 18px; cursor: pointer; padding: 2px 8px; border-radius: 6px; }
+  .close-btn:hover { color: var(--text); }
+  .form-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .form-row label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .form-row input, .form-row select, .form-row textarea { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; padding: 10px 13px; outline: none; font-family: inherit; resize: vertical; }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: var(--green); }
+  .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+
+  /* Toast */
+  #toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #000; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 13px; z-index: 999; box-shadow: 0 4px 12px rgba(0,0,0,.4); transition: opacity .3s; opacity: 0; pointer-events: none; }
+  #toast.show { opacity: 1; }
+
+  .empty { text-align: center; color: var(--muted); padding: 48px; }
+  .hidden { display: none !important; }
+
+  @media (max-width: 680px) {
+    header { height: auto; padding: 12px 16px; }
+    nav { overflow-x: auto; width: 100%; }
+    main { padding: 16px; }
+    .charts-grid { grid-template-columns: 1fr; }
+    .chart-box.wide { grid-column: auto; }
+  }
+</style>
 </head>
 <body>
-<div id="root"></div>
 
-<script type="text/babel">
-const { useState, useEffect, useRef } = React;
+<header>
+  <div class="logo">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M8 11.8C10.3 11 13.7 10.8 16 12M9 15c1.8-.7 4.2-.7 6 0M10 8.5c1.3-.4 3.7-.4 5 0"/>
+    </svg>
+    Avi Snow · Outreach
+  </div>
+  <nav>
+    <button class="tab-btn active" onclick="showTab('curators')">Curator Finder</button>
+    <button class="tab-btn" onclick="showTab('tracker')">Outreach Tracker</button>
+    <button class="tab-btn" onclick="showTab('blogs')">Blogs &amp; Platforms</button>
+    <button class="tab-btn" onclick="showTab('analytics')">Analytics</button>
+  </nav>
+</header>
 
-// ── Mock data ────────────────────────────────────────────────────────────────
-const MOCK_ARTIST = {
-  name: "Avi Snow", followers: 1240, genres: ["indie pop", "alternative", "folk"],
-  url: "https://open.spotify.com", image: null,
-};
-const MOCK_CURATORS = [
-  { playlist_name: "Indie Fresh Picks", owner_display: "melodymaven", followers: 48200, playlist_url: "#", owner_url: "#", found_via: "Avi Snow" },
-  { playlist_name: "Chill Vibes Only", owner_display: "chillcurator", followers: 31500, playlist_url: "#", owner_url: "#", found_via: "Avi Snow" },
-  { playlist_name: "New Indie Discoveries", owner_display: "indieworld", followers: 22100, playlist_url: "#", owner_url: "#", found_via: "Phoebe Bridgers" },
-  { playlist_name: "Morning Coffee Music", owner_display: "jazzhandspl", followers: 18900, playlist_url: "#", owner_url: "#", found_via: "Novo Amor" },
-  { playlist_name: "Folk & Soul Sessions", owner_display: "folkfanatic", followers: 14300, playlist_url: "#", owner_url: "#", found_via: "Novo Amor" },
-  { playlist_name: "Bedroom Pop Gems", owner_display: "bedroombeats", followers: 11200, playlist_url: "#", owner_url: "#", found_via: "Avi Snow" },
-  { playlist_name: "Late Night Indie", owner_display: "nightowlmusic", followers: 9800, playlist_url: "#", owner_url: "#", found_via: "Phoebe Bridgers" },
-  { playlist_name: "Acoustic Stories", owner_display: "acousticvibes", followers: 7600, playlist_url: "#", owner_url: "#", found_via: "Novo Amor" },
-];
-const MOCK_LOG = [
-  { id: "1", date: "2026-04-10", type: "playlist_curator", name: "Indie Fresh Picks", contact: "#", platform: "spotify", status: "contacted", notes: "Sent DM via Instagram" },
-  { id: "2", date: "2026-04-12", type: "platform", name: "SubmitHub", contact: "#", platform: "web", status: "contacted", notes: "Submitted 3 tracks" },
-  { id: "3", date: "2026-04-15", type: "blog", name: "Indie Shuffle", contact: "#", platform: "web", status: "added", notes: "Featured on homepage!" },
-  { id: "4", date: "2026-04-18", type: "playlist_curator", name: "Chill Vibes Only", contact: "#", platform: "spotify", status: "identified", notes: "" },
-  { id: "5", date: "2026-04-20", type: "community", name: "r/indieheads", contact: "#", platform: "reddit", status: "contacted", notes: "Posted new release" },
-  { id: "6", date: "2026-04-25", type: "playlist_curator", name: "Morning Coffee Music", contact: "#", platform: "spotify", status: "declined", notes: "Not accepting submissions" },
-  { id: "7", date: "2026-05-01", type: "blog", name: "Hilly Dilly", contact: "#", platform: "web", status: "no_response", notes: "Submitted 2 weeks ago" },
-  { id: "8", date: "2026-05-03", type: "platform", name: "Groover", contact: "#", platform: "web", status: "identified", notes: "" },
-];
-const MOCK_BLOGS = [
-  { name: "SubmitHub", url: "#", type: "platform", genres: ["all"] },
-  { name: "Groover", url: "#", type: "platform", genres: ["all"] },
-  { name: "Playlist Push", url: "#", type: "platform", genres: ["all"] },
-  { name: "Indie Shuffle", url: "#", type: "blog", genres: ["indie", "alternative", "pop"] },
-  { name: "Hilly Dilly", url: "#", type: "blog", genres: ["indie", "pop"] },
-  { name: "The Wild Honey Pie", url: "#", type: "blog", genres: ["indie", "folk"] },
-  { name: "Ones To Watch", url: "#", type: "blog", genres: ["pop", "indie", "r&b"] },
-  { name: "Earmilk", url: "#", type: "blog", genres: ["electronic", "indie"] },
-  { name: "r/indieheads", url: "#", type: "community", genres: ["indie"] },
-  { name: "r/spotify", url: "#", type: "community", genres: ["all"] },
-];
+<main>
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-const STATUS_BADGE = {
-  identified:  { bg: "#1a2a3a", color: "#5ba3d9" },
-  contacted:   { bg: "#1a2a1a", color: "#6dbb7a" },
-  added:       { bg: "#1a3a1a", color: "#1db954" },
-  declined:    { bg: "#2a1a1a", color: "#e07070" },
-  no_response: { bg: "#2a2a1a", color: "#c8a84b" },
-};
-const TYPE_COLOR = { platform: "#1db954", blog: "#5ba3d9", community: "#c8a84b", playlist_curator: "#a78bfa" };
-
-function Badge({ status }) {
-  const s = STATUS_BADGE[status] || { bg: "#222", color: "#888" };
-  return (
-    <span style={{ background: s.bg, color: s.color, padding: "3px 9px", borderRadius: 12,
-      fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em" }}>
-      {status?.replace("_", " ")}
-    </span>
-  );
-}
-
-// ── Header ───────────────────────────────────────────────────────────────────
-function Header({ tab, setTab }) {
-  const tabs = ["curators", "tracker", "blogs", "analytics"];
-  const labels = { curators: "Curator Finder", tracker: "Outreach Tracker", blogs: "Blogs & Platforms", analytics: "Analytics" };
-  return (
-    <header style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
-      padding:"0 28px", height:60, background:"#181818", borderBottom:"1px solid #2a2a2a",
-      position:"sticky", top:0, zIndex:100, gap:16 }}>
-      <div style={{ display:"flex", alignItems:"center", gap:10, fontWeight:700, fontSize:16, color:"#1db954" }}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="10"/><path d="M8 11.8C10.3 11 13.7 10.8 16 12M9 15c1.8-.7 4.2-.7 6 0M10 8.5c1.3-.4 3.7-.4 5 0"/>
-        </svg>
-        Avi Snow · Outreach
+  <!-- CURATOR FINDER -->
+  <div id="panel-curators" class="panel active">
+    <div class="panel-top">
+      <div>
+        <h2>Curator Finder</h2>
+        <p class="sub">Find playlist curators on Spotify who feature similar artists</p>
       </div>
-      <nav style={{ display:"flex", gap:4 }}>
-        {tabs.map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{
-            background: tab===t ? "rgba(29,185,84,.12)" : "none",
-            border: "none", color: tab===t ? "#1db954" : "#888",
-            fontSize:13, padding:"8px 14px", borderRadius:8, cursor:"pointer", fontFamily:"inherit"
-          }}>{labels[t]}</button>
-        ))}
-      </nav>
-    </header>
-  );
-}
-
-// ── Curator Finder Tab ───────────────────────────────────────────────────────
-function CuratorTab() {
-  const [searched, setSearched] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [saved, setSaved] = useState({});
-
-  function handleSearch() {
-    setLoading(true);
-    setTimeout(() => { setLoading(false); setSearched(true); }, 1200);
-  }
-
-  return (
-    <div>
-      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:24, flexWrap:"wrap", gap:16 }}>
-        <div>
-          <h2 style={{ fontSize:22, fontWeight:700, marginBottom:4 }}>Curator Finder</h2>
-          <p style={{ color:"#888", fontSize:13 }}>Find playlist curators on Spotify who feature similar artists</p>
-        </div>
-        <div style={{ display:"flex", gap:8 }}>
-          <input defaultValue="Avi Snow" style={{ background:"#242424", border:"1px solid #2a2a2a", borderRadius:8,
-            color:"#e8e8e8", fontSize:14, padding:"9px 14px", width:200, outline:"none" }} />
-          <button onClick={handleSearch} style={{ background:"#1db954", color:"#000", border:"none",
-            borderRadius:8, padding:"9px 18px", fontSize:13, fontWeight:600, cursor:"pointer" }}>
-            {loading ? "Searching…" : "Search"}
-          </button>
-        </div>
+      <div class="search-bar">
+        <input id="artist-input" type="text" value="Avi Snow" placeholder="Artist name" />
+        <button class="btn-green" onclick="runSearch()">Search</button>
       </div>
-
-      {searched && (
-        <>
-          {/* Artist card */}
-          <div style={{ display:"flex", alignItems:"center", gap:18, background:"#181818",
-            border:"1px solid #2a2a2a", borderRadius:10, padding:"18px 22px", marginBottom:20 }}>
-            <div style={{ width:64, height:64, borderRadius:"50%", background:"linear-gradient(135deg,#1db954,#0d5c2e)",
-              display:"flex", alignItems:"center", justifyContent:"center", fontSize:24 }}>❄️</div>
-            <div>
-              <h3 style={{ fontSize:18, fontWeight:700 }}>Avi Snow</h3>
-              <p style={{ color:"#888", marginTop:4, fontSize:13 }}>1,240 followers · indie pop, alternative, folk</p>
-              <p style={{ marginTop:6, fontSize:13 }}>Related: Phoebe Bridgers, Novo Amor, Sufjan Stevens, Fleet Foxes</p>
-            </div>
-          </div>
-
-          {/* Toolbar */}
-          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
-            <span style={{ background:"#242424", border:"1px solid #2a2a2a", borderRadius:20,
-              padding:"4px 12px", fontSize:12, color:"#888" }}>8 curators found</span>
-            <button style={{ background:"#242424", color:"#e8e8e8", border:"1px solid #2a2a2a",
-              borderRadius:8, padding:"9px 18px", fontSize:13, fontWeight:600, cursor:"pointer" }}>
-              Save All to Tracker
-            </button>
-          </div>
-
-          {/* Table */}
-          <div style={{ overflowX:"auto", borderRadius:10, border:"1px solid #2a2a2a" }}>
-            <table style={{ width:"100%", borderCollapse:"collapse" }}>
-              <thead>
-                <tr style={{ background:"#181818" }}>
-                  {["Playlist","Curator","Followers","Found via",""].map(h => (
-                    <th key={h} style={{ textAlign: h==="Followers" ? "right" : "left",
-                      padding:"12px 16px", fontSize:12, fontWeight:600, color:"#888",
-                      textTransform:"uppercase", letterSpacing:".04em", borderBottom:"1px solid #2a2a2a" }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {MOCK_CURATORS.map((c, i) => (
-                  <tr key={i} style={{ background: i%2===0 ? "#181818" : "#1a1a1a" }}>
-                    <td style={{ padding:"11px 16px", borderBottom:"1px solid #2a2a2a" }}>
-                      <a href={c.playlist_url} style={{ color:"#1db954", fontSize:13 }}>{c.playlist_name}</a>
-                    </td>
-                    <td style={{ padding:"11px 16px", borderBottom:"1px solid #2a2a2a" }}>
-                      <a href={c.owner_url} style={{ color:"#1db954", fontSize:13 }}>{c.owner_display}</a>
-                    </td>
-                    <td style={{ padding:"11px 16px", borderBottom:"1px solid #2a2a2a", textAlign:"right" }}>
-                      {c.followers.toLocaleString()}
-                    </td>
-                    <td style={{ padding:"11px 16px", borderBottom:"1px solid #2a2a2a", color:"#888" }}>{c.found_via}</td>
-                    <td style={{ padding:"11px 16px", borderBottom:"1px solid #2a2a2a" }}>
-                      <button onClick={() => setSaved(s => ({...s, [i]: true}))}
-                        style={{ background:"none", border:"none", color: saved[i] ? "#1db954" : "#888",
-                          cursor:"pointer", padding:"4px 8px", borderRadius:6, fontSize:13, fontFamily:"inherit" }}>
-                        {saved[i] ? "Saved ✓" : "Save"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
-      )}
-
-      {!searched && (
-        <div style={{ textAlign:"center", color:"#888", padding:"60px 0", fontSize:15 }}>
-          Enter an artist name and click <strong style={{color:"#e8e8e8"}}>Search</strong> to find playlist curators
-        </div>
-      )}
     </div>
-  );
-}
 
-// ── Outreach Tracker Tab ─────────────────────────────────────────────────────
-function TrackerTab() {
-  const [log, setLog] = useState(MOCK_LOG);
-  const [statusFilter, setStatusFilter] = useState("");
-  const [typeFilter, setTypeFilter] = useState("");
-  const [search, setSearch] = useState("");
-  const [showModal, setShowModal] = useState(false);
-
-  const filtered = log.filter(e =>
-    (!statusFilter || e.status === statusFilter) &&
-    (!typeFilter || e.type === typeFilter) &&
-    (!search || e.name.toLowerCase().includes(search.toLowerCase()))
-  );
-
-  return (
-    <div>
-      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:24, gap:16, flexWrap:"wrap" }}>
+    <div id="curator-content" class="hidden">
+      <div class="artist-card">
+        <div class="artist-avatar">❄️</div>
         <div>
-          <h2 style={{ fontSize:22, fontWeight:700, marginBottom:4 }}>Outreach Tracker</h2>
-          <p style={{ color:"#888", fontSize:13 }}>Manage and track all your outreach efforts</p>
+          <h3>Avi Snow</h3>
+          <p>1,240 followers &nbsp;·&nbsp; indie pop, alternative, folk</p>
+          <p style="margin-top:6px">Related artists: Phoebe Bridgers, Novo Amor, Sufjan Stevens, Fleet Foxes</p>
         </div>
-        <button onClick={() => setShowModal(true)} style={{ background:"#1db954", color:"#000", border:"none",
-          borderRadius:8, padding:"9px 18px", fontSize:13, fontWeight:600, cursor:"pointer" }}>+ Add Entry</button>
       </div>
-
-      <div style={{ display:"flex", gap:10, marginBottom:16, flexWrap:"wrap" }}>
-        {[
-          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-            style={{ background:"#242424", border:"1px solid #2a2a2a", borderRadius:8, color:"#e8e8e8", padding:"8px 12px", fontSize:13, outline:"none" }}>
-            <option value="">All statuses</option>
-            {["identified","contacted","added","declined","no_response"].map(s =>
-              <option key={s} value={s}>{s}</option>)}
-          </select>,
-          <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)}
-            style={{ background:"#242424", border:"1px solid #2a2a2a", borderRadius:8, color:"#e8e8e8", padding:"8px 12px", fontSize:13, outline:"none" }}>
-            <option value="">All types</option>
-            {["playlist_curator","blog","platform","community"].map(t =>
-              <option key={t} value={t}>{t}</option>)}
-          </select>,
-          <input placeholder="Search by name…" value={search} onChange={e => setSearch(e.target.value)}
-            style={{ background:"#242424", border:"1px solid #2a2a2a", borderRadius:8, color:"#e8e8e8",
-              padding:"8px 12px", fontSize:13, outline:"none", flex:1, minWidth:160 }} />
-        ].map((el, i) => <React.Fragment key={i}>{el}</React.Fragment>)}
+      <div class="toolbar">
+        <span class="count">8 curators found</span>
+        <button class="btn-grey" onclick="saveAll()">Save All to Tracker</button>
       </div>
-
-      <div style={{ overflowX:"auto", borderRadius:10, border:"1px solid #2a2a2a" }}>
-        <table style={{ width:"100%", borderCollapse:"collapse" }}>
-          <thead>
-            <tr style={{ background:"#181818" }}>
-              {["Date","Type","Name","Platform","Status","Notes","Actions"].map(h => (
-                <th key={h} style={{ textAlign:"left", padding:"12px 16px", fontSize:12, fontWeight:600,
-                  color:"#888", textTransform:"uppercase", letterSpacing:".04em", borderBottom:"1px solid #2a2a2a" }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((e, i) => (
-              <tr key={e.id} style={{ background: i%2===0 ? "#181818" : "#1a1a1a" }}>
-                <td style={{ padding:"11px 16px", borderBottom:"1px solid #2a2a2a", color:"#888", whiteSpace:"nowrap" }}>{e.date}</td>
-                <td style={{ padding:"11px 16px", borderBottom:"1px solid #2a2a2a" }}>
-                  <span style={{ fontSize:10, fontWeight:700, textTransform:"uppercase", color: TYPE_COLOR[e.type] || "#888" }}>{e.type}</span>
-                </td>
-                <td style={{ padding:"11px 16px", borderBottom:"1px solid #2a2a2a" }}>
-                  <a href={e.contact} style={{ color:"#1db954", fontSize:13 }}>{e.name}</a>
-                </td>
-                <td style={{ padding:"11px 16px", borderBottom:"1px solid #2a2a2a", color:"#888" }}>{e.platform}</td>
-                <td style={{ padding:"11px 16px", borderBottom:"1px solid #2a2a2a" }}><Badge status={e.status} /></td>
-                <td style={{ padding:"11px 16px", borderBottom:"1px solid #2a2a2a", color:"#888", fontSize:12,
-                  maxWidth:180, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{e.notes}</td>
-                <td style={{ padding:"11px 16px", borderBottom:"1px solid #2a2a2a" }}>
-                  <button style={{ background:"none", border:"none", color:"#888", cursor:"pointer",
-                    padding:"4px 8px", borderRadius:6, fontSize:13, fontFamily:"inherit" }}>Edit</button>
-                  <button onClick={() => setLog(l => l.filter(x => x.id !== e.id))}
-                    style={{ background:"none", border:"none", color:"#888", cursor:"pointer",
-                      padding:"4px 8px", borderRadius:6, fontSize:13, fontFamily:"inherit" }}>Del</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Playlist</th><th>Curator</th><th class="right">Followers</th><th>Found Via</th><th></th>
+          </tr></thead>
+          <tbody id="curator-tbody"></tbody>
         </table>
       </div>
+    </div>
 
-      {showModal && (
-        <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.7)", display:"flex",
-          alignItems:"center", justifyContent:"center", zIndex:200 }} onClick={() => setShowModal(false)}>
-          <div style={{ background:"#181818", border:"1px solid #2a2a2a", borderRadius:14,
-            padding:28, width:"100%", maxWidth:480 }} onClick={e => e.stopPropagation()}>
-            <div style={{ display:"flex", justifyContent:"space-between", marginBottom:22 }}>
-              <h3 style={{ fontSize:17, fontWeight:700 }}>Add Entry</h3>
-              <button onClick={() => setShowModal(false)} style={{ background:"none", border:"none",
-                color:"#888", cursor:"pointer", fontSize:16 }}>✕</button>
-            </div>
-            {[["Type","select"],["Name","text"],["Contact / URL","text"],["Platform","text"],["Status","select"],["Notes","textarea"]].map(([label, type]) => (
-              <div key={label} style={{ display:"flex", flexDirection:"column", gap:6, marginBottom:14 }}>
-                <label style={{ fontSize:12, fontWeight:600, color:"#888", textTransform:"uppercase", letterSpacing:".04em" }}>{label}</label>
-                {type === "textarea"
-                  ? <textarea rows={3} style={{ background:"#242424", border:"1px solid #2a2a2a", borderRadius:8,
-                      color:"#e8e8e8", fontSize:14, padding:"10px 13px", outline:"none", resize:"vertical", fontFamily:"inherit" }} />
-                  : type === "select"
-                  ? <select style={{ background:"#242424", border:"1px solid #2a2a2a", borderRadius:8,
-                      color:"#e8e8e8", fontSize:14, padding:"10px 13px", outline:"none" }}>
-                      {label === "Type"
-                        ? ["playlist_curator","blog","platform","community"].map(o => <option key={o}>{o}</option>)
-                        : ["identified","contacted","added","declined","no_response"].map(o => <option key={o}>{o}</option>)}
-                    </select>
-                  : <input type="text" style={{ background:"#242424", border:"1px solid #2a2a2a", borderRadius:8,
-                      color:"#e8e8e8", fontSize:14, padding:"10px 13px", outline:"none" }} />}
-              </div>
-            ))}
-            <div style={{ display:"flex", justifyContent:"flex-end", gap:10, marginTop:6 }}>
-              <button onClick={() => setShowModal(false)} style={{ background:"#242424", color:"#e8e8e8",
-                border:"1px solid #2a2a2a", borderRadius:8, padding:"9px 18px", fontSize:13, fontWeight:600, cursor:"pointer" }}>Cancel</button>
-              <button onClick={() => setShowModal(false)} style={{ background:"#1db954", color:"#000", border:"none",
-                borderRadius:8, padding:"9px 18px", fontSize:13, fontWeight:600, cursor:"pointer" }}>Save</button>
-            </div>
-          </div>
+    <div id="curator-empty" style="text-align:center;color:var(--muted);padding:60px 0;font-size:15px">
+      Enter an artist name and click <strong style="color:var(--text)">Search</strong> to find playlist curators
+    </div>
+  </div>
+
+  <!-- OUTREACH TRACKER -->
+  <div id="panel-tracker" class="panel">
+    <div class="panel-top">
+      <div>
+        <h2>Outreach Tracker</h2>
+        <p class="sub">Manage and track all your outreach efforts</p>
+      </div>
+      <button class="btn-green" onclick="openModal(null)">+ Add Entry</button>
+    </div>
+    <div class="filters">
+      <select id="f-status" onchange="renderTracker()">
+        <option value="">All statuses</option>
+        <option value="identified">Identified</option>
+        <option value="contacted">Contacted</option>
+        <option value="added">Added</option>
+        <option value="declined">Declined</option>
+        <option value="no_response">No Response</option>
+      </select>
+      <select id="f-type" onchange="renderTracker()">
+        <option value="">All types</option>
+        <option value="playlist_curator">Playlist Curator</option>
+        <option value="blog">Blog</option>
+        <option value="platform">Platform</option>
+        <option value="community">Community</option>
+      </select>
+      <input id="f-search" type="text" placeholder="Search by name…" oninput="renderTracker()" />
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Date</th><th>Type</th><th>Name</th><th>Platform</th><th>Status</th><th>Notes</th><th></th>
+        </tr></thead>
+        <tbody id="tracker-tbody"></tbody>
+      </table>
+    </div>
+    <p id="tracker-empty" class="empty hidden">No entries yet. Use Curator Finder to get started.</p>
+  </div>
+
+  <!-- BLOGS & PLATFORMS -->
+  <div id="panel-blogs" class="panel">
+    <div class="panel-top">
+      <div>
+        <h2>Blogs &amp; Platforms</h2>
+        <p class="sub">Recommended submission channels for music promotion</p>
+      </div>
+    </div>
+    <div class="blog-grid" id="blog-grid"></div>
+  </div>
+
+  <!-- ANALYTICS -->
+  <div id="panel-analytics" class="panel">
+    <div class="panel-top">
+      <div>
+        <h2>Analytics</h2>
+        <p class="sub">Track your outreach progress over time</p>
+      </div>
+    </div>
+    <div class="stat-cards" id="stat-cards"></div>
+    <div class="charts-grid">
+      <div class="chart-box">
+        <h3>By Status</h3>
+        <div id="chart-status"></div>
+      </div>
+      <div class="chart-box">
+        <h3>By Type</h3>
+        <div id="chart-type"></div>
+      </div>
+      <div class="chart-box wide">
+        <h3>Outreach Over Time</h3>
+        <div id="chart-timeline"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Modal -->
+<div id="overlay" class="overlay hidden" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modal-title">Add Entry</h3>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="form-row">
+      <label>Type</label>
+      <select id="f-mtype">
+        <option value="playlist_curator">Playlist Curator</option>
+        <option value="blog">Blog</option>
+        <option value="platform">Platform</option>
+        <option value="community">Community</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Name</label>
+      <input id="f-mname" type="text" placeholder="Playlist or blog name" />
+    </div>
+    <div class="form-row">
+      <label>Contact / URL</label>
+      <input id="f-mcontact" type="text" placeholder="https://…" />
+    </div>
+    <div class="form-row">
+      <label>Platform</label>
+      <input id="f-mplatform" type="text" placeholder="spotify, web, email…" />
+    </div>
+    <div class="form-row">
+      <label>Status</label>
+      <select id="f-mstatus">
+        <option value="identified">Identified</option>
+        <option value="contacted">Contacted</option>
+        <option value="added">Added</option>
+        <option value="declined">Declined</option>
+        <option value="no_response">No Response</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Notes</label>
+      <textarea id="f-mnotes" rows="3" placeholder="Any notes…"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn-grey" onclick="closeModal()">Cancel</button>
+      <button class="btn-green" onclick="saveEntry()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── Data ─────────────────────────────────────────────────────────────────────
+const CURATORS = [
+  { name:"Indie Fresh Picks",       curator:"melodymaven",   followers:48200, via:"Avi Snow" },
+  { name:"Chill Vibes Only",        curator:"chillcurator",  followers:31500, via:"Avi Snow" },
+  { name:"New Indie Discoveries",   curator:"indieworld",    followers:22100, via:"Phoebe Bridgers" },
+  { name:"Morning Coffee Music",    curator:"jazzhandspl",   followers:18900, via:"Novo Amor" },
+  { name:"Folk & Soul Sessions",    curator:"folkfanatic",   followers:14300, via:"Novo Amor" },
+  { name:"Bedroom Pop Gems",        curator:"bedroombeats",  followers:11200, via:"Avi Snow" },
+  { name:"Late Night Indie",        curator:"nightowlmusic", followers:9800,  via:"Phoebe Bridgers" },
+  { name:"Acoustic Stories",        curator:"acousticvibes", followers:7600,  via:"Novo Amor" },
+];
+
+const BLOGS = [
+  { name:"SubmitHub",         url:"https://submithub.com",                  type:"platform",  genres:"All genres" },
+  { name:"Groover",           url:"https://groover.co",                     type:"platform",  genres:"All genres" },
+  { name:"Playlist Push",     url:"https://playlistpush.com",               type:"platform",  genres:"All genres" },
+  { name:"Fluence",           url:"https://fluence.io",                     type:"platform",  genres:"All genres" },
+  { name:"Indie Shuffle",     url:"https://www.indieshuffle.com/submit",    type:"blog",      genres:"Indie, Pop, Alternative" },
+  { name:"Hilly Dilly",       url:"https://hillydilly.com",                 type:"blog",      genres:"Indie, Pop" },
+  { name:"The Wild Honey Pie",url:"https://thewildhoneypie.com/submit",     type:"blog",      genres:"Indie, Folk" },
+  { name:"Ones To Watch",     url:"https://www.ones2watch.com",             type:"blog",      genres:"Pop, Indie, R&B" },
+  { name:"Earmilk",           url:"https://www.earmilk.com/submit",         type:"blog",      genres:"Electronic, Indie" },
+  { name:"Soundigest",        url:"https://soundigest.com/submit-music",    type:"blog",      genres:"Indie, Pop" },
+  { name:"r/indieheads",      url:"https://reddit.com/r/indieheads",        type:"community", genres:"Indie, Alternative" },
+  { name:"r/spotify",         url:"https://reddit.com/r/spotify",           type:"community", genres:"All genres" },
+  { name:"r/WeAreTheMusicMakers", url:"https://reddit.com/r/WeAreTheMusicMakers", type:"community", genres:"All genres" },
+];
+
+let log = [
+  { id:"1", date:"2026-04-10", type:"playlist_curator", name:"Indie Fresh Picks",  contact:"#", platform:"spotify", status:"contacted",   notes:"Sent DM via Instagram" },
+  { id:"2", date:"2026-04-12", type:"platform",         name:"SubmitHub",           contact:"#", platform:"web",     status:"contacted",   notes:"Submitted 3 tracks" },
+  { id:"3", date:"2026-04-15", type:"blog",             name:"Indie Shuffle",       contact:"#", platform:"web",     status:"added",       notes:"Featured on homepage!" },
+  { id:"4", date:"2026-04-18", type:"playlist_curator", name:"Chill Vibes Only",   contact:"#", platform:"spotify", status:"identified",  notes:"" },
+  { id:"5", date:"2026-04-20", type:"community",        name:"r/indieheads",        contact:"#", platform:"reddit",  status:"contacted",   notes:"Posted new release" },
+  { id:"6", date:"2026-04-25", type:"playlist_curator", name:"Morning Coffee Music",contact:"#", platform:"spotify", status:"declined",    notes:"Not accepting submissions" },
+  { id:"7", date:"2026-05-01", type:"blog",             name:"Hilly Dilly",         contact:"#", platform:"web",     status:"no_response", notes:"Submitted 2 weeks ago" },
+  { id:"8", date:"2026-05-03", type:"platform",         name:"Groover",             contact:"#", platform:"web",     status:"identified",  notes:"" },
+];
+
+let editingId = null;
+const savedCurators = new Set();
+
+// ── Tabs ─────────────────────────────────────────────────────────────────────
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (name === 'analytics') renderAnalytics();
+}
+
+// ── Curator Finder ────────────────────────────────────────────────────────────
+function runSearch() {
+  const btn = document.querySelector('#panel-curators .btn-green');
+  btn.textContent = 'Searching…';
+  btn.disabled = true;
+  setTimeout(() => {
+    renderCurators();
+    document.getElementById('curator-empty').classList.add('hidden');
+    document.getElementById('curator-content').classList.remove('hidden');
+    btn.textContent = 'Search';
+    btn.disabled = false;
+  }, 900);
+}
+
+function renderCurators() {
+  const tbody = document.getElementById('curator-tbody');
+  tbody.innerHTML = CURATORS.map((c, i) => `
+    <tr>
+      <td><span style="color:#1db954;font-size:13px">${c.name}</span></td>
+      <td><span style="color:#1db954;font-size:13px">${c.curator}</span></td>
+      <td class="right">${c.followers.toLocaleString()}</td>
+      <td style="color:var(--muted)">${c.via}</td>
+      <td>
+        <button class="btn-text" id="save-c-${i}" onclick="saveCurator(${i})">
+          ${savedCurators.has(i) ? 'Saved ✓' : 'Save'}
+        </button>
+      </td>
+    </tr>`).join('');
+}
+
+function saveCurator(i) {
+  savedCurators.add(i);
+  const c = CURATORS[i];
+  addToLog({ type:'playlist_curator', name:c.name, contact:'#', platform:'spotify', status:'identified', notes:`Curator: ${c.curator} | Followers: ${c.followers.toLocaleString()}` });
+  document.getElementById('save-c-' + i).textContent = 'Saved ✓';
+  toast('Saved to tracker');
+}
+
+function saveAll() {
+  CURATORS.forEach((_, i) => { if (!savedCurators.has(i)) saveCurator(i); });
+  toast('All curators saved to tracker');
+}
+
+// ── Tracker ───────────────────────────────────────────────────────────────────
+function renderTracker() {
+  const fs = document.getElementById('f-status').value;
+  const ft = document.getElementById('f-type').value;
+  const fq = document.getElementById('f-search').value.toLowerCase();
+  const rows = log.filter(e =>
+    (!fs || e.status === fs) && (!ft || e.type === ft) &&
+    (!fq || e.name.toLowerCase().includes(fq))
+  );
+  const tbody = document.getElementById('tracker-tbody');
+  const empty = document.getElementById('tracker-empty');
+  if (!rows.length) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  const typeColor = { playlist_curator:'#a78bfa', blog:'#5ba3d9', platform:'#1db954', community:'#c8a84b' };
+  tbody.innerHTML = rows.map(e => `
+    <tr>
+      <td style="color:var(--muted);white-space:nowrap">${e.date}</td>
+      <td><span style="font-size:10px;font-weight:700;text-transform:uppercase;color:${typeColor[e.type]||'#888'}">${e.type}</span></td>
+      <td><span style="color:#1db954;font-size:13px">${e.name}</span></td>
+      <td style="color:var(--muted)">${e.platform}</td>
+      <td>
+        <select onchange="updateStatus('${e.id}',this.value)" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:4px 8px;font-size:12px;outline:none;font-family:inherit">
+          ${['identified','contacted','added','declined','no_response'].map(s => `<option value="${s}" ${e.status===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </td>
+      <td style="color:var(--muted);font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.notes}">${e.notes}</td>
+      <td>
+        <button class="btn-text" onclick="openModal('${e.id}')">Edit</button>
+        <button class="btn-text" style="color:var(--muted)" onmouseover="this.style.color='#e25454'" onmouseout="this.style.color='var(--muted)'" onclick="deleteEntry('${e.id}')">Del</button>
+      </td>
+    </tr>`).join('');
+}
+
+function updateStatus(id, status) {
+  const e = log.find(x => x.id === id);
+  if (e) { e.status = status; renderAnalytics(); }
+}
+
+function deleteEntry(id) {
+  if (!confirm('Delete this entry?')) return;
+  log = log.filter(e => e.id !== id);
+  renderTracker();
+  renderAnalytics();
+}
+
+function addToLog(data) {
+  log.push({ id: Date.now().toString(), date: new Date().toISOString().slice(0,10), ...data });
+  renderTracker();
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+function openModal(id) {
+  editingId = id;
+  const e = id ? log.find(x => x.id === id) : null;
+  document.getElementById('modal-title').textContent = e ? 'Edit Entry' : 'Add Entry';
+  document.getElementById('f-mtype').value    = e?.type     || 'playlist_curator';
+  document.getElementById('f-mname').value    = e?.name     || '';
+  document.getElementById('f-mcontact').value = e?.contact  || '';
+  document.getElementById('f-mplatform').value= e?.platform || '';
+  document.getElementById('f-mstatus').value  = e?.status   || 'identified';
+  document.getElementById('f-mnotes').value   = e?.notes    || '';
+  document.getElementById('overlay').classList.remove('hidden');
+}
+
+function closeModal() { document.getElementById('overlay').classList.add('hidden'); editingId = null; }
+
+function saveEntry() {
+  const data = {
+    type:     document.getElementById('f-mtype').value,
+    name:     document.getElementById('f-mname').value.trim(),
+    contact:  document.getElementById('f-mcontact').value.trim(),
+    platform: document.getElementById('f-mplatform').value.trim(),
+    status:   document.getElementById('f-mstatus').value,
+    notes:    document.getElementById('f-mnotes').value.trim(),
+  };
+  if (!data.name) { alert('Name is required'); return; }
+  if (editingId) {
+    const e = log.find(x => x.id === editingId);
+    if (e) Object.assign(e, data);
+  } else {
+    log.push({ id: Date.now().toString(), date: new Date().toISOString().slice(0,10), ...data });
+  }
+  closeModal();
+  renderTracker();
+  renderAnalytics();
+  toast(editingId ? 'Entry updated' : 'Entry added');
+}
+
+// ── Blogs ─────────────────────────────────────────────────────────────────────
+function renderBlogs() {
+  const typeColor = { platform:'#1db954', blog:'#5ba3d9', community:'#c8a84b' };
+  const saved = new Set();
+  document.getElementById('blog-grid').innerHTML = BLOGS.map((b, i) => `
+    <div class="blog-card">
+      <span class="blog-type" style="color:${typeColor[b.type]||'#888'}">${b.type}</span>
+      <h4>${b.name}</h4>
+      <p class="genres">${b.genres}</p>
+      <a href="${b.url}" target="_blank" class="visit-btn">Visit →</a>
+      <button class="save-btn" id="sblog-${i}" onclick="saveBlog(${i},'${b.name}','${b.type}')">Save to Tracker</button>
+    </div>`).join('');
+}
+
+function saveBlog(i, name, type) {
+  addToLog({ type, name, contact: BLOGS[i].url, platform:'web', status:'identified', notes:'' });
+  const btn = document.getElementById('sblog-' + i);
+  btn.textContent = 'Saved ✓';
+  btn.classList.add('saved');
+  toast(name + ' saved to tracker');
+}
+
+// ── Analytics ─────────────────────────────────────────────────────────────────
+function renderAnalytics() {
+  const byStatus = {}, byType = {}, byMonth = {};
+  log.forEach(e => {
+    byStatus[e.status] = (byStatus[e.status] || 0) + 1;
+    byType[e.type]     = (byType[e.type]     || 0) + 1;
+    const m = (e.date || '').slice(0, 7);
+    if (m) byMonth[m] = (byMonth[m] || 0) + 1;
+  });
+
+  // Stat cards
+  const statusLabel = { identified:'Identified', contacted:'Contacted', added:'Added ✓', declined:'Declined', no_response:'No Response' };
+  document.getElementById('stat-cards').innerHTML =
+    `<div class="stat-card"><div class="stat-num">${log.length}</div><div class="stat-label">Total</div></div>` +
+    Object.entries(byStatus).map(([s, n]) =>
+      `<div class="stat-card"><div class="stat-num">${n}</div><div class="stat-label">${statusLabel[s]||s}</div></div>`
+    ).join('');
+
+  // Status bars
+  const statusColors = { identified:'#5ba3d9', contacted:'#6dbb7a', added:'#1db954', declined:'#e07070', no_response:'#c8a84b' };
+  const maxS = Math.max(...Object.values(byStatus), 1);
+  document.getElementById('chart-status').innerHTML = `<div class="bar-chart">` +
+    Object.entries(byStatus).map(([s, n]) => `
+      <div class="bar-row">
+        <span class="bar-label">${s.replace('_',' ')}</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${Math.round(n/maxS*100)}%;background:${statusColors[s]||'#888'}">${n}</div>
         </div>
-      )}
-    </div>
-  );
-}
+        <span class="bar-val">${n}</span>
+      </div>`).join('') + `</div>`;
 
-// ── Blogs Tab ────────────────────────────────────────────────────────────────
-function BlogsTab() {
-  const [saved, setSaved] = useState({});
-  const typeColor = { platform: "#1db954", blog: "#5ba3d9", community: "#c8a84b" };
-  return (
-    <div>
-      <div style={{ marginBottom:24 }}>
-        <h2 style={{ fontSize:22, fontWeight:700, marginBottom:4 }}>Blogs & Platforms</h2>
-        <p style={{ color:"#888", fontSize:13 }}>Recommended submission channels for music promotion</p>
-      </div>
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(260px,1fr))", gap:14 }}>
-        {MOCK_BLOGS.map((b, i) => (
-          <div key={i} style={{ background:"#181818", border:"1px solid #2a2a2a", borderRadius:10,
-            padding:"18px 20px", display:"flex", flexDirection:"column", gap:8 }}>
-            <span style={{ fontSize:10, fontWeight:700, textTransform:"uppercase",
-              letterSpacing:".06em", color: typeColor[b.type] || "#888" }}>{b.type}</span>
-            <h4 style={{ fontSize:15, fontWeight:700 }}>{b.name}</h4>
-            <p style={{ fontSize:12, color:"#888" }}>{b.genres.join(", ")}</p>
-            <a href={b.url} style={{ display:"inline-block", marginTop:6, padding:"7px 14px",
-              background:"rgba(29,185,84,.1)", color:"#1db954", borderRadius:6, fontSize:12,
-              fontWeight:600, textAlign:"center", textDecoration:"none" }}>Visit →</a>
-            <button onClick={() => setSaved(s => ({...s, [i]: true}))}
-              style={{ background:"#242424", color: saved[i] ? "#1db954" : "#888", border:"none",
-                borderRadius:6, padding:"7px 14px", fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}>
-              {saved[i] ? "Saved ✓" : "Save to Tracker"}
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Analytics Tab ────────────────────────────────────────────────────────────
-function AnalyticsTab() {
-  const statusRef = useRef(null);
-  const typeRef = useRef(null);
-  const timeRef = useRef(null);
-  const chartsRef = useRef({});
-
-  const byStatus = { identified:2, contacted:3, added:1, declined:1, no_response:1 };
-  const byType = { playlist_curator:4, blog:2, platform:2, community:1 };
-  const byMonth = { "2026-04":5, "2026-05":3 };
-  const palette = ["#1db954","#5ba3d9","#c8a84b","#e07070","#a78bfa"];
-
-  useEffect(() => {
-    const opts = (type, labels, data, colors, extra={}) => ({
-      type, data: { labels, datasets: [{ data, backgroundColor: type==="line" ? "rgba(29,185,84,.15)" : colors,
-        borderColor: type==="line" ? "#1db954" : colors, borderWidth: type==="line" ? 2 : 1, ...extra }] },
-      options: { responsive:true, plugins:{ legend:{ labels:{ color:"#888", font:{ size:12 } } } },
-        scales: type!=="doughnut" ? { x:{ ticks:{color:"#888"}, grid:{color:"#2a2a2a"} },
-          y:{ ticks:{color:"#888"}, grid:{color:"#2a2a2a"}, beginAtZero:true } } : undefined }
-    });
-    ["status","type","time"].forEach(k => { if (chartsRef.current[k]) chartsRef.current[k].destroy(); });
-    chartsRef.current.status = new Chart(statusRef.current, opts("doughnut", Object.keys(byStatus), Object.values(byStatus), palette));
-    chartsRef.current.type = new Chart(typeRef.current, opts("bar", Object.keys(byType), Object.values(byType), palette));
-    chartsRef.current.time = new Chart(timeRef.current, opts("line", Object.keys(byMonth), Object.values(byMonth), ["#1db954"], { fill:true, tension:0.4 }));
-    return () => Object.values(chartsRef.current).forEach(c => c.destroy());
-  }, []);
-
-  const statCards = [
-    { num: 8, label: "Total" }, { num: 2, label: "Identified" },
-    { num: 3, label: "Contacted" }, { num: 1, label: "Added ✓" },
-  ];
-
-  return (
-    <div>
-      <div style={{ marginBottom:24 }}>
-        <h2 style={{ fontSize:22, fontWeight:700, marginBottom:4 }}>Analytics</h2>
-        <p style={{ color:"#888", fontSize:13 }}>Track your outreach progress over time</p>
-      </div>
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(150px,1fr))", gap:14, marginBottom:24 }}>
-        {statCards.map(({ num, label }) => (
-          <div key={label} style={{ background:"#181818", border:"1px solid #2a2a2a", borderRadius:10,
-            padding:"18px 20px", textAlign:"center" }}>
-            <div style={{ fontSize:32, fontWeight:800, color:"#1db954" }}>{num}</div>
-            <div style={{ fontSize:12, color:"#888", marginTop:4, textTransform:"uppercase", letterSpacing:".04em" }}>{label}</div>
-          </div>
-        ))}
-      </div>
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
-        {[["By Status", statusRef], ["By Type", typeRef]].map(([title, ref]) => (
-          <div key={title} style={{ background:"#181818", border:"1px solid #2a2a2a", borderRadius:10, padding:20 }}>
-            <h3 style={{ fontSize:14, fontWeight:600, marginBottom:16, color:"#888" }}>{title}</h3>
-            <canvas ref={ref} />
-          </div>
-        ))}
-        <div style={{ background:"#181818", border:"1px solid #2a2a2a", borderRadius:10, padding:20, gridColumn:"1/-1" }}>
-          <h3 style={{ fontSize:14, fontWeight:600, marginBottom:16, color:"#888" }}>Outreach Over Time</h3>
-          <canvas ref={timeRef} />
+  // Type bars
+  const typeColors = { playlist_curator:'#a78bfa', blog:'#5ba3d9', platform:'#1db954', community:'#c8a84b' };
+  const maxT = Math.max(...Object.values(byType), 1);
+  document.getElementById('chart-type').innerHTML = `<div class="bar-chart">` +
+    Object.entries(byType).map(([t, n]) => `
+      <div class="bar-row">
+        <span class="bar-label">${t.replace('_',' ')}</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${Math.round(n/maxT*100)}%;background:${typeColors[t]||'#888'}">${n}</div>
         </div>
-      </div>
-    </div>
-  );
+        <span class="bar-val">${n}</span>
+      </div>`).join('') + `</div>`;
+
+  // Timeline
+  const months = Object.keys(byMonth).sort();
+  const maxM = Math.max(...Object.values(byMonth), 1);
+  document.getElementById('chart-timeline').innerHTML =
+    `<div class="timeline">` +
+    months.map(m => {
+      const n = byMonth[m];
+      const h = Math.round(n / maxM * 80) + 20;
+      return `<div class="timeline-bar" style="height:${h}px;background:linear-gradient(to top,#1db954,#17a349)"><span class="timeline-num">${n}</span></div>`;
+    }).join('') +
+    `</div><div class="timeline-labels">` +
+    months.map(m => `<span class="timeline-lbl">${m}</span>`).join('') +
+    `</div>`;
 }
 
-// ── App ──────────────────────────────────────────────────────────────────────
-function App() {
-  const [tab, setTab] = useState("curators");
-  const panels = { curators: <CuratorTab />, tracker: <TrackerTab />, blogs: <BlogsTab />, analytics: <AnalyticsTab /> };
-  return (
-    <>
-      <Header tab={tab} setTab={setTab} />
-      <main style={{ padding:28, maxWidth:1200, margin:"0 auto" }}>
-        {panels[tab]}
-      </main>
-    </>
-  );
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+// ── Init ──────────────────────────────────────────────────────────────────────
+renderTracker();
+renderBlogs();
+renderAnalytics();
 </script>
 </body>
 </html>
