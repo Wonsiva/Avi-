@@ -228,7 +228,7 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
   <div class="logo"><span class="logo-snow">❄️</span> Avi Snow</div>
   <nav>
     <button class="tab-btn active" onclick="showTab('home', this)">Home</button>
-    <button class="tab-btn" onclick="showTab('pipeline', this)">Pipeline <span class="dot"></span></button>
+    <button class="tab-btn" id="pipeline-tab" onclick="showTab('pipeline', this)">Pipeline</button>
     <button class="tab-btn" onclick="showTab('submit', this)">Submit</button>
     <button class="tab-btn" onclick="showTab('playlists', this)">My Playlists</button>
     <button class="tab-btn" onclick="showTab('release', this)">Release Plan</button>
@@ -399,11 +399,15 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
     <div class="form-row">
       <label>Status</label>
       <select id="pm-status">
-        <option value="identified">Identified — haven't reached out yet</option>
-        <option value="pitched">Pitched — waiting to hear back</option>
-        <option value="added">Added ✓ — I'm on the playlist!</option>
-        <option value="declined">Declined — not a fit</option>
+        <option value="identified">🔵 Identified — haven't reached out yet</option>
+        <option value="pitched">🟡 Pitched — waiting to hear back</option>
+        <option value="added">🟢 Added — I'm on the playlist!</option>
+        <option value="declined">🔴 Declined — not a fit right now</option>
       </select>
+    </div>
+    <div id="pm-template-hint" style="background:var(--surface2);border-radius:8px;padding:12px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px">
+      <strong style="color:var(--text);display:block;margin-bottom:6px">✍️ Pitch tip</strong>
+      Keep it short: who you are (1 line), what the song sounds like (1 line), why it fits their playlist (1 line). Never send a generic pitch.
     </div>
     <div class="form-row">
       <label>Notes</label>
@@ -463,25 +467,34 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
 <script>
 // ════════════════════════════════ DATA ═══════════════════════════════════════
 
-let pitches = [
-  { id:'p1', name:'Indie Fresh Picks',      curator:'melodymaven',   followers:48200, contact:'#', contacted:'2026-04-20', followup:'2026-05-04', status:'pitched',     notes:'Sent IG DM. They asked for a link.' },
-  { id:'p2', name:'Chill Vibes Only',        curator:'chillcurator',  followers:31500, contact:'#', contacted:'2026-05-01', followup:'2026-05-15', status:'pitched',     notes:'Submitted via SubmitHub.' },
-  { id:'p3', name:'New Indie Discoveries',   curator:'indieworld',    followers:22100, contact:'#', contacted:'',           followup:'',           status:'identified',  notes:'Found via Phoebe Bridgers search.' },
-  { id:'p4', name:'Morning Coffee Music',    curator:'jazzhandspl',   followers:18900, contact:'#', contacted:'2026-04-10', followup:'2026-04-24', status:'declined',    notes:'Said not accepting submissions RN.' },
-  { id:'p5', name:'Folk & Soul Sessions',    curator:'folkfanatic',   followers:14300, contact:'#', contacted:'2026-04-28', followup:'2026-05-12', status:'pitched',     notes:'Cold DM on Spotify.' },
-  { id:'p6', name:'Bedroom Pop Gems',        curator:'bedroombeats',  followers:11200, contact:'#', contacted:'2026-03-15', followup:'2026-03-29', status:'added',       notes:'Added Mar 22!' },
-  { id:'p7', name:'Late Night Indie',        curator:'nightowlmusic', followers:9800,  contact:'#', contacted:'2026-04-05', followup:'2026-04-19', status:'added',       notes:'Featured track added.' },
-  { id:'p8', name:'Acoustic Stories',        curator:'acousticvibes', followers:7600,  contact:'#', contacted:'',           followup:'',           status:'identified',  notes:'' },
+const DEFAULT_PITCHES = [
+  { id:'p1', name:'Indie Fresh Picks',    curator:'melodymaven',   followers:48200, contact:'', contacted:'2026-04-20', followup:'2026-05-04', status:'pitched',    notes:'Sent IG DM. They asked for a Spotify link.' },
+  { id:'p2', name:'Chill Vibes Only',     curator:'chillcurator',  followers:31500, contact:'', contacted:'2026-05-01', followup:'2026-05-15', status:'pitched',    notes:'Submitted via SubmitHub.' },
+  { id:'p3', name:'New Indie Discoveries',curator:'indieworld',    followers:22100, contact:'', contacted:'',           followup:'',           status:'identified', notes:'Found via similar artist search.' },
+  { id:'p4', name:'Morning Coffee Music', curator:'jazzhandspl',   followers:18900, contact:'', contacted:'2026-04-10', followup:'2026-04-24', status:'declined',   notes:'Not accepting submissions right now.' },
+  { id:'p5', name:'Folk & Soul Sessions', curator:'folkfanatic',   followers:14300, contact:'', contacted:'2026-04-28', followup:'2026-05-12', status:'pitched',    notes:'Cold DM on Spotify.' },
+  { id:'p6', name:'Bedroom Pop Gems',     curator:'bedroombeats',  followers:11200, contact:'', contacted:'2026-03-15', followup:'',           status:'added',      notes:'Added March 22 — featured track!' },
+  { id:'p7', name:'Late Night Indie',     curator:'nightowlmusic', followers:9800,  contact:'', contacted:'2026-04-05', followup:'',           status:'added',      notes:'Track added to top of playlist.' },
+  { id:'p8', name:'Acoustic Stories',     curator:'acousticvibes', followers:7600,  contact:'', contacted:'',           followup:'',           status:'identified', notes:'' },
 ];
 
-let playlists = [
-  { id:'pl1', name:'Bedroom Pop Gems',  curator:'bedroombeats',  followers:11200, dateAdded:'2026-03-22', link:'#', emoji:'🛏️' },
-  { id:'pl2', name:'Late Night Indie',  curator:'nightowlmusic', followers:9800,  dateAdded:'2026-04-05', link:'#', emoji:'🌙' },
-  { id:'pl3', name:'Soft Sounds Daily', curator:'softbeats',     followers:6400,  dateAdded:'2026-02-10', link:'#', emoji:'☁️' },
+const DEFAULT_PLAYLISTS = [
+  { id:'pl1', name:'Bedroom Pop Gems',  curator:'bedroombeats',  followers:11200, dateAdded:'2026-03-22', link:'', emoji:'🛏️' },
+  { id:'pl2', name:'Late Night Indie',  curator:'nightowlmusic', followers:9800,  dateAdded:'2026-04-05', link:'', emoji:'🌙' },
+  { id:'pl3', name:'Soft Sounds Daily', curator:'softbeats',     followers:6400,  dateAdded:'2026-02-10', link:'', emoji:'☁️' },
 ];
+
+// Load from localStorage, fall back to defaults on first run
+let pitches   = JSON.parse(localStorage.getItem('avi-pitches'))   || DEFAULT_PITCHES;
+let playlists = JSON.parse(localStorage.getItem('avi-playlists')) || DEFAULT_PLAYLISTS;
+
+function saveData() {
+  localStorage.setItem('avi-pitches',   JSON.stringify(pitches));
+  localStorage.setItem('avi-playlists', JSON.stringify(playlists));
+}
 
 let editingPitchId = null;
-let editingPlId = null;
+let editingPlId    = null;
 
 const CHECKLIST = [
   { phase:'6 Weeks Before', items:[
@@ -551,14 +564,29 @@ const PLATFORMS = [
 
 // ════════════════════════════════ TABS ═══════════════════════════════════════
 
-function showTab(name, btn) {
+function showTab(name, btnOrName) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-  if (name === 'home') renderHome();
-  if (name === 'pipeline') renderPipeline();
+  // accept either a button element or a tab name string
+  if (typeof btnOrName === 'string') {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + btnOrName + "'")) b.classList.add('active');
+    });
+  } else if (btnOrName) {
+    btnOrName.classList.add('active');
+  }
+  if (name === 'home')      renderHome();
+  if (name === 'pipeline')  renderPipeline();
   if (name === 'playlists') renderPlaylists();
+  updatePipelineDot();
+}
+
+function updatePipelineDot() {
+  const tab = document.getElementById('pipeline-tab');
+  if (!tab) return;
+  const overdue = getOverdue().length;
+  tab.innerHTML = 'Pipeline' + (overdue > 0 ? ` <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#e05555;margin-left:5px;vertical-align:middle"></span>` : '');
 }
 
 // ════════════════════════════════ HOME ═══════════════════════════════════════
@@ -587,19 +615,24 @@ function renderHome() {
       <div class="sub">${s.sub}</div>
     </div>`).join('');
 
-  // Today's actions
+  // Today's actions — all clickable
   const actions = [];
   const identified = pitches.filter(p => p.status === 'identified');
-  if (identified.length) actions.push({ icon:'🎯', bg:'rgba(91,155,213,.15)', title:`Pitch ${identified[0].name}`, sub:`You have ${identified.length} curator${identified.length>1?'s':''} ready to reach out to` });
-  if (overdue.length) actions.push({ icon:'⏰', bg:'rgba(224,85,85,.15)', title:`Follow up with ${overdue[0].name}`, sub:`${overdue.length} follow-up${overdue.length>1?'s':''} are overdue` });
+  if (identified.length) actions.push({ icon:'🎯', bg:'rgba(91,155,213,.15)', title:`Pitch ${identified[0].name}`, sub:`You have ${identified.length} curator${identified.length>1?'s':''} ready to reach out to`, tab:'pipeline', btn:'Open Pipeline →' });
+  if (overdue.length)    actions.push({ icon:'⏰', bg:'rgba(224,85,85,.15)',  title:`Follow up with ${overdue[0].name}`, sub:`${overdue.length} follow-up${overdue.length>1?'s':''} are overdue`, tab:'pipeline', btn:'View Pipeline →' });
   const pd = releaseData.date ? daysUntil(releaseData.date) : null;
-  if (pd !== null && pd <= 14) actions.push({ icon:'🚀', bg:'rgba(29,185,84,.15)', title:`Release in ${pd} days — finish your checklist`, sub:`${releaseData.title || 'Your release'} is coming up fast` });
-  if (!actions.length) actions.push({ icon:'✅', bg:'rgba(29,185,84,.15)', title:'You\'re all caught up!', sub:'No urgent actions right now. Keep pitching.' });
+  if (pd !== null && pd >= 0 && pd <= 21) actions.push({ icon:'🚀', bg:'rgba(29,185,84,.15)', title:`${releaseData.title || 'Release'} in ${pd} days`, sub:'Finish your release checklist before it drops', tab:'release', btn:'View Checklist →' });
+  if (!playlists.length) actions.push({ icon:'🎵', bg:'rgba(91,155,213,.15)', title:'Add your first playlist win', sub:'Track which playlists you\'re already on', tab:'playlists', btn:'Add Playlist →' });
+  if (!actions.length)   actions.push({ icon:'✅', bg:'rgba(29,185,84,.15)', title:'You\'re all caught up!', sub:'No urgent actions. Keep pitching and releasing consistently.' });
 
   document.getElementById('today-actions').innerHTML = actions.map(a => `
-    <div class="action-item">
+    <div class="action-item" style="${a.tab ? 'cursor:pointer' : ''}" ${a.tab ? `onclick="showTab('${a.tab}', '${a.tab}')"` : ''}>
       <div class="action-icon" style="background:${a.bg}">${a.icon}</div>
-      <div class="action-text"><strong>${a.title}</strong><span>${a.sub}</span></div>
+      <div class="action-text">
+        <strong>${a.title}</strong>
+        <span>${a.sub}</span>
+      </div>
+      ${a.btn ? `<button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();showTab('${a.tab}','${a.tab}')">${a.btn}</button>` : ''}
     </div>`).join('');
 
   // Recent wins
@@ -647,7 +680,7 @@ function getOverdue() {
 
 function markFollowedUp(id) {
   const p = pitches.find(x => x.id === id);
-  if (p) { p.followup = futureDate(14); toast('Follow-up rescheduled for 2 weeks'); renderHome(); }
+  if (p) { p.followup = futureDate(14); saveData(); toast('Follow-up rescheduled for 2 weeks'); renderHome(); updatePipelineDot(); }
 }
 
 // ════════════════════════════════ PIPELINE ═══════════════════════════════════
@@ -724,18 +757,24 @@ function savePitch() {
     status: v('pm-status'), notes: v('pm-notes'),
   };
   if (!data.name) { alert('Playlist name is required'); return; }
+  const wasEditing = editingPitchId;
   if (editingPitchId) Object.assign(pitches.find(x => x.id === editingPitchId), data);
   else pitches.unshift({ id:'p'+Date.now(), ...data });
+  saveData();
   closePitchModal();
   renderPipeline();
   renderHome();
-  toast(editingPitchId ? 'Curator updated' : 'Curator added');
+  updatePipelineDot();
+  toast(wasEditing ? 'Curator updated' : 'Curator added!');
 }
 function deletePitch(id) {
   if (!confirm('Remove this pitch?')) return;
   pitches = pitches.filter(x => x.id !== id);
+  saveData();
   renderPipeline();
   renderHome();
+  updatePipelineDot();
+  toast('Pitch removed');
 }
 
 // ════════════════════════════════ SUBMIT ════════════════════════════════════
@@ -794,28 +833,46 @@ function renderPlaylists() {
         <div class="reach-num">${num(p.followers).toLocaleString()}</div>
         <div class="reach-lbl">followers</div>
       </div>
-      <div style="margin-left:8px">
-        <button class="icon-btn" onclick="removePl('${p.id}')">🗑</button>
+      <div style="margin-left:8px;display:flex;gap:4px">
+        <button class="icon-btn" title="Edit" onclick="openPlaylistModal('${p.id}')">✏️</button>
+        <button class="icon-btn" title="Remove" onclick="removePl('${p.id}')">🗑</button>
       </div>
     </div>`).join('');
 }
 
-function openPlaylistModal() { document.getElementById('pl-overlay').classList.remove('hidden'); }
-function closePlModal() { document.getElementById('pl-overlay').classList.add('hidden'); }
+function openPlaylistModal(id) {
+  editingPlId = id || null;
+  const p = id ? playlists.find(x => x.id === id) : null;
+  document.querySelector('#pl-overlay .modal-head h3').textContent = p ? 'Edit Playlist' : 'Add Playlist I\'m On';
+  document.getElementById('plm-name').value     = p?.name      || '';
+  document.getElementById('plm-curator').value  = p?.curator   || '';
+  document.getElementById('plm-followers').value= p?.followers || '';
+  document.getElementById('plm-date').value     = p?.dateAdded || '';
+  document.getElementById('plm-link').value     = p?.link      || '';
+  document.getElementById('plm-emoji').value    = p?.emoji     || '';
+  document.getElementById('pl-overlay').classList.remove('hidden');
+}
+function closePlModal() { document.getElementById('pl-overlay').classList.add('hidden'); editingPlId = null; }
 function savePlaylist() {
   const name = v('plm-name');
   if (!name) { alert('Name is required'); return; }
-  playlists.push({ id:'pl'+Date.now(), name, curator:v('plm-curator'), followers:v('plm-followers'), dateAdded:v('plm-date'), link:v('plm-link'), emoji:v('plm-emoji')||'🎵' });
+  const data = { name, curator:v('plm-curator'), followers:v('plm-followers'), dateAdded:v('plm-date'), link:v('plm-link'), emoji:v('plm-emoji')||'🎵' };
+  const wasEditing = editingPlId;
+  if (editingPlId) Object.assign(playlists.find(x => x.id === editingPlId), data);
+  else playlists.push({ id:'pl'+Date.now(), ...data });
+  saveData();
   closePlModal();
   renderPlaylists();
   renderHome();
-  toast('Playlist added!');
+  toast(wasEditing ? 'Playlist updated!' : 'Playlist added!');
 }
 function removePl(id) {
   if (!confirm('Remove this playlist?')) return;
   playlists = playlists.filter(x => x.id !== id);
+  saveData();
   renderPlaylists();
   renderHome();
+  toast('Playlist removed');
 }
 
 // ════════════════════════════════ RELEASE ═══════════════════════════════════
@@ -884,6 +941,15 @@ function toast(msg) {
 renderHome();
 renderSubmit();
 renderRelease();
+updatePipelineDot();
+
+// Keyboard: Escape closes any open modal
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closePitchModal();
+    closePlModal();
+  }
+});
 </script>
 </body>
 </html>
