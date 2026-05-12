@@ -227,6 +227,16 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
 .find-bar { display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 20px; align-items: center; }
 .find-bar-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing:.06em; margin-right: 4px; white-space: nowrap; }
 
+/* ── Warm Contacts ── */
+.wc-section { margin-bottom: 20px; }
+.wc-type-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 10px; }
+.wc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; }
+.wc-card { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--text); transition: border-color .15s; }
+.wc-card:hover { border-color: var(--green); }
+.wc-count { font-size: 18px; font-weight: 800; color: var(--green); line-height: 1; }
+.wc-name { font-size: 12px; font-weight: 600; color: var(--text); margin-top: 2px; }
+.wc-meta { font-size: 11px; color: var(--muted); }
+
 /* ── Resources tab ── */
 .res-section { margin-bottom: 28px; }
 .res-section-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
@@ -451,6 +461,106 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
         <tbody id="pipeline-tbody"></tbody>
       </table>
     </div>
+  </div>
+
+  <!-- Warm Contacts -->
+  <div class="card mt20">
+    <div class="flex between mb16">
+      <div>
+        <div class="section-title" style="margin-bottom:2px">Your curator network 🔥</div>
+        <p class="muted small">Curators &amp; outlets that have approved your music before — pitch these first for every release</p>
+      </div>
+      <a href="https://www.submithub.com" target="_blank" class="btn btn-ghost" style="font-size:12px">Open SubmitHub →</a>
+    </div>
+
+    <!-- Spotify Playlists -->
+    <div class="wc-section">
+      <div class="wc-type-label">🎧 Spotify Playlist Curators</div>
+      <div class="wc-grid">
+        <a class="wc-card" href="https://open.spotify.com/user/rzhkeoqm6wlm6js99l3slb07g" target="_blank"><span class="wc-count">7×</span><span class="wc-name">Caltify MX</span><span class="wc-meta">🌍 International</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/mariusonuc" target="_blank"><span class="wc-count">6×</span><span class="wc-name">Dance FM Romania</span><span class="wc-meta">🇷🇴 Romania</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/12151746616" target="_blank"><span class="wc-count">5×</span><span class="wc-name">Melodik Records</span><span class="wc-meta">🇷🇴 Romania</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/316aorwgiradupjtuxu4l46cmna4" target="_blank"><span class="wc-count">5×</span><span class="wc-name">Natiii</span><span class="wc-meta">🇵🇱 Poland</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/pm0szn6t4tauzw6nwp66a6jx4" target="_blank"><span class="wc-count">5×</span><span class="wc-name">Mav</span><span class="wc-meta">🇬🇷 Greece</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/futurehousecloud" target="_blank"><span class="wc-count">5×</span><span class="wc-name">Future House Cloud</span><span class="wc-meta">🇩🇪 Germany</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/11165657541" target="_blank"><span class="wc-count">4×</span><span class="wc-name">zoyasmusic</span><span class="wc-meta">🇳🇱 Netherlands</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/119002431" target="_blank"><span class="wc-count">4×</span><span class="wc-name">O.bymarie</span><span class="wc-meta">🇧🇪 Belgium</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/117814792" target="_blank"><span class="wc-count">4×</span><span class="wc-name">Jelle Ravesloot</span><span class="wc-meta">🇧🇪 Belgium</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/moon_sound" target="_blank"><span class="wc-count">4×</span><span class="wc-name">TeddyBear Records</span><span class="wc-meta">🇷🇴 Romania</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/21adcahyueq4m7tqeggah5uza" target="_blank"><span class="wc-count">4×</span><span class="wc-name">Simo Saimöö</span><span class="wc-meta">🇫🇷 France</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/or63ztp20ycc66mj5wpx18lgc" target="_blank"><span class="wc-count">4×</span><span class="wc-name">Inkognito Records</span><span class="wc-meta">🇦🇪 UAE</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/e6zui4qnv3ixhfa5grh4dlos6" target="_blank"><span class="wc-count">4×</span><span class="wc-name">Boisterous Men</span><span class="wc-meta">🇷🇸 Serbia</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/2smb29ygazv6v93er0tp1d0yt" target="_blank"><span class="wc-count">4×</span><span class="wc-name">NotOnlyPlaylists</span><span class="wc-meta">🇪🇸 Spain</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/1191660459" target="_blank"><span class="wc-count">4×</span><span class="wc-name">Laurence Paul</span><span class="wc-meta">🇮🇹 Italy</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/longliveklaus" target="_blank"><span class="wc-count">4×</span><span class="wc-name">Klaus</span><span class="wc-meta">🇮🇹 Italy</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/izzu8zy433r3k05y4a3kgtowv" target="_blank"><span class="wc-count">4×</span><span class="wc-name">Music Lover</span><span class="wc-meta">🇵🇭 Philippines</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/mabrfe16ab9l8pdhy4m06685g" target="_blank"><span class="wc-count">4×</span><span class="wc-name">Newpop</span><span class="wc-meta">🇮🇹 Italy</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/31vwbse7onwzuqr4ho6qp5rljllu" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Moonsound</span><span class="wc-meta">🇷🇴 Romania</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/31ukcki2zwx6vcloms6klqtospjm" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Alex Swank</span><span class="wc-meta">🇩🇪 Germany</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/21u42s3svs7w3z67y63fmtkni" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Maxxify Music</span><span class="wc-meta">🇷🇴 Romania</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/wdj3ur98l24yuj80f5th83v4q" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Alpas Records</span><span class="wc-meta">🇧🇪 Belgium</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/118439508" target="_blank"><span class="wc-count">3×</span><span class="wc-name">BYAS - Yasin B</span><span class="wc-meta">🇧🇪 Belgium</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/auborddeleau" target="_blank"><span class="wc-count">3×</span><span class="wc-name">La Radio du bord de l'eau</span><span class="wc-meta">🇨🇭 Switzerland</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/31sidf55zc32ghor7zsqvebjwkoq" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Shuffle Playlists</span><span class="wc-meta">🇷🇴 Romania</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/1122461678" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Hanne</span><span class="wc-meta">🇧🇪 Belgium</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/uz2sz8sxhi3xlynuzmrd4de50" target="_blank"><span class="wc-count">3×</span><span class="wc-name">I NAME IT MUSIC</span><span class="wc-meta">🇷🇴 Romania</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/savz8vts72hqdy7von3mqc29g" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Esydia</span><span class="wc-meta">🇨🇦 Canada</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/1138331383" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Robaer</span><span class="wc-meta">🇩🇪 Germany</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/czech_vibes_sound" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Czech Vibes Sound</span><span class="wc-meta">🇨🇿 Czech Republic</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/lillyera" target="_blank"><span class="wc-count">3×</span><span class="wc-name">8D Era</span><span class="wc-meta">🇬🇧 UK</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/2z9kpltmnhnvfcn9mgs0znhni" target="_blank"><span class="wc-count">3×</span><span class="wc-name">RelaxingVibe</span><span class="wc-meta">🇺🇸 USA</span></a>
+        <a class="wc-card" href="https://open.spotify.com/user/11133176104" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Blaze U</span><span class="wc-meta">🇩🇪 Germany</span></a>
+      </div>
+    </div>
+
+    <!-- Blogs -->
+    <div class="wc-section">
+      <div class="wc-type-label">📝 Blogs &amp; Press</div>
+      <div class="wc-grid">
+        <a class="wc-card" href="http://lastdaydeaf.com/" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Last Day Deaf</span><span class="wc-meta">🇬🇷 Greece</span></a>
+        <a class="wc-card" href="https://www.nagamag.com" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Nagamag</span><span class="wc-meta">🇬🇷 Greece</span></a>
+        <a class="wc-card" href="https://www.riptidemag.fr/" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Riptide Mag</span><span class="wc-meta">🇫🇷 France</span></a>
+        <a class="wc-card" href="http://www.mysticsons.com/" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Mystic Sons</span><span class="wc-meta">🌍 International</span></a>
+        <a class="wc-card" href="https://www.visualatelier8.com/" target="_blank"><span class="wc-count">2×</span><span class="wc-name">Visual Atelier 8</span><span class="wc-meta">🇮🇹 Italy</span></a>
+        <a class="wc-card" href="https://www.moochila.com.ar" target="_blank"><span class="wc-count">2×</span><span class="wc-name">MoochilaTv</span><span class="wc-meta">🇦🇷 Argentina</span></a>
+        <a class="wc-card" href="http://www.affinityascension.com" target="_blank"><span class="wc-count">2×</span><span class="wc-name">Affinity Ascension</span><span class="wc-meta">🌍 International</span></a>
+        <a class="wc-card" href="https://extravafrench.com/" target="_blank"><span class="wc-count">2×</span><span class="wc-name">EXTRAVAFRENCH</span><span class="wc-meta">🇫🇷 France</span></a>
+        <a class="wc-card" href="https://roadie-music.com/" target="_blank"><span class="wc-count">2×</span><span class="wc-name">Roadie Music</span><span class="wc-meta">🇧🇷 Brazil</span></a>
+        <a class="wc-card" href="https://lefuturewave.com/" target="_blank"><span class="wc-count">2×</span><span class="wc-name">Lefuturewave</span><span class="wc-meta">🇳🇱 Netherlands</span></a>
+        <a class="wc-card" href="https://mishkadj.ru" target="_blank"><span class="wc-count">2×</span><span class="wc-name">MishkaDj</span><span class="wc-meta">🇷🇺 Russia</span></a>
+        <a class="wc-card" href="https://littledoseofindie.com/" target="_blank"><span class="wc-count">2×</span><span class="wc-name">Little Dose of Indie</span><span class="wc-meta">🇬🇧 UK</span></a>
+        <a class="wc-card" href="https://talkaboutpopmusic.com/" target="_blank"><span class="wc-count">2×</span><span class="wc-name">Talk About Pop Music</span><span class="wc-meta">🇬🇧 UK</span></a>
+        <a class="wc-card" href="http://soramusic.asia/" target="_blank"><span class="wc-count">2×</span><span class="wc-name">Sora Music</span><span class="wc-meta">🌏 Asia</span></a>
+      </div>
+    </div>
+
+    <!-- YouTube -->
+    <div class="wc-section">
+      <div class="wc-type-label">▶️ YouTube Channels</div>
+      <div class="wc-grid">
+        <a class="wc-card" href="https://www.youtube.com/c/LaBelleMusique" target="_blank"><span class="wc-count">4×</span><span class="wc-name">La Belle Musique</span><span class="wc-meta">🇫🇷 France</span></a>
+        <a class="wc-card" href="https://www.youtube.com/user/themahoganysessions" target="_blank"><span class="wc-count">2×</span><span class="wc-name">Mahogany</span><span class="wc-meta">🇬🇧 UK</span></a>
+        <a class="wc-card" href="https://www.youtube.com/c/centralbassboost" target="_blank"><span class="wc-count">2×</span><span class="wc-name">Central Bass Boost</span><span class="wc-meta">🇬🇧 UK</span></a>
+        <a class="wc-card" href="https://www.youtube.com/user/theGiantAngryRobot" target="_blank"><span class="wc-count">2×</span><span class="wc-name">The Giant Angry Robot</span><span class="wc-meta">🇨🇦 Canada</span></a>
+        <a class="wc-card" href="https://www.youtube.com/channel/UC0EFXxsXIA9aqnLxUwcAU6A/" target="_blank"><span class="wc-count">2×</span><span class="wc-name">BOM VIBE</span><span class="wc-meta">🇻🇳 Vietnam</span></a>
+      </div>
+    </div>
+
+    <!-- Radio -->
+    <div class="wc-section">
+      <div class="wc-type-label">📻 Radio Stations</div>
+      <div class="wc-grid">
+        <a class="wc-card" href="https://www.afxradio.com/" target="_blank"><span class="wc-count">4×</span><span class="wc-name">OVERVIEW (AFX Radio)</span><span class="wc-meta">🇬🇧 UK</span></a>
+        <a class="wc-card" href="https://www.kanefm.com/" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Monday Mashup — Kane FM</span><span class="wc-meta">🇬🇧 UK</span></a>
+        <a class="wc-card" href="https://www.cbnvirginislands.com/css909fm" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Caribbean Broadcast Network</span><span class="wc-meta">🇻🇮 US Virgin Islands</span></a>
+        <a class="wc-card" href="http://www.radionordnorge.no" target="_blank"><span class="wc-count">3×</span><span class="wc-name">Radio Nord Norge</span><span class="wc-meta">🇳🇴 Norway</span></a>
+        <a class="wc-card" href="http://www.nam-radio.com/" target="_blank"><span class="wc-count">3×</span><span class="wc-name">nam-radio</span><span class="wc-meta">🇳🇦 Namibia</span></a>
+        <a class="wc-card" href="https://www.radioalternativarock.com/" target="_blank"><span class="wc-count">2×</span><span class="wc-name">Rock'n'Roll Vibration</span><span class="wc-meta">🇧🇷 Brazil</span></a>
+        <a class="wc-card" href="https://maestrofm.md/" target="_blank"><span class="wc-count">2×</span><span class="wc-name">Fresh Sly — Maestro FM</span><span class="wc-meta">🇲🇩 Moldova</span></a>
+      </div>
+    </div>
+
+    <p class="muted small mt12" style="font-size:11px">From 12,131 total SubmitHub submissions · 2019–2026 · showing outlets with 2+ approvals</p>
   </div>
 </div>
 
@@ -1029,6 +1139,36 @@ function deletePitch(id) {
 
 const SUBMIT_CATEGORIES = [
   {
+    title: '✅ Blogs & Outlets That Already Love Your Sound',
+    intro: 'These outlets have approved your music before — email them personally for every new release. They already know your name.',
+    items: [
+      { name:'Last Day Deaf', icon:'🔊', color:'#1db954', cost:'Free · 3× approved', rate:'Approved you 3×', url:'http://lastdaydeaf.com/',
+        desc:'Greek electronic/dance music blog with strong European readership. Has approved your music 3 times.', tip:'Email them directly referencing their previous coverage. They already know your name.' },
+      { name:'Nagamag', icon:'🎵', color:'#1db954', cost:'Free · 3× approved', rate:'Approved you 3×', url:'https://www.nagamag.com',
+        desc:'Greece-based electronic and indie music magazine. 3 approvals — one of your most reliable press outlets.', tip:'Consistent supporter. Reach out for every release.' },
+      { name:'Riptide Mag', icon:'🌊', color:'#1db954', cost:'Free · 3× approved', rate:'Approved you 3×', url:'https://www.riptidemag.fr/',
+        desc:'French music blog with strong house/electronic readership. Has approved your music 3 times.', tip:'French-speaking audience — lean into your European fanbase here.' },
+      { name:'Mystic Sons', icon:'🌙', color:'#1db954', cost:'Free · 3× approved', rate:'Approved you 3×', url:'http://www.mysticsons.com/',
+        desc:'International music blog. 3 approvals — consistently responds positively to your sound.', tip:'Direct outreach with your new release. They already know what you sound like.' },
+      { name:'Visual Atelier 8', icon:'🎨', color:'#5b9bd5', cost:'Free · 2× approved', rate:'Approved you 2×', url:'https://www.visualatelier8.com/',
+        desc:'Italian music and visual arts publication. Has approved your music twice. Strong design/art crossover audience.', tip:'Their audience skews visual and artistic — lead with striking cover art or visuals.' },
+      { name:'Lefuturewave', icon:'🌊', color:'#5b9bd5', cost:'Free · 2× approved', rate:'Approved you 2×', url:'https://lefuturewave.com/',
+        desc:'Dutch electronic and chill music blog. 2 approvals. Strong taste in deep house and melodic electronic.', tip:'Perfect fit for your Zeeba/deep house material.' },
+      { name:'Affinity Ascension', icon:'⬆️', color:'#5b9bd5', cost:'Free · 2× approved', rate:'Approved you 2×', url:'http://www.affinityascension.com',
+        desc:'Electronic and ambient music blog. 2 approvals.', tip:'Reach out directly with your next release.' },
+      { name:'Talk About Pop Music', icon:'💬', color:'#5b9bd5', cost:'Free · 2× approved', rate:'Approved you 2×', url:'https://talkaboutpopmusic.com/',
+        desc:'UK pop and electronic music blog. 2 approvals. Good for reaching British music fans.', tip:'Email with your new release — they\'ve responded to your sound twice already.' },
+      { name:'Roadie Music', icon:'🚌', color:'#5b9bd5', cost:'Free · 2× approved', rate:'Approved you 2×', url:'https://roadie-music.com/',
+        desc:'Brazilian music media outlet. 2 approvals — taps into your Latin American audience.', tip:'Brazil is a growing market for you. This outlet helps build your South American presence.' },
+      { name:'EXTRAVAFRENCH', icon:'🇫🇷', color:'#5b9bd5', cost:'Free · 2× approved', rate:'Approved you 2×', url:'https://extravafrench.com/',
+        desc:'French electronic music blog. 2 approvals. France is already in your top 10 markets.', tip:'French press = French Spotify algorithmic push. Leverage this for EU growth.' },
+      { name:'Little Dose of Indie', icon:'💊', color:'#5b9bd5', cost:'Free · 2× approved', rate:'Approved you 2×', url:'https://littledoseofindie.com/',
+        desc:'UK indie music blog. 2 approvals. Engaged indie music community.', tip:'Direct email outreach with any indie-leaning tracks.' },
+      { name:'MoochilaTv', icon:'🎒', color:'#5b9bd5', cost:'Free · 2× approved', rate:'Approved you 2×', url:'https://www.moochila.com.ar',
+        desc:'Argentine music media. 2 approvals. Your Latin American audience is real — this outlet builds it.', tip:'They called Hashem "like a mantra but with a great vibe to dance." Lean into that.' },
+    ]
+  },
+  {
     title: '🎧 Start Here — Highest Priority',
     items: [
       { name:'Spotify for Artists', icon:'🎧', color:'#1db954', cost:'Free', rate:'<5% editorial', url:'https://artists.spotify.com',
@@ -1146,13 +1286,14 @@ function renderSubmit() {
   document.getElementById('submit-content').innerHTML = SUBMIT_CATEGORIES.map(cat => `
     <div class="submit-cat">
       <div class="submit-cat-title">${cat.title}</div>
+      ${cat.intro ? `<p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.5">${cat.intro}</p>` : ''}
       <div class="platform-grid">
         ${cat.items.map(p => `
-          <div class="platform-card">
+          <div class="platform-card" style="${p.rate && p.rate.includes('Approved you') ? 'border-color:rgba(29,185,84,.4);' : ''}">
             <div class="plat-top">
               <div class="plat-icon" style="background:${p.color}22">${p.icon}</div>
               <div>
-                <div class="plat-name">${p.name}</div>
+                <div class="plat-name">${p.name}${p.rate && p.rate.includes('Approved you') ? ' <span style="font-size:10px;background:rgba(29,185,84,.15);color:var(--green);padding:1px 6px;border-radius:10px;font-weight:700;vertical-align:middle">✓ loves your music</span>' : ''}</div>
                 <div class="plat-type">${p.cost} &nbsp;·&nbsp; ${p.rate}</div>
               </div>
             </div>
