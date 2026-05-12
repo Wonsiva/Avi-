@@ -498,29 +498,126 @@ let editingPlId    = null;
 
 const CHECKLIST = [
   { phase:'6 Weeks Before', items:[
-    { id:'c1',  text:'Finish mastering',          tip:'Make sure your track sounds great on Spotify — check the loudness normalization (-14 LUFS target).' },
-    { id:'c2',  text:'Upload to distributor',      tip:'Use DistroKid, TuneCore, or CD Baby. Set release date 3–4 weeks out to give time for pitching.' },
-    { id:'c3',  text:'Pitch to Spotify Editorial', tip:'Open Spotify for Artists → go to "Music" → your unreleased track → click "Pitch a Song". Do this ASAP after upload.' },
+    { id:'c1', text:'Finish mastering',
+      tip:'Target -14 LUFS integrated loudness for Spotify. Anything louder gets turned down and loses punch.',
+      links:[
+        { label:'LANDR (online mastering)', url:'https://www.landr.com' },
+        { label:'eMastered', url:'https://emastered.com' },
+        { label:'Loudness guide', url:'https://artists.spotify.com/en/blog/loudness-normalization' },
+      ]},
+    { id:'c2', text:'Upload to your distributor',
+      tip:'Set your release date 4+ weeks out. You need time to pitch. Most distributors take 1–3 days to go live.',
+      links:[
+        { label:'DistroKid', url:'https://distrokid.com' },
+        { label:'TuneCore', url:'https://www.tunecore.com' },
+        { label:'CD Baby', url:'https://cdbaby.com' },
+        { label:'United Masters', url:'https://unitedmasters.com' },
+      ]},
+    { id:'c3', text:'Pitch to Spotify Editorial',
+      tip:'FREE and the highest-value pitch you can make. Only works on unreleased songs. Go to Spotify for Artists → Music → your upcoming track → Pitch a Song.',
+      links:[
+        { label:'Spotify for Artists →', url:'https://artists.spotify.com' },
+        { label:'How to pitch guide', url:'https://artists.spotify.com/en/blog/how-to-pitch-your-music-to-spotify-playlists' },
+      ]},
   ]},
   { phase:'4 Weeks Before', items:[
-    { id:'c4',  text:'Submit to SubmitHub',        tip:'Target 10–20 curators. Write a personal note for each — generic pitches get ignored.' },
-    { id:'c5',  text:'Submit to Groover',          tip:'Groover guarantees feedback. Great for getting honest curator reactions and potential adds.' },
-    { id:'c6',  text:'Email 5 music blogs',        tip:'Research which blogs cover your genre. Personalize each email with a line about their recent posts.' },
+    { id:'c4', text:'Submit to SubmitHub',
+      tip:'Target 10–20 curators max. Write a personal note for each — mention something specific about their playlist. Generic pitches get skipped every time.',
+      links:[
+        { label:'SubmitHub →', url:'https://www.submithub.com' },
+        { label:'How to write a good pitch', url:'https://www.submithub.com/blog/how-to-submit-music' },
+      ]},
+    { id:'c5', text:'Submit to Groover',
+      tip:'Guaranteed feedback within 7 days. ~10-12% placement rate. Good for honest curator reactions even when they don\'t add you.',
+      links:[
+        { label:'Groover →', url:'https://groover.co' },
+        { label:'Groover tips', url:'https://blog.groover.co/en/tips/groover-tips/' },
+      ]},
+    { id:'c6', text:'Submit to music blogs',
+      tip:'Personalise every email. Reference a specific post they wrote recently. Blogs that cover your genre drive real Spotify listeners.',
+      links:[
+        { label:'Indie Shuffle', url:'https://www.indieshuffle.com/submit' },
+        { label:'Hilly Dilly', url:'https://hillydilly.com' },
+        { label:'The Wild Honey Pie', url:'https://thewildhoneypie.com/submit' },
+        { label:'Ones To Watch', url:'https://www.ones2watch.com' },
+        { label:'Earmilk', url:'https://www.earmilk.com/submit' },
+      ]},
   ]},
   { phase:'2 Weeks Before', items:[
-    { id:'c7',  text:'Post on socials (tease)',    tip:'Short clip or studio snippet. Don\'t reveal the whole song — build curiosity.' },
-    { id:'c8',  text:'DM playlist curators',       tip:'Reach out to curators in your pipeline who haven\'t responded. Keep it short and genuine.' },
-    { id:'c9',  text:'Tell your existing fans',    tip:'Email list, Discord, Patreon — whoever follows you closely. They\'ll save and share on day 1.' },
+    { id:'c7', text:'Tease on TikTok & Reels',
+      tip:'Post a 15–30 second clip of the best hook. Don\'t show the full song. Use trending audio formats. TikTok drives more indie growth than any other platform right now.',
+      links:[
+        { label:'TikTok for Artists', url:'https://www.tiktok.com/creators/creator-portal/en-us/getting-started/tiktok-for-artists/' },
+        { label:'CapCut (free video editor)', url:'https://www.capcut.com' },
+      ]},
+    { id:'c8', text:'DM your Pipeline curators',
+      tip:'Reach out to anyone in your pipeline who hasn\'t responded. Keep it to 3 sentences max: who you are, what the song sounds like, why it fits their playlist.',
+      links:[
+        { label:'Open your Pipeline', url:'#', onclick:'showTab(\'pipeline\',\'pipeline\')' },
+      ]},
+    { id:'c9', text:'Set up a pre-save campaign',
+      tip:'Pre-saves signal demand to Spotify\'s algorithm before release. Even 50 pre-saves help. Use a free tool to collect them.',
+      links:[
+        { label:'Hypeddit (free pre-saves)', url:'https://hypeddit.com' },
+        { label:'Toneden', url:'https://www.toneden.io' },
+        { label:'Feature.fm', url:'https://feature.fm' },
+      ]},
+    { id:'c9b', text:'Tell your existing fans',
+      tip:'Email list, Discord, Patreon — whoever follows you closely. Day-1 saves from real fans trigger the algorithm before anyone else sees the song.',
+      links:[
+        { label:'Mailchimp (free email)', url:'https://mailchimp.com' },
+        { label:'Substack', url:'https://substack.com' },
+        { label:'Beehiiv', url:'https://www.beehiiv.com' },
+      ]},
   ]},
   { phase:'Release Day', items:[
-    { id:'c10', text:'Share everywhere',           tip:'All social platforms, stories, reels. Ask friends and family to save (not just stream) — saves boost algorithmic reach.' },
-    { id:'c11', text:'Post in Reddit communities', tip:'r/indieheads, r/spotify, genre-specific subs. Be genuine, not spammy.' },
-    { id:'c12', text:'Thank curators who added you', tip:'A quick thank-you DM goes a long way and builds a relationship for future releases.' },
+    { id:'c10', text:'Post on every platform',
+      tip:'Ask friends and family to SAVE the song, not just stream it. A save is worth 10 passive streams to Spotify\'s algorithm.',
+      links:[
+        { label:'TikTok', url:'https://www.tiktok.com' },
+        { label:'Instagram', url:'https://www.instagram.com' },
+        { label:'Twitter/X', url:'https://twitter.com' },
+        { label:'Facebook', url:'https://www.facebook.com' },
+      ]},
+    { id:'c11', text:'Post in Reddit communities',
+      tip:'Be genuine — introduce yourself, don\'t just drop a link. Comment on other posts in the community first.',
+      links:[
+        { label:'r/indieheads', url:'https://reddit.com/r/indieheads' },
+        { label:'r/spotify', url:'https://reddit.com/r/spotify' },
+        { label:'r/WeAreTheMusicMakers', url:'https://reddit.com/r/WeAreTheMusicMakers' },
+        { label:'r/shareyourmusic', url:'https://reddit.com/r/shareyourmusic' },
+      ]},
+    { id:'c12', text:'Thank curators who added you',
+      tip:'A genuine thank-you DM builds a real relationship. These curators are far more likely to add your next release too.',
+      links:[
+        { label:'Open your Pipeline', url:'#', onclick:'showTab(\'pipeline\',\'pipeline\')' },
+      ]},
   ]},
   { phase:'After Release', items:[
-    { id:'c13', text:'Follow up with no-responses', tip:'Wait 2 weeks then send a polite follow-up. Most curators are just busy, not ignoring you.' },
-    { id:'c14', text:'Pitch to Playlist Push',     tip:'Now that you have streaming data, Playlist Push works better with proof of traction.' },
-    { id:'c15', text:'Note what worked',           tip:'Which platforms drove the most adds? Which pitches got replies? Use this for your next release.' },
+    { id:'c13', text:'Check your Spotify for Artists stats',
+      tip:'Look at save rate (aim for 5%+), skip rate (keep under 30%), and which playlists drove the most streams. This tells you what\'s working.',
+      links:[
+        { label:'Spotify for Artists →', url:'https://artists.spotify.com' },
+        { label:'Understanding your stats', url:'https://artists.spotify.com/en/blog/understanding-your-spotify-stats' },
+      ]},
+    { id:'c14', text:'Follow up with non-responses',
+      tip:'Wait 2 weeks, then send one polite follow-up. Most curators are just busy. Never follow up more than once.',
+      links:[
+        { label:'View your pitched curators', url:'#', onclick:'showTab(\'pipeline\',\'pipeline\')' },
+      ]},
+    { id:'c15', text:'Run a Playlist Push campaign',
+      tip:'Now that you have real streaming data, Playlist Push matches you with curators algorithmically. Works much better with proof of traction.',
+      links:[
+        { label:'Playlist Push →', url:'https://playlistpush.com' },
+        { label:'Fluence →', url:'https://fluence.io' },
+      ]},
+    { id:'c16', text:'Start building your email list',
+      tip:'Spotify followers can disappear overnight if the algorithm stops pushing you. An email list is yours forever — no algorithm between you and your fans.',
+      links:[
+        { label:'Mailchimp (free up to 500)', url:'https://mailchimp.com' },
+        { label:'Hypeddit fan gate', url:'https://hypeddit.com' },
+        { label:'Beehiiv', url:'https://www.beehiiv.com' },
+      ]},
   ]},
 ];
 
@@ -896,14 +993,22 @@ function renderRelease() {
   document.getElementById('checklist-wrap').innerHTML = CHECKLIST.map(phase => `
     <div class="check-phase">${phase.phase}</div>
     <div class="checklist">
-      ${phase.items.map(item => `
+      ${phase.items.map(item => {
+        const links = (item.links || []).map(l =>
+          l.onclick
+            ? `<button onclick="${l.onclick}" style="background:var(--surface3);border:1px solid var(--border);color:var(--green);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;text-decoration:none">${l.label}</button>`
+            : `<a href="${l.url}" target="_blank" style="display:inline-block;background:var(--surface3);border:1px solid var(--border);color:var(--green);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;text-decoration:none">${l.label} ↗</a>`
+        ).join('');
+        return `
         <div class="check-item ${checkState[item.id] ? 'done' : ''}" id="ci-${item.id}">
           <div class="check-box ${checkState[item.id] ? 'checked' : ''}" onclick="toggleCheck('${item.id}')"></div>
           <div class="check-content">
             <strong>${item.text}</strong>
             <p>${item.tip}</p>
+            ${links ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${links}</div>` : ''}
           </div>
-        </div>`).join('')}
+        </div>`;
+      }).join('')}
     </div>`).join('');
 }
 
