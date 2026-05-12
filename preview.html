@@ -209,6 +209,43 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
 .check-item.done .check-content strong { text-decoration: line-through; color: var(--muted); }
 .check-phase { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: 20px 0 8px; color: var(--muted); }
 
+/* ── Quick links bar ── */
+.ql-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.ql-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; font-weight: 600; color: var(--text); text-decoration: none; transition: all .15s; white-space: nowrap; }
+.ql-pill:hover { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+.ql-pill .pi { font-size: 14px; }
+
+/* ── Algorithm benchmarks ── */
+.algo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 10px; }
+.algo-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.algo-card .metric { font-size: 22px; font-weight: 800; }
+.algo-card .mlabel { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing:.05em; margin-top: 3px; }
+.algo-card .mtarget { font-size: 11px; margin-top: 4px; font-weight: 600; }
+.algo-card .mdesc { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+
+/* ── Find curators bar ── */
+.find-bar { display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 20px; align-items: center; }
+.find-bar-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing:.06em; margin-right: 4px; white-space: nowrap; }
+
+/* ── Resources tab ── */
+.res-section { margin-bottom: 28px; }
+.res-section-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.res-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 10px; }
+.res-card { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--text); transition: all .15s; }
+.res-card:hover { border-color: var(--green); transform: translateY(-1px); }
+.res-card .ri { font-size: 22px; flex-shrink: 0; }
+.res-card .rt { flex: 1; }
+.res-card .rn { font-size: 13px; font-weight: 700; display: block; }
+.res-card .rd { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; display: block; }
+.res-card .rb { display: inline-block; margin-top: 6px; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; text-transform: uppercase; letter-spacing:.04em; }
+.rb-free { background: rgba(29,185,84,.15); color: var(--green); }
+.rb-paid { background: rgba(245,200,66,.12); color: var(--yellow); }
+.rb-freemium { background: rgba(91,155,213,.12); color: var(--blue); }
+
+/* ── Submit categories ── */
+.submit-cat { margin-bottom: 28px; }
+.submit-cat-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+
 @media (max-width: 800px) {
   header { height: auto; padding: 10px 16px; flex-wrap: wrap; }
   nav { overflow-x: auto; }
@@ -232,7 +269,9 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
     <button class="tab-btn" onclick="showTab('submit', this)">Submit</button>
     <button class="tab-btn" onclick="showTab('playlists', this)">My Playlists</button>
     <button class="tab-btn" onclick="showTab('release', this)">Release Plan</button>
+    <button class="tab-btn" onclick="showTab('resources', this)">Resources</button>
   </nav>
+  <a href="https://artists.spotify.com" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--green);color:#000;padding:6px 13px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0">🎧 Spotify for Artists</a>
 </header>
 
 <main>
@@ -242,6 +281,18 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
   <div class="greeting">
     <h1 id="greeting-text">Good morning, Avi 👋</h1>
     <p id="greeting-date"></p>
+  </div>
+
+  <!-- Quick links bar -->
+  <div class="ql-bar">
+    <a class="ql-pill" href="https://artists.spotify.com" target="_blank"><span class="pi">🎧</span> Spotify for Artists</a>
+    <a class="ql-pill" href="https://distrokid.com" target="_blank"><span class="pi">📦</span> DistroKid</a>
+    <a class="ql-pill" href="https://www.submithub.com" target="_blank"><span class="pi">📬</span> SubmitHub</a>
+    <a class="ql-pill" href="https://groover.co" target="_blank"><span class="pi">🎚️</span> Groover</a>
+    <a class="ql-pill" href="https://www.tiktok.com/tiktokstudio/upload" target="_blank"><span class="pi">🎵</span> TikTok Studio</a>
+    <a class="ql-pill" href="https://hypeddit.com" target="_blank"><span class="pi">💾</span> Pre-Save Tool</a>
+    <a class="ql-pill" href="https://chartmetric.com" target="_blank"><span class="pi">📊</span> Chartmetric</a>
+    <a class="ql-pill" href="https://open.spotify.com" target="_blank"><span class="pi">🟢</span> Open Spotify</a>
   </div>
 
   <!-- Stats -->
@@ -269,10 +320,50 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
     <div id="followup-list"></div>
   </div>
 
+  <!-- Algorithm benchmarks -->
+  <div class="card mt16">
+    <div class="flex between mb12">
+      <div class="section-title" style="margin-bottom:0">Spotify algorithm benchmarks</div>
+      <a href="https://artists.spotify.com" target="_blank" style="font-size:12px;color:var(--green);text-decoration:none;font-weight:600">Check your stats →</a>
+    </div>
+    <div class="algo-grid">
+      <div class="algo-card">
+        <div class="metric" style="color:var(--green)">5%+</div>
+        <div class="mlabel">Save Rate</div>
+        <div class="mtarget" style="color:var(--green)">Target: 5%+</div>
+        <div class="mdesc">Saves are the #1 signal. 1 save = 10 passive streams to the algorithm.</div>
+      </div>
+      <div class="algo-card">
+        <div class="metric" style="color:var(--blue)">70%+</div>
+        <div class="mlabel">Completion Rate</div>
+        <div class="mtarget" style="color:var(--blue)">Target: 70%+</div>
+        <div class="mdesc">People finishing your song signals quality to Discover Weekly.</div>
+      </div>
+      <div class="algo-card">
+        <div class="metric" style="color:var(--yellow)">&lt;30%</div>
+        <div class="mlabel">Skip Rate</div>
+        <div class="mtarget" style="color:var(--yellow)">Keep under 30%</div>
+        <div class="mdesc">Skips in the first 30 sec suppress your song across Radio and Autoplay.</div>
+      </div>
+      <div class="algo-card">
+        <div class="metric" style="color:var(--purple)">2.0+</div>
+        <div class="mlabel">Repeat Listen Rate</div>
+        <div class="mtarget" style="color:var(--purple)">Target: 2.0+</div>
+        <div class="mdesc">Listeners playing your song twice is a very strong algorithmic signal.</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--muted)">
+      Check these in <a href="https://artists.spotify.com" target="_blank" style="color:var(--green)">Spotify for Artists</a> · <a href="https://chartmetric.com" target="_blank" style="color:var(--green)">Chartmetric</a> · <a href="https://www.soundcharts.com" target="_blank" style="color:var(--green)">Soundcharts</a>
+    </div>
+  </div>
+
   <!-- Quick reach stats -->
   <div class="card mt16">
-    <div class="section-title">Your current reach</div>
-    <div class="flex gap16 wrap mt8" id="reach-summary"></div>
+    <div class="flex between mb12">
+      <div class="section-title" style="margin-bottom:0">Your current reach</div>
+      <a href="#" onclick="showTab('playlists','playlists');return false" style="font-size:12px;color:var(--green);text-decoration:none;font-weight:600">View all playlists →</a>
+    </div>
+    <div class="flex gap16 wrap" id="reach-summary"></div>
   </div>
 </div>
 
@@ -284,6 +375,18 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
       <p class="muted small mt4">Track every curator from discovery to placement</p>
     </div>
     <button class="btn btn-green" onclick="openPitchModal(null)">+ Add Curator</button>
+  </div>
+
+  <!-- Find curators bar -->
+  <div class="find-bar">
+    <span class="find-bar-label">🔍 Find curators:</span>
+    <a class="ql-pill" href="https://www.submithub.com/explore" target="_blank">SubmitHub Browse</a>
+    <a class="ql-pill" href="https://groover.co/en/music-curators/" target="_blank">Groover Curators</a>
+    <a class="ql-pill" href="https://open.spotify.com/search" target="_blank">Spotify Search</a>
+    <a class="ql-pill" href="https://playlistsupply.com" target="_blank">Playlist Supply</a>
+    <a class="ql-pill" href="https://chartmetric.com/playlists" target="_blank">Chartmetric Playlists</a>
+    <a class="ql-pill" href="https://reddit.com/r/SpotifyPlaylists" target="_blank">r/SpotifyPlaylists</a>
+    <a class="ql-pill" href="https://indiemono.com" target="_blank">IndieMono</a>
   </div>
 
   <div class="pipeline-stages" id="pipeline-board"></div>
@@ -305,9 +408,9 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
 <div id="panel-submit" class="panel">
   <div class="mb20">
     <h2 style="font-size:22px;font-weight:800;letter-spacing:-.02em">Submit Your Music</h2>
-    <p class="muted small mt4">Every platform you need, with what to know before you pitch</p>
+    <p class="muted small mt4">Every channel to get your music heard — ranked by what matters most</p>
   </div>
-  <div class="platform-grid" id="platform-grid"></div>
+  <div id="submit-content"></div>
 </div>
 
 <!-- ════════════════════════════════════════ PLAYLISTS ══════════════════════ -->
@@ -322,6 +425,17 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
 
   <div class="card mb16" id="reach-card">
     <div class="flex gap16 wrap" id="reach-stats"></div>
+  </div>
+
+  <!-- Research tools bar -->
+  <div class="find-bar mb16">
+    <span class="find-bar-label">🔬 Research tools:</span>
+    <a class="ql-pill" href="https://chartmetric.com/playlists" target="_blank">Chartmetric</a>
+    <a class="ql-pill" href="https://www.soundcharts.com" target="_blank">Soundcharts</a>
+    <a class="ql-pill" href="https://open.spotify.com/search" target="_blank">Spotify Search</a>
+    <a class="ql-pill" href="https://playlistsupply.com" target="_blank">Playlist Supply</a>
+    <a class="ql-pill" href="https://spotifyplaylistarchive.com" target="_blank">Playlist Archive</a>
+    <a class="ql-pill" href="https://www.chosic.com/spotify-playlist-analyzer/" target="_blank">Playlist Analyzer</a>
   </div>
 
   <div class="card">
@@ -355,6 +469,15 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
   </div>
 
   <div id="checklist-wrap"></div>
+</div>
+
+<!-- ════════════════════════════════════════ RESOURCES ══════════════════════ -->
+<div id="panel-resources" class="panel">
+  <div class="mb20">
+    <h2 style="font-size:22px;font-weight:800;letter-spacing:-.02em">Resources</h2>
+    <p class="muted small mt4">Every tool, platform, and community an indie artist needs — all in one place</p>
+  </div>
+  <div id="resources-content"></div>
 </div>
 
 </main>
@@ -624,40 +747,6 @@ const CHECKLIST = [
 let checkState = JSON.parse(localStorage.getItem('avi-checks') || '{}');
 let releaseData = JSON.parse(localStorage.getItem('avi-release') || '{"title":"","date":""}');
 
-const PLATFORMS = [
-  { name:'Spotify for Artists', icon:'🎧', type:'Editorial Pitch', color:'#1db954',
-    desc:'Pitch directly to Spotify\'s editorial team for playlist consideration. FREE — and the highest-value pitch you can make. Do this FIRST.',
-    cost:'Free', turnaround:'Before release', url:'https://artists.spotify.com',
-    tip:'Only available for unreleased songs. Pitch at least 7 days before release date.' },
-  { name:'SubmitHub', icon:'📬', type:'Curator Platform', color:'#5b9bd5',
-    desc:'Send your track to hundreds of independent playlist curators and blogs. Pay per submission — curators must listen and respond.',
-    cost:'$1–3/submit', turnaround:'1–5 days', url:'https://www.submithub.com',
-    tip:'Write a personal note for each curator. Generic pitches get skipped.' },
-  { name:'Groover', icon:'🎚️', type:'Curator Platform', color:'#9b7fe8',
-    desc:'Guaranteed feedback from curators, labels, and blogs. Even if they don\'t add you, you get a response.',
-    cost:'€2/submit', turnaround:'7 days', url:'https://groover.co',
-    tip:'Great for early-career artists who need feedback to improve their pitch.' },
-  { name:'Playlist Push', icon:'📈', type:'Curator Network', color:'#f5c842',
-    desc:'Algorithm-matched curator network. Works best once you have some streaming history to show curators.',
-    cost:'$300+/campaign', turnaround:'2 weeks', url:'https://playlistpush.com',
-    tip:'Higher investment but can result in dozens of adds from one campaign.' },
-  { name:'Fluence', icon:'⚡', type:'Creator Platform', color:'#e05555',
-    desc:'Submit to curators, TikTok creators, and media contacts. Good for getting your song into video content.',
-    cost:'$1–5/submit', turnaround:'3–7 days', url:'https://fluence.io',
-    tip:'Target TikTok creators to get sync opportunities alongside playlist adds.' },
-  { name:'Indie Shuffle', icon:'🔀', type:'Music Blog', color:'#5b9bd5',
-    desc:'Indie music blog with a strong following. Getting featured here drives Spotify listeners organically.',
-    cost:'Free', turnaround:'1–3 weeks', url:'https://www.indieshuffle.com/submit',
-    tip:'They only feature music they genuinely love. Be selective — make sure your track is a great fit.' },
-  { name:'r/indieheads', icon:'🟠', type:'Community', color:'#ff4500',
-    desc:'Reddit community for indie music fans. Post your release, do a "New Music Friday" thread, engage genuinely.',
-    cost:'Free', turnaround:'Immediate', url:'https://reddit.com/r/indieheads',
-    tip:'Be a real member of the community, not just a self-promoter. Comment on other posts too.' },
-  { name:'Hive', icon:'🐝', type:'Fan Platform', color:'#f5c842',
-    desc:'A music-first social network where fans discover new artists. Great for building an early fanbase organically.',
-    cost:'Free', turnaround:'Ongoing', url:'https://hivesocial.app',
-    tip:'Post consistently and engage with other artists. The algorithm favors genuine interaction.' },
-];
 
 // ════════════════════════════════ TABS ═══════════════════════════════════════
 
@@ -676,6 +765,7 @@ function showTab(name, btnOrName) {
   if (name === 'home')      renderHome();
   if (name === 'pipeline')  renderPipeline();
   if (name === 'playlists') renderPlaylists();
+  if (name === 'resources') renderResources();
   updatePipelineDot();
 }
 
@@ -876,26 +966,141 @@ function deletePitch(id) {
 
 // ════════════════════════════════ SUBMIT ════════════════════════════════════
 
+const SUBMIT_CATEGORIES = [
+  {
+    title: '🎧 Start Here — Highest Priority',
+    items: [
+      { name:'Spotify for Artists', icon:'🎧', color:'#1db954', cost:'Free', rate:'<5% editorial', url:'https://artists.spotify.com',
+        desc:'Pitch your unreleased song to Spotify\'s editorial team. The single highest-value action you can take. Do this FIRST, before anything else.',
+        tip:'Only works on unreleased tracks. Pitch immediately after upload — at least 7 days before release.' },
+      { name:'Spotify Canvas', icon:'🎬', color:'#1db954', cost:'Free', rate:'Boosts saves', url:'https://artists.spotify.com',
+        desc:'Add a 3–8 second looping video to your track. Canvas videos increase streams by up to 145% and saves significantly.',
+        tip:'Use vertical video (9:16). Loop perfectly — no hard cuts. Go to Spotify for Artists → Music → your track → Canvas.' },
+    ]
+  },
+  {
+    title: '📬 Paid Curator Platforms',
+    items: [
+      { name:'SubmitHub', icon:'📬', color:'#5b9bd5', cost:'$1–3/submit', rate:'~5% placement', url:'https://www.submithub.com',
+        desc:'Submit to hundreds of independent playlist curators and blogs. Curators must listen and respond within 5 days.',
+        tip:'Write a personal note for each curator. Generic pitches get skipped. Target 10–20 curators per release.' },
+      { name:'Groover', icon:'🎚️', color:'#9b7fe8', cost:'€2/submit', rate:'~12% placement', url:'https://groover.co',
+        desc:'Guaranteed feedback within 7 days from curators, labels, and blogs. Better ROI per placement than SubmitHub.',
+        tip:'Great when you want honest feedback even on rejections. Labels and sync agents also use Groover.' },
+      { name:'Playlist Push', icon:'📈', color:'#f5c842', cost:'$300+/campaign', rate:'Varies', url:'https://playlistpush.com',
+        desc:'Algorithm-matched curator network. Worth it once you have streaming data to show curators your traction.',
+        tip:'Wait until you have some streams and saves before running a campaign — it converts much better with proof.' },
+      { name:'Fluence', icon:'⚡', color:'#e05555', cost:'$1–5/submit', rate:'~15%', url:'https://fluence.io',
+        desc:'Submit to curators AND TikTok creators. Good for getting sync and social coverage alongside playlist adds.',
+        tip:'Filter for TikTok creators in your genre — one viral video can drive thousands of Spotify saves.' },
+      { name:'Playlist Machinery', icon:'⚙️', color:'#5b9bd5', cost:'Free–paid', rate:'Varies', url:'https://playlistmachinery.com',
+        desc:'Curator outreach database with direct contact info for thousands of independent playlist curators.',
+        tip:'Use for direct cold outreach — more personal than SubmitHub and often gets better response rates.' },
+    ]
+  },
+  {
+    title: '📰 Music Blogs & Press — Tier 1 (Highest Impact)',
+    items: [
+      { name:'Stereogum', icon:'⭐', color:'#e05555', cost:'Free', rate:'Very selective', url:'https://stereogum.com',
+        desc:'One of the most influential indie blogs — first to break Arcade Fire, Vampire Weekend, Billie Eilish. A feature here is a major career moment.', tip:'No direct submissions — pitch via email (editorial@stereogum.com) with a proper press release. Need industry buzz first.' },
+      { name:'Pitchfork', icon:'🏆', color:'#1db954', cost:'Free', rate:'Very selective', url:'https://pitchfork.com',
+        desc:'The most influential music publication online. Discovered Bon Iver, Sufjan Stevens, Arcade Fire. Industry follows this religiously.', tip:'Submit 8–12 weeks before release. They don\'t take direct pitches — go through a PR person or via pitchfork@pitchfork.com.' },
+      { name:'Gorilla vs. Bear', icon:'🐻', color:'#9b7fe8', cost:'Free', rate:'Selective', url:'https://gorillavsbear.net',
+        desc:'One of the most respected indie tastemaker blogs in the world. Texas-based, covers cutting-edge indie and electronic.', tip:'No genre focus — they cover what they love. Authentic, not commercial. A feature here carries real credibility.' },
+      { name:'The Quietus', icon:'📣', color:'#5b9bd5', cost:'Free', rate:'Selective', url:'https://thequietus.com/contact/',
+        desc:'Europe\'s largest independent music and culture website. Very high industry readership — labels and booking agents read this daily.', tip:'Strong for experimental, post-punk, and alternative. Submit via contact page.' },
+      { name:'Under the Radar', icon:'📡', color:'#f5c842', cost:'Free', rate:'Selective', url:'https://www.undertheradarmag.com/contact',
+        desc:'Respected indie print and online magazine distributed internationally. Solid credibility for emerging artists.', tip:'Submit via contact page. Good for indie, alternative, and singer-songwriter.' },
+    ]
+  },
+  {
+    title: '📰 Music Blogs — Tier 2 (Excellent Discovery)',
+    items: [
+      { name:'Atwood Magazine', icon:'📖', color:'#1db954', cost:'Free', rate:'Moderate', url:'https://atwoodmagazine.com/pitching-us/',
+        desc:'Thoughtful indie music journalism. Known for deep artist interviews and premiere features. Dedicated pitch submission page.', tip:'They love a good story alongside the music. Submit when you have something to say.' },
+      { name:'Aquarium Drunkard', icon:'💧', color:'#5b9bd5', cost:'Free', rate:'Selective', url:'https://aquariumdrunkard.com/contact/',
+        desc:'Respected eclectic music journal covering psych, folk, jazz, avant-garde, and indie. Founded 2005. Passionate, engaged readership.', tip:'Great for artists with depth and eclecticism. Not for mainstream pop.' },
+      { name:'Earmilk', icon:'🥛', color:'#9b7fe8', cost:'Free via SubmitHub', rate:'Moderate', url:'https://www.earmilk.com/submit',
+        desc:'High-traffic electronic, indie, and pop blog. Only accepts via SubmitHub now. Strong global monthly readership.', tip:'Submit via SubmitHub — they don\'t take email pitches. Electronic-leaning music performs best.' },
+      { name:'Pigeons & Planes', icon:'✈️', color:'#5b9bd5', cost:'Free', rate:'Selective', url:'https://pigeonsandplanes.com',
+        desc:'Complex Media-owned blog covering emerging indie, hip-hop, R&B, and pop. Wide reach across genres.', tip:'Email submissions@pigeonsandplanes.com. Very selective — submit your absolute best.' },
+      { name:'Ear to the Ground', icon:'👂', color:'#f5c842', cost:'Free via SubmitHub', rate:'Moderate', url:'https://www.submithub.com',
+        desc:'Beloved indie folk, Americana, and singer-songwriter blog. Highly engaged niche audience. Submit via SubmitHub.', tip:'Perfect for acoustic, folk, and Americana artists. Thoughtful reviews that actually drive streams.' },
+      { name:'Hype Machine', icon:'🔥', color:'#e05555', cost:'Free', rate:'Aggregator', url:'https://hypem.com',
+        desc:'Aggregates 800+ music blogs. Get featured on the blogs it tracks and you\'ll automatically appear here — massive discovery multiplier.', tip:'Don\'t submit to Hype Machine directly — submit to blogs it tracks. Multiple blog features = Hype Machine chart momentum.' },
+      { name:'Brooklyn Vegan', icon:'🥦', color:'#1db954', cost:'Free', rate:'Selective', url:'https://www.brooklynvegan.com',
+        desc:'NYC-based indie blog with a strong following. Great for indie rock, alternative, and live music coverage.', tip:'Email submissions@brooklynvegan.com. Good for artists with a New York connection or touring presence.' },
+      { name:'Indie Shuffle', icon:'🔀', color:'#5b9bd5', cost:'Free', rate:'High quality', url:'https://www.indieshuffle.com/submit',
+        desc:'Founded by Jason Grishkoff (also founder of SubmitHub). Only posts music they genuinely love. Very clean, engaged audience.', tip:'Submit via their site or SubmitHub. Bedroom pop, indie pop, and lo-fi perform best.' },
+      { name:'Ones To Watch', icon:'👁️', color:'#9b7fe8', cost:'Free', rate:'Selective', url:'https://www.ones2watch.com',
+        desc:'Premier emerging artist discovery platform. Pop, indie, and R&B focus. Strong social amplification of every feature.', tip:'A feature here often leads to bigger press pickups. Submit when your social presence supports the story.' },
+      { name:'The Wild Honey Pie', icon:'🍯', color:'#f5c842', cost:'Free', rate:'Selective', url:'https://thewildhoneypie.com/submit',
+        desc:'Beloved indie/folk/alt blog known for discovering artists early. Passionate, loyal readership.', tip:'Folk, indie, and alternative work best. They love artists with a unique backstory.' },
+    ]
+  },
+  {
+    title: '📰 Niche & Genre-Specific Blogs',
+    items: [
+      { name:'Twangville', icon:'🤠', color:'#f5c842', cost:'Free', rate:'Open', url:'https://twangville.com/requests/',
+        desc:'Americana, alt-country, folk, blues, and indie rock. Founded 2005. Has a dedicated requests/submission page — very open to indie artists.', tip:'Direct submission page at twangville.com/requests/ — one of the friendlier blogs for unsolicited submissions.' },
+      { name:'Widen Island', icon:'☁️', color:'#5b9bd5', cost:'Free', rate:'Open', url:'https://www.widenisland.com',
+        desc:'Dedicated to bedroom pop and lo-fi discovery. Perfect for Avi Snow\'s sound. Passionate niche audience.', tip:'If your music is bedroom pop, lo-fi, or ambient indie — this is a must-submit.' },
+      { name:'Indie is Not a Genre', icon:'🎸', color:'#9b7fe8', cost:'Free via SubmitHub', rate:'Moderate', url:'https://www.indieisnotagenre.com/submit/',
+        desc:'Philosophy-driven blog covering punk, psychedelic, post-punk, and experimental indie. Submit via SubmitHub.', tip:'Strong editorial voice. Good for artists who resist genre labels.' },
+      { name:'American Songwriter', icon:'✍️', color:'#1db954', cost:'Free', rate:'Moderate', url:'https://americansongwriter.com',
+        desc:'Focused on the craft of songwriting. Great for folk, indie, and singer-songwriter artists with strong lyrics.', tip:'Pitch the story behind the song — they care about the writing process as much as the result.' },
+      { name:'Glide Magazine', icon:'🎵', color:'#5b9bd5', cost:'Free', rate:'Moderate', url:'https://glidemagazine.com',
+        desc:'Operating since 2003. Album reviews, track premieres, and artist interviews. Covers indie, alternative, folk, and pop.', tip:'Good for premiere requests on release day. Thoughtful, consistent editorial.' },
+      { name:'Cougar Microbes', icon:'🦁', color:'#e05555', cost:'Free via MusoSoup', rate:'Moderate', url:'https://musosoup.com',
+        desc:'London-based indie blog with 11 writers. Receives 300+ submissions daily — submit via MusoSoup platform only.', tip:'Don\'t email directly — use MusoSoup. Covers global indie and alternative.' },
+    ]
+  },
+  {
+    title: '🎬 Sync Licensing (Film, TV & Ads)',
+    items: [
+      { name:'Musicbed', icon:'🎬', color:'#e05555', cost:'Revenue share', rate:'High quality', url:'https://www.musicbed.com/artist-submissions',
+        desc:'Premium sync licensing for film, TV, ads, and YouTube. High per-sync payouts for selected artists.', tip:'Build a professional catalog first. They\'re selective but the payouts are excellent.' },
+      { name:'Artlist', icon:'🎞️', color:'#5b9bd5', cost:'Revenue share', rate:'Curated', url:'https://artlist.io/artist/',
+        desc:'Sync library for video creators worldwide. Passive income from ongoing license sales.', tip:'Strong for cinematic, ambient, and indie acoustic music. Consistent passive royalties.' },
+      { name:'Epidemic Sound', icon:'🔊', color:'#9b7fe8', cost:'Revenue share', rate:'Curated', url:'https://www.epidemicsound.com/creator/',
+        desc:'Used by millions of YouTubers and video creators. Large passive income potential if accepted.', tip:'More electronic and production-focused. Worth applying if you produce instrumentals.' },
+      { name:'TAXI', icon:'🚕', color:'#f5c842', cost:'$299/year', rate:'Industry access', url:'https://www.taxi.com',
+        desc:'Music licensing company that pitches your music directly to industry briefs from labels and studios.', tip:'Real briefs from real industry clients. Worth it if you\'re serious about sync.' },
+    ]
+  },
+  {
+    title: '📱 TikTok & Social Promotion',
+    items: [
+      { name:'TikTok for Artists', icon:'🎵', color:'#010101', cost:'Free', rate:'Highest ROI', url:'https://www.tiktok.com/tiktokstudio/upload',
+        desc:'56% of indie artists say TikTok is their most important growth tool. Post 15–30 sec hooks regularly.', tip:'Post the most emotional or catchy 20 seconds. Use trending sounds as background context.' },
+      { name:'SoundOn (TikTok)', icon:'🔗', color:'#010101', cost:'Free', rate:'Direct to TikTok', url:'https://www.soundon.global',
+        desc:'TikTok\'s own distribution tool — distribute your music directly to TikTok and earn royalties when creators use it.', tip:'Use alongside your main distributor. Maximises your song\'s chances of going viral.' },
+      { name:'Submify', icon:'📲', color:'#5b9bd5', cost:'$5–20/submit', rate:'UGC focused', url:'https://submify.com',
+        desc:'Connect your music with TikTok and Instagram content creators for organic UGC promotion.', tip:'UGC (user generated content) with your song is far more powerful than paid ads.' },
+    ]
+  },
+];
+
 function renderSubmit() {
-  document.getElementById('platform-grid').innerHTML = PLATFORMS.map(p => `
-    <div class="platform-card">
-      <div class="plat-top">
-        <div class="plat-icon" style="background:${p.color}22">${p.icon}</div>
-        <div>
-          <div class="plat-name">${p.name}</div>
-          <div class="plat-type">${p.type}</div>
-        </div>
-      </div>
-      <p class="plat-desc">${p.desc}</p>
-      <div class="plat-stats">
-        <div class="plat-stat"><div class="val">${p.cost}</div><div class="key">Cost</div></div>
-        <div class="plat-stat"><div class="val">${p.turnaround}</div><div class="key">Turnaround</div></div>
-      </div>
-      <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--muted);line-height:1.5">
-        💡 ${p.tip}
-      </div>
-      <div class="plat-btns">
-        <a href="${p.url}" target="_blank" class="btn btn-green btn-sm" style="text-decoration:none;flex:1;justify-content:center">Submit →</a>
+  document.getElementById('submit-content').innerHTML = SUBMIT_CATEGORIES.map(cat => `
+    <div class="submit-cat">
+      <div class="submit-cat-title">${cat.title}</div>
+      <div class="platform-grid">
+        ${cat.items.map(p => `
+          <div class="platform-card">
+            <div class="plat-top">
+              <div class="plat-icon" style="background:${p.color}22">${p.icon}</div>
+              <div>
+                <div class="plat-name">${p.name}</div>
+                <div class="plat-type">${p.cost} &nbsp;·&nbsp; ${p.rate}</div>
+              </div>
+            </div>
+            <p class="plat-desc">${p.desc}</p>
+            <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--muted);line-height:1.5">💡 ${p.tip}</div>
+            <div class="plat-btns">
+              <a href="${p.url}" target="_blank" class="btn btn-green btn-sm" style="text-decoration:none;flex:1;justify-content:center">Open ${p.name} →</a>
+            </div>
+          </div>`).join('')}
       </div>
     </div>`).join('');
 }
@@ -1041,11 +1246,113 @@ function toast(msg) {
   t._to = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
+// ════════════════════════════════ RESOURCES ══════════════════════════════════
+
+const RESOURCES = [
+  { section:'📊 Analytics & Tracking', items:[
+    { icon:'🎧', name:'Spotify for Artists', desc:'Your official dashboard. Check save rate, skip rate, listener demographics, and playlist adds.', cost:'free', url:'https://artists.spotify.com' },
+    { icon:'📈', name:'Chartmetric', desc:'Deep playlist analytics, competitor research, and audience insights. Industry standard tool.', cost:'freemium', url:'https://chartmetric.com' },
+    { icon:'🔊', name:'Soundcharts', desc:'Real-time playlist monitoring, radio tracking, and chart positions across all platforms.', cost:'paid', url:'https://www.soundcharts.com' },
+    { icon:'📊', name:'Spotify Charts', desc:'See what\'s trending on Spotify globally and by country. Research what songs are succeeding in your genre.', cost:'free', url:'https://charts.spotify.com' },
+    { icon:'🔍', name:'Kworb', desc:'Free Spotify streaming stats and chart history for any artist or song. Great for competitor research.', cost:'free', url:'https://kworb.net' },
+    { icon:'🎵', name:'Last.fm', desc:'Track your scrobbles and see listener habits over time. Useful for understanding repeat listen patterns.', cost:'free', url:'https://www.last.fm' },
+  ]},
+  { section:'📦 Distribution', items:[
+    { icon:'⚡', name:'DistroKid', desc:'Fastest distributor. Unlimited uploads for a flat annual fee. Keeps 100% of royalties. Best for prolific artists.', cost:'paid', url:'https://distrokid.com' },
+    { icon:'🎵', name:'TuneCore', desc:'Per-release pricing. Strong publishing admin add-on. Good if you release occasionally.', cost:'paid', url:'https://www.tunecore.com' },
+    { icon:'👶', name:'CD Baby', desc:'One-time per-release fee. Strong sync licensing network. Good for artists building a back catalog.', cost:'paid', url:'https://cdbaby.com' },
+    { icon:'🌟', name:'United Masters', desc:'Free tier available. Strong brand partnership deals and sync opportunities for independent artists.', cost:'freemium', url:'https://unitedmasters.com' },
+    { icon:'🎼', name:'AWAL', desc:'Selective distributor for artists with proven traction. Offers advances, marketing support, and label services.', cost:'revenue share', url:'https://www.awal.com' },
+    { icon:'🎙️', name:'SoundOn (TikTok)', desc:'TikTok\'s own distribution tool. Distribute directly to TikTok and earn royalties when creators use your song.', cost:'free', url:'https://www.soundon.global' },
+  ]},
+  { section:'📬 Playlist Pitching', items:[
+    { icon:'📬', name:'SubmitHub', desc:'Submit to 700+ curators and blogs. ~5% placement rate. Curators must respond. Write personal notes.', cost:'freemium', url:'https://www.submithub.com' },
+    { icon:'🎚️', name:'Groover', desc:'Guaranteed curator feedback in 7 days. ~12% placement. Better for feedback + relationship building.', cost:'paid', url:'https://groover.co' },
+    { icon:'📈', name:'Playlist Push', desc:'Algorithmic curator matching. Best with existing streaming data. $300+ per campaign.', cost:'paid', url:'https://playlistpush.com' },
+    { icon:'⚡', name:'Fluence', desc:'Curators + TikTok creators + media contacts. Good for cross-platform promotion.', cost:'paid', url:'https://fluence.io' },
+    { icon:'⚙️', name:'Playlist Machinery', desc:'Curator database with direct contact info. Good for personalised cold outreach.', cost:'freemium', url:'https://playlistmachinery.com' },
+    { icon:'🔍', name:'Playlist Supply', desc:'Find and research playlists by genre. Identify the right curators before you pitch.', cost:'freemium', url:'https://playlistsupply.com' },
+    { icon:'🌿', name:'IndieMono', desc:'Indie-focused playlist curation platform. Community-driven submissions with real listeners.', cost:'free', url:'https://indiemono.com' },
+  ]},
+  { section:'💾 Pre-Save & Fan Tools', items:[
+    { icon:'💾', name:'Hypeddit', desc:'Free pre-save campaigns and fan gates. Collect emails when fans pre-save. Best free tool available.', cost:'free', url:'https://hypeddit.com' },
+    { icon:'🔗', name:'Toneden', desc:'Smart links and pre-save pages. Clean design, good analytics on where clicks come from.', cost:'freemium', url:'https://www.toneden.io' },
+    { icon:'⚡', name:'Feature.fm', desc:'Smart links, pre-save campaigns, and paid promo tools. Professional-grade fan marketing.', cost:'freemium', url:'https://feature.fm' },
+    { icon:'🌳', name:'Linktree', desc:'Bio link for all your social profiles and streaming links. Put one link everywhere.', cost:'freemium', url:'https://linktr.ee' },
+    { icon:'🎵', name:'Songlink / Odesli', desc:'Creates a single smart link that works for all streaming platforms. Share one link everywhere.', cost:'free', url:'https://odesli.co' },
+  ]},
+  { section:'📧 Email & Fan Building', items:[
+    { icon:'📧', name:'Mailchimp', desc:'Free up to 500 contacts. Easy email campaigns. Start building your list before your first release.', cost:'freemium', url:'https://mailchimp.com' },
+    { icon:'🐝', name:'Beehiiv', desc:'Newsletter platform built for growth. Better analytics than Mailchimp. Growing in music communities.', cost:'freemium', url:'https://www.beehiiv.com' },
+    { icon:'📰', name:'Substack', desc:'Build a paid or free newsletter with an audience that owns your relationship — no algorithm.', cost:'free', url:'https://substack.com' },
+    { icon:'💬', name:'Discord', desc:'Build a fan community server. Direct access to your most engaged fans. Free and powerful.', cost:'free', url:'https://discord.com' },
+    { icon:'🎁', name:'Patreon', desc:'Paid fan membership. Superfans pay monthly for exclusive content, early access, and behind-the-scenes.', cost:'revenue share', url:'https://www.patreon.com' },
+  ]},
+  { section:'📱 Content & Social Tools', items:[
+    { icon:'🎵', name:'TikTok Studio', desc:'Upload and manage your TikTok content. Add your music directly to videos. Most important platform for indie growth.', cost:'free', url:'https://www.tiktok.com/tiktokstudio/upload' },
+    { icon:'✂️', name:'CapCut', desc:'Free video editor made for TikTok/Reels. Fast, easy, and has music integration built in.', cost:'free', url:'https://www.capcut.com' },
+    { icon:'📅', name:'Later', desc:'Schedule posts across Instagram, TikTok, and Twitter. Maintain consistency without being online 24/7.', cost:'freemium', url:'https://later.com' },
+    { icon:'🎨', name:'Canva', desc:'Design cover art, social posts, stories, and promo graphics. Free tier is excellent.', cost:'freemium', url:'https://www.canva.com' },
+    { icon:'🎬', name:'Adobe Express', desc:'Quick social graphics and short videos. Free tier available. Good for release day assets.', cost:'freemium', url:'https://www.adobe.com/express/' },
+    { icon:'📸', name:'VSCO', desc:'Photo editing for consistent visual branding across your Instagram. Define your aesthetic.', cost:'freemium', url:'https://vsco.co' },
+  ]},
+  { section:'🎬 Sync Licensing', items:[
+    { icon:'🎬', name:'Musicbed', desc:'Premium sync library for film, TV, and ads. High per-sync payouts. Selective but worth applying.', cost:'revenue share', url:'https://www.musicbed.com/artist-submissions' },
+    { icon:'🎞️', name:'Artlist', desc:'Sync library for video creators. Passive income from ongoing license sales globally.', cost:'revenue share', url:'https://artlist.io/artist/' },
+    { icon:'🔊', name:'Epidemic Sound', desc:'Used by millions of YouTubers. Passive royalties if accepted. More electronic/production focused.', cost:'revenue share', url:'https://www.epidemicsound.com/creator/' },
+    { icon:'🚕', name:'TAXI', desc:'Pitches your music to real industry briefs. $299/year but direct access to label and film briefs.', cost:'paid', url:'https://www.taxi.com' },
+    { icon:'🎵', name:'Musicbed Submit', desc:'Apply to join Musicbed\'s catalog of licensed artists. One of the best-paying sync libraries.', cost:'revenue share', url:'https://www.musicbed.com/artist-submissions' },
+  ]},
+  { section:'⚖️ Rights & Royalties', items:[
+    { icon:'⚖️', name:'ASCAP', desc:'US performing rights organization. Register here to collect performance royalties from radio, TV, and streaming.', cost:'free', url:'https://www.ascap.com/music-creators/registration' },
+    { icon:'🎵', name:'BMI', desc:'Alternative to ASCAP. Register your songs and collect performance royalties. Free to join.', cost:'free', url:'https://www.bmi.com/creators' },
+    { icon:'💰', name:'SoundExchange', desc:'Collects digital performance royalties (Pandora, satellite radio, etc.) that ASCAP/BMI don\'t cover.', cost:'free', url:'https://www.soundexchange.com' },
+    { icon:'🔒', name:'DistroKid Protect', desc:'One-click copyright registration for your releases directly through DistroKid.', cost:'paid', url:'https://distrokid.com/copyright' },
+    { icon:'🌍', name:'Songtrust', desc:'Global publishing admin — collects royalties you\'re owed from 60+ countries. Flat annual fee.', cost:'paid', url:'https://www.songtrust.com' },
+  ]},
+  { section:'🎓 Learn & Stay Updated', items:[
+    { icon:'📚', name:'Spotify for Artists Blog', desc:'Official guides on how the algorithm works, how to pitch, and how to grow. Required reading.', cost:'free', url:'https://artists.spotify.com/en/blog' },
+    { icon:'📰', name:'Music Business Worldwide', desc:'Industry news and data. Essential for understanding where the music business is heading.', cost:'free', url:'https://www.musicbusinessworldwide.com' },
+    { icon:'🎵', name:'Hypebot', desc:'Daily music industry news, streaming data, and artist strategy guides.', cost:'free', url:'https://www.hypebot.com' },
+    { icon:'🎸', name:'DIY Musician (CD Baby)', desc:'Practical guides on releasing, promoting, and monetising your music independently.', cost:'free', url:'https://diymusician.cdbaby.com' },
+    { icon:'🎤', name:'Ari\'s Take', desc:'Brutally honest music industry advice from industry insider Ari Herstand. Book and blog.', cost:'free', url:'https://aristake.com' },
+    { icon:'🧠', name:'Chartlex', desc:'Data-driven guides on the Spotify algorithm, release strategy, and what actually works in 2025.', cost:'free', url:'https://www.chartlex.com' },
+  ]},
+  { section:'🤝 Community', items:[
+    { icon:'🟠', name:'r/WeAreTheMusicMakers', desc:'500k+ indie musicians sharing tips, feedback, and experience. Best music production and release advice on Reddit.', cost:'free', url:'https://reddit.com/r/WeAreTheMusicMakers' },
+    { icon:'🎵', name:'r/indieheads', desc:'Indie music fan community. Post your release, get genuine listener feedback, discover similar artists.', cost:'free', url:'https://reddit.com/r/indieheads' },
+    { icon:'📻', name:'r/SpotifyForArtists', desc:'Community for artists on Spotify. Algorithm questions, release strategy, and real data from other artists.', cost:'free', url:'https://reddit.com/r/SpotifyForArtists' },
+    { icon:'🎧', name:'r/spotify', desc:'Post your new music in weekly threads. Genuine listener discovery.', cost:'free', url:'https://reddit.com/r/spotify' },
+    { icon:'🌐', name:'MusoCity', desc:'Global community of independent musicians. Collaboration, feedback, and networking.', cost:'free', url:'https://www.musocity.com' },
+    { icon:'🔧', name:'SoundBetter', desc:'Hire producers, mixing engineers, session musicians. Find collaborators and elevate your sound.', cost:'freemium', url:'https://soundbetter.com' },
+  ]},
+];
+
+function renderResources() {
+  const costColor = { free:'rb-free', paid:'rb-paid', freemium:'rb-freemium', 'revenue share':'rb-paid' };
+  document.getElementById('resources-content').innerHTML = RESOURCES.map(sec => `
+    <div class="res-section">
+      <div class="res-section-title">${sec.section}</div>
+      <div class="res-grid">
+        ${sec.items.map(r => `
+          <a href="${r.url}" target="_blank" class="res-card">
+            <span class="ri">${r.icon}</span>
+            <span class="rt">
+              <span class="rn">${r.name}</span>
+              <span class="rd">${r.desc}</span>
+              <span class="rb ${costColor[r.cost]||'rb-free'}">${r.cost}</span>
+            </span>
+          </a>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
 // ════════════════════════════════ INIT ═══════════════════════════════════════
 
 renderHome();
 renderSubmit();
 renderRelease();
+renderResources();
 updatePipelineDot();
 
 // Keyboard: Escape closes any open modal
