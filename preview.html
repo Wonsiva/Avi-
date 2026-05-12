@@ -365,6 +365,56 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
     </div>
     <div class="flex gap16 wrap" id="reach-summary"></div>
   </div>
+
+  <!-- SubmitHub real data insights -->
+  <div class="card mt16">
+    <div class="flex between mb12">
+      <div class="section-title" style="margin-bottom:0">Your SubmitHub history at a glance</div>
+      <a href="https://www.submithub.com" target="_blank" style="font-size:12px;color:var(--green);text-decoration:none;font-weight:600">Open SubmitHub →</a>
+    </div>
+    <div class="algo-grid" style="margin-bottom:16px">
+      <div class="algo-card">
+        <div class="metric" style="color:var(--green)">12,131</div>
+        <div class="mlabel">Total Submissions</div>
+        <div class="mdesc">Since 2019 across all campaigns and tracks.</div>
+      </div>
+      <div class="algo-card">
+        <div class="metric" style="color:var(--green)">15.2%</div>
+        <div class="mlabel">Approval Rate</div>
+        <div class="mdesc">Above platform average (~11%). 1,847 approvals total.</div>
+      </div>
+      <div class="algo-card">
+        <div class="metric" style="color:var(--blue)">12.8%</div>
+        <div class="mlabel">Share Rate</div>
+        <div class="mdesc">Curators sharing without adding — strong engagement signal.</div>
+      </div>
+      <div class="algo-card">
+        <div class="metric" style="color:var(--yellow)">47%</div>
+        <div class="mlabel">Best Approval Rate</div>
+        <div class="mdesc">Feel (Joezi Remix) & Vibe — your highest-converting tracks.</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.8">
+      <strong style="color:var(--text)">Your best songs</strong> (by curator approval rate):
+      <span style="color:var(--green)">Feel/Joezi Remix (47%)</span> ·
+      <span style="color:var(--green)">Vibe/Bruno Martini (47%)</span> ·
+      <span style="color:var(--green)">These Roads/Zeeba (43%)</span> ·
+      <span style="color:var(--green)">Famous (43%)</span> ·
+      <span style="color:var(--green)">Starlight/Zeeba (43%)</span>
+      <br/>
+      <strong style="color:var(--text)">Your audience geography</strong>:
+      🇺🇸 USA · 🇩🇪 Germany · 🇬🇧 UK · 🇪🇸 Spain · 🇧🇪 Belgium · 🇨🇴 Colombia · 🇲🇽 Mexico · 🇪🇨 Ecuador · 🇷🇴 Romania · 🇫🇷 France
+      <br/>
+      <strong style="color:var(--text)">Sound keywords curators use</strong>:
+      house · groove · melodic · afro · pop · dance · electronic · tribal · deep house
+      <br/>
+      <strong style="color:var(--text)">Top recurring curators</strong>:
+      <a href="https://open.spotify.com/user/rzhkeoqm6wlm6js99l3s" target="_blank" style="color:var(--green)">Caltify MX</a> (7x) ·
+      <a href="https://open.spotify.com/user/mariusonuc" target="_blank" style="color:var(--green)">Dance FM Romania</a> (6x) ·
+      <a href="https://open.spotify.com/user/futurehousecloud" target="_blank" style="color:var(--green)">Future House Cloud</a> (5x) ·
+      <a href="https://open.spotify.com/user/119002431" target="_blank" style="color:var(--green)">O.bymarie</a> (4x)
+    </div>
+  </div>
 </div>
 
 <!-- ════════════════════════════════════════ PIPELINE ════════════════════════ -->
@@ -591,20 +641,31 @@ label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); 
 // ════════════════════════════════ DATA ═══════════════════════════════════════
 
 const DEFAULT_PITCHES = [
-  { id:'p1', name:'Indie Fresh Picks',    curator:'melodymaven',   followers:48200, contact:'', contacted:'2026-04-20', followup:'2026-05-04', status:'pitched',    notes:'Sent IG DM. They asked for a Spotify link.' },
-  { id:'p2', name:'Chill Vibes Only',     curator:'chillcurator',  followers:31500, contact:'', contacted:'2026-05-01', followup:'2026-05-15', status:'pitched',    notes:'Submitted via SubmitHub.' },
-  { id:'p3', name:'New Indie Discoveries',curator:'indieworld',    followers:22100, contact:'', contacted:'',           followup:'',           status:'identified', notes:'Found via similar artist search.' },
-  { id:'p4', name:'Morning Coffee Music', curator:'jazzhandspl',   followers:18900, contact:'', contacted:'2026-04-10', followup:'2026-04-24', status:'declined',   notes:'Not accepting submissions right now.' },
-  { id:'p5', name:'Folk & Soul Sessions', curator:'folkfanatic',   followers:14300, contact:'', contacted:'2026-04-28', followup:'2026-05-12', status:'pitched',    notes:'Cold DM on Spotify.' },
-  { id:'p6', name:'Bedroom Pop Gems',     curator:'bedroombeats',  followers:11200, contact:'', contacted:'2026-03-15', followup:'',           status:'added',      notes:'Added March 22 — featured track!' },
-  { id:'p7', name:'Late Night Indie',     curator:'nightowlmusic', followers:9800,  contact:'', contacted:'2026-04-05', followup:'',           status:'added',      notes:'Track added to top of playlist.' },
-  { id:'p8', name:'Acoustic Stories',     curator:'acousticvibes', followers:7600,  contact:'', contacted:'',           followup:'',           status:'identified', notes:'' },
+  // Current active campaigns (May 2026)
+  { id:'p1', name:'Seems So Right — Earmilk',      curator:'Earmilk',           followers:0,     contact:'https://www.earmilk.com/submit', contacted:'2026-04-23', followup:'2026-05-14', status:'pitched',    notes:'Blog. Still listening as of May 4. Follow up.' },
+  { id:'p2', name:'Seems So Right — Nafas',         curator:'Nafas',             followers:0,     contact:'https://open.spotify.com/user/nafas', contacted:'2026-05-04', followup:'2026-05-18', status:'pitched',    notes:'Spotify Playlister. Still listening as of May 4.' },
+  // Recently approved — Seems So Right
+  { id:'p3', name:'O.bymarie',                      curator:'O.bymarie',         followers:0,     contact:'https://open.spotify.com/user/119002431', contacted:'2026-05-01', followup:'',           status:'added',      notes:'Approved May 4. Belgium. Has added us 4x total.' },
+  { id:'p4', name:'Rapture',                        curator:'Rapture',           followers:0,     contact:'https://open.spotify.com/user/rapture', contacted:'2026-05-01', followup:'',           status:'added',      notes:'Approved May 4 — Seems So Right.' },
+  { id:'p5', name:'HMWL (House Music With Love)',   curator:'HMWL',              followers:0,     contact:'https://open.spotify.com/user/hmwl', contacted:'2026-05-01', followup:'',           status:'added',      notes:'Approved May 4. Said "You\'re in. Tag us @housemusicwithlove"' },
+  { id:'p6', name:'DJ Cosmin',                      curator:'DJ Cosmin',         followers:0,     contact:'https://open.spotify.com/user/djcosmin', contacted:'2026-05-01', followup:'',           status:'added',      notes:'Approved May 3. Said guitar is "splendid".' },
+  { id:'p7', name:'Semblance Smile',                curator:'Semblance Smile',   followers:0,     contact:'', contacted:'2026-05-01', followup:'',           status:'added',      notes:'Approved May 2. Praised the "groovy beat and guitar elements."' },
+  { id:'p8', name:'ZYRS — Echoes of Chill House',  curator:'ZYRS',              followers:0,     contact:'', contacted:'2026-05-01', followup:'',           status:'added',      notes:'Approved May 2. Adding to "Echoes of Chill House."' },
+  // High-value recurring curators to keep warm
+  { id:'p9', name:'Caltify MX',                     curator:'Caltify MX',        followers:0,     contact:'https://open.spotify.com/user/rzhkeoqm6wlm6js99l3s', contacted:'', followup:'', status:'identified', notes:'International. Has approved us 7x — most of any curator. Pitch every release.' },
+  { id:'p10', name:'Future House Cloud',            curator:'Future House Cloud', followers:0,    contact:'https://open.spotify.com/user/futurehousecloud', contacted:'', followup:'', status:'identified', notes:'Germany. 5x approvals. Major house/electronic playlist network.' },
+  { id:'p11', name:'Dance FM Romania',              curator:'Dance FM Romania',  followers:0,     contact:'https://open.spotify.com/user/mariusonuc', contacted:'', followup:'', status:'identified', notes:'Romania. 6x approvals. Pitch next release.' },
+  { id:'p12', name:'Last Day Deaf',                 curator:'Last Day Deaf',     followers:0,     contact:'http://lastdaydeaf.com/', contacted:'', followup:'', status:'identified', notes:'Blog — Greece. 3x approvals. Approved Hashem in May 2026.' },
 ];
 
 const DEFAULT_PLAYLISTS = [
-  { id:'pl1', name:'Bedroom Pop Gems',  curator:'bedroombeats',  followers:11200, dateAdded:'2026-03-22', link:'', emoji:'🛏️' },
-  { id:'pl2', name:'Late Night Indie',  curator:'nightowlmusic', followers:9800,  dateAdded:'2026-04-05', link:'', emoji:'🌙' },
-  { id:'pl3', name:'Soft Sounds Daily', curator:'softbeats',     followers:6400,  dateAdded:'2026-02-10', link:'', emoji:'☁️' },
+  { id:'pl1', name:'O.bymarie playlist',            curator:'O.bymarie',         followers:0,  dateAdded:'2026-05-04', link:'https://open.spotify.com/user/119002431', emoji:'🎵' },
+  { id:'pl2', name:'Rapture',                       curator:'Rapture',           followers:0,  dateAdded:'2026-05-04', link:'https://open.spotify.com/user/rapture',    emoji:'⚡' },
+  { id:'pl3', name:'Echoes of Chill House (ZYRS)',  curator:'ZYRS',              followers:0,  dateAdded:'2026-05-02', link:'',                                          emoji:'🌊' },
+  { id:'pl4', name:'Semblance Smile playlist',      curator:'Semblance Smile',   followers:0,  dateAdded:'2026-05-02', link:'',                                          emoji:'😊' },
+  { id:'pl5', name:'Caltify MX',                    curator:'Caltify MX',        followers:0,  dateAdded:'2025-10-01', link:'https://open.spotify.com/user/rzhkeoqm6wlm6js99l3s', emoji:'🇲🇽' },
+  { id:'pl6', name:'Dance FM Romania',              curator:'Dance FM Romania',  followers:0,  dateAdded:'2025-08-01', link:'https://open.spotify.com/user/mariusonuc', emoji:'📻' },
+  { id:'pl7', name:'Future House Cloud',            curator:'Future House Cloud',followers:0,  dateAdded:'2025-06-01', link:'https://open.spotify.com/user/futurehousecloud', emoji:'☁️' },
 ];
 
 // Load from localStorage, fall back to defaults on first run
