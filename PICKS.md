@@ -3,7 +3,7 @@
 > Analyzed 23 tradable Kalshi markets from bundled sample data. Mode: best overall.
 >
 > Top 3 most interesting bets, sized for a hypothetical **$10** stake per bet.
-> Last updated: **2026-04-19 21:30 UTC**
+> Last updated: **2026-05-21 00:05 UTC**
 
 ---
 
@@ -11,7 +11,7 @@
 
 `SOL-500-EOY26` | Crypto
 
-> Overlooked underdog — only 11% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 8.1x payout with 11% chance of winning.
+> Overlooked underdog — only 11% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 8.1x payout with 11% chance of winning; favorite-longshot bias suggests this price range historically underprices the true probability of winning; volume spike detected — 24h trading is well above normal, suggesting new information is being priced in.
 
 | | |
 |---|---|
@@ -19,7 +19,7 @@
 | **Implied probability** | 11.0% |
 | **Potential payout** | **8.09x** your stake |
 | **Profit per contract** | 89¢ |
-| **Closes** | 2026-12-31 23:59 UTC (~256d away) |
+| **Closes** | 2026-12-31 23:59 UTC (~224d away) |
 | **24h volume** | 4,800 contracts |
 | **Open interest** | 1,800 |
 
@@ -36,30 +36,30 @@
 
 ---
 
-### #2 — Will the WHO declare a new Public Health Emergency of International Concern in 2026?
+### #2 — Will the Oklahoma City Thunder win the 2025-26 NBA Championship?
 
-`WHO-PANDEMIC-26` | Health
+`NBA-CHAMP-26-OKC` | Sports
 
-> Overlooked underdog — only 21% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; strong risk-reward sweet spot at 3.8x payout with 21% chance of winning.
+> Overlooked underdog — only 26% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 2.8x payout with 26% chance of winning; volume spike detected — 24h trading is well above normal, suggesting new information is being priced in.
 
 | | |
 |---|---|
-| **Recommended** | BUY **YES** at **21¢** |
-| **Implied probability** | 21.0% |
-| **Potential payout** | **3.76x** your stake |
-| **Profit per contract** | 79¢ |
-| **Closes** | 2026-12-31 23:59 UTC (~256d away) |
-| **24h volume** | 5,600 contracts |
-| **Open interest** | 2,300 |
+| **Recommended** | BUY **YES** at **26¢** |
+| **Implied probability** | 26.0% |
+| **Potential payout** | **2.85x** your stake |
+| **Profit per contract** | 74¢ |
+| **Closes** | 2026-06-22 00:00 UTC (~31d away) |
+| **24h volume** | 12,800 contracts |
+| **Open interest** | 5,200 |
 
 <details>
 <summary>How to place this bet (hypothetically)</summary>
 
 1. Sign in to Kalshi at [kalshi.com](https://kalshi.com)
-2. Open the market: [WHO-PANDEMIC-26](https://kalshi.com/markets/who-health-26/who-pandemic-26)
-3. Place a **YES** limit order for **47** contracts at **21¢** each (total cost **$9.87**)
-4. If it resolves **YES** → you receive **$47.00** (profit $37.13, a 3.76x return)
-5. If it resolves **NO** → contracts expire worthless (loss $9.87)
+2. Open the market: [NBA-CHAMP-26-OKC](https://kalshi.com/markets/nba-champ-26/nba-champ-26-okc)
+3. Place a **YES** limit order for **38** contracts at **26¢** each (total cost **$9.88**)
+4. If it resolves **YES** → you receive **$38.00** (profit $28.12, a 2.85x return)
+5. If it resolves **NO** → contracts expire worthless (loss $9.88)
 
 </details>
 
@@ -69,7 +69,7 @@
 
 `GDP-26Q2-NEGATIVE` | Economics
 
-> Overlooked underdog — only 14% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 6.1x payout with 14% chance of winning.
+> Overlooked underdog — only 14% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 6.1x payout with 14% chance of winning; favorite-longshot bias suggests this price range historically underprices the true probability of winning; volume spike detected — 24h trading is well above normal, suggesting new information is being priced in.
 
 | | |
 |---|---|
@@ -77,7 +77,7 @@
 | **Implied probability** | 14.0% |
 | **Potential payout** | **6.14x** your stake |
 | **Profit per contract** | 86¢ |
-| **Closes** | 2026-07-30 12:30 UTC (~101d away) |
+| **Closes** | 2026-07-30 12:30 UTC (~70d away) |
 | **24h volume** | 11,300 contracts |
 | **Open interest** | 5,100 |
 

@@ -45,11 +45,11 @@ from typing import Iterable
 MODES = ("best", "underdog", "momentum", "value", "safe")
 
 MODE_WEIGHTS: dict[str, dict[str, float]] = {
-    "best":     {"value": 0.30, "underdog": 0.25, "momentum": 0.20, "activity": 0.15, "spread": 0.10},
-    "underdog": {"value": 0.10, "underdog": 0.50, "momentum": 0.25, "activity": 0.10, "spread": 0.05},
-    "momentum": {"value": 0.15, "underdog": 0.10, "momentum": 0.45, "activity": 0.20, "spread": 0.10},
-    "value":    {"value": 0.60, "underdog": 0.10, "momentum": 0.10, "activity": 0.10, "spread": 0.10},
-    "safe":     {"value": 0.20, "underdog": 0.00, "momentum": 0.15, "activity": 0.30, "spread": 0.35},
+    "best":     {"value": 0.20, "underdog": 0.18, "momentum": 0.15, "activity": 0.10, "spread": 0.07, "longshot_edge": 0.18, "volume_spike": 0.12},
+    "underdog": {"value": 0.08, "underdog": 0.35, "momentum": 0.18, "activity": 0.07, "spread": 0.02, "longshot_edge": 0.22, "volume_spike": 0.08},
+    "momentum": {"value": 0.10, "underdog": 0.08, "momentum": 0.32, "activity": 0.15, "spread": 0.05, "longshot_edge": 0.10, "volume_spike": 0.20},
+    "value":    {"value": 0.40, "underdog": 0.08, "momentum": 0.08, "activity": 0.07, "spread": 0.07, "longshot_edge": 0.20, "volume_spike": 0.10},
+    "safe":     {"value": 0.18, "underdog": 0.00, "momentum": 0.12, "activity": 0.22, "spread": 0.25, "longshot_edge": 0.08, "volume_spike": 0.15},
 }
 
 LIQUIDITY_REFERENCE_VOLUME: float = 5_000.0
@@ -141,6 +141,42 @@ def _activity_signal(market: dict) -> float:
     return min(1.0, ratio)
 
 
+def _longshot_edge_signal(p: float) -> float:
+    """Favorite-longshot bias calibration.
+
+    Academic research (Snowberg/Wolfers 2010) shows that prediction
+    markets systematically overprice favorites and underprice longshots.
+    Contracts below ~25% resolve YES more often than their price implies;
+    contracts above ~75% resolve YES less often.
+
+    This returns a value in [0, 1] that's highest for longshots (where
+    the structural bias gives you the most edge) and lowest for
+    mid-range/favorite prices.
+    """
+    if p <= 0.0 or p >= 1.0:
+        return 0.0
+    if p < 0.25:
+        return min(1.0, (0.25 - p) * 4.0)
+    if p > 0.75:
+        return min(1.0, (p - 0.75) * 4.0)
+    return 0.0
+
+
+def _volume_spike_signal(market: dict) -> float:
+    """Detect unusual volume spikes that often precede price moves.
+
+    A sudden 2-3x increase in 24h volume relative to total accumulated
+    volume suggests new information is being priced in. High volume
+    spikes on cheap contracts are especially predictive.
+    """
+    vol24 = float(market.get("volume_24h") or 0)
+    total_vol = float(market.get("volume") or 0)
+    if vol24 <= 0 or total_vol <= 0:
+        return 0.0
+    ratio = vol24 / (total_vol / max(1, 7))
+    return min(1.0, max(0.0, (ratio - 1.0) / 3.0))
+
+
 def _spread_signal(market: dict, side: str) -> float:
     """Tight bid-ask spread = efficient; wide = penalty.
 
@@ -220,6 +256,16 @@ def _generate_narrative(
             f"{payout_multiple:.1f}x return makes this a lower-risk play"
         )
 
+    if signals.get("longshot_edge", 0) > 0.3:
+        parts.append(
+            "favorite-longshot bias suggests this price range historically "
+            "underprices the true probability of winning"
+        )
+    if signals.get("volume_spike", 0) > 0.3:
+        parts.append(
+            "volume spike detected — 24h trading is well above normal, "
+            "suggesting new information is being priced in"
+        )
     if not parts:
         parts.append(
             f"{payout_multiple:.1f}x potential return at {p * 100:.0f}% implied probability"
@@ -258,6 +304,8 @@ def _score_side(
         "underdog": _underdog_signal(market, p),
         "activity": _activity_signal(market),
         "spread": _spread_signal(market, side),
+        "longshot_edge": _longshot_edge_signal(p),
+        "volume_spike": _volume_spike_signal(market),
     }
 
     weights = MODE_WEIGHTS[mode]

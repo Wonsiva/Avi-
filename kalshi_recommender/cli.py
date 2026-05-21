@@ -3,7 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import json
+import shutil
 import sys
+from importlib import resources
+from pathlib import Path
 
 from .formatter import (
     format_recommendations,
@@ -99,13 +103,38 @@ def _build_parser() -> argparse.ArgumentParser:
         "--format",
         choices=sorted(FORMATTERS),
         default="text",
-        help="output format: text (default), html, or json",
+        help="output format: text (default), html, markdown, or json",
     )
     parser.add_argument(
         "--output",
         "-o",
         default=None,
         help="write output to this file instead of stdout",
+    )
+    parser.add_argument(
+        "--performance",
+        action="store_true",
+        help="show the performance report (signal accuracy, win rate, ROI) instead of picks",
+    )
+    parser.add_argument(
+        "--track",
+        action="store_true",
+        help="record the current picks in the history for future learning",
+    )
+    parser.add_argument(
+        "--learn",
+        action="store_true",
+        help="run the learning loop: analyze signal performance and update weights",
+    )
+    parser.add_argument(
+        "--demo-history",
+        action="store_true",
+        help="load bundled sample history into the data directory for demo purposes",
+    )
+    parser.add_argument(
+        "--data-dir",
+        default=None,
+        help="override the data directory for history/weights (default: ~/.kalshi-recommender/)",
     )
     parser.add_argument(
         "--fail-if-empty",
@@ -125,10 +154,50 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _load_demo_history(data_dir: str | None) -> None:
+    """Copy bundled sample_history.json into the data directory."""
+    from .tracker import _data_path, HISTORY_FILE
+
+    text = resources.files("kalshi_recommender.data").joinpath(
+        "sample_history.json"
+    ).read_text(encoding="utf-8")
+    path = _data_path(data_dir) / HISTORY_FILE
+    path.write_text(text, encoding="utf-8")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
 
+    # --- Demo history setup
+    if args.demo_history:
+        _load_demo_history(args.data_dir)
+        print("Loaded sample history into data directory.", file=sys.stderr)
+
+    # --- Performance report mode
+    if args.performance:
+        from .learner import format_performance_report
+        print(format_performance_report(data_dir=args.data_dir))
+        return 0
+
+    # --- Learning mode
+    if args.learn:
+        from .learner import update_weights, analyze_signals
+        stats = analyze_signals(data_dir=args.data_dir)
+        result = update_weights(data_dir=args.data_dir)
+        if result is None:
+            print(
+                "Not enough resolved picks to learn from yet. "
+                "Need at least 10 resolved picks.",
+                file=sys.stderr,
+            )
+            return 0
+        print("Signal performance analyzed and weights updated.", file=sys.stderr)
+        from .learner import format_performance_report
+        print(format_performance_report(data_dir=args.data_dir))
+        return 0
+
+    # --- Main recommendation flow
     try:
         if args.sample:
             markets = KalshiClient.load_sample()
@@ -172,6 +241,15 @@ def main(argv: list[str] | None = None) -> int:
             file=sys.stderr,
         )
         return 3
+
+    # --- Track picks if requested
+    if args.track and bets:
+        from .tracker import record_picks
+        records = record_picks(bets, data_dir=args.data_dir)
+        print(
+            f"Tracked {len(records)} pick(s) in history.",
+            file=sys.stderr,
+        )
 
     mode_label = {
         "best": "best overall",
