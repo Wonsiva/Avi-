@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-21T00:05:46+00:00",
+  "generated_at": "2026-05-21T00:18:29+00:00",
   "header": "Analyzed 23 tradable Kalshi markets from bundled sample data. Mode: best overall.",
   "stake_dollars": 10.0,
   "disclaimer": "This tool is for educational/research purposes only. It does not place real orders, is not investment advice, and the scoring heuristic does not predict outcomes. Always do your own research before risking money.",
@@ -29,7 +29,7 @@
         "longshot_edge": 0.56,
         "volume_spike": 0.7361
       },
-      "narrative": "Overlooked underdog \u2014 only 11% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 8.1x payout with 11% chance of winning; favorite-longshot bias suggests this price range historically underprices the true probability of winning; volume spike detected \u2014 24h trading is well above normal, suggesting new information is being priced in.",
+      "narrative": "MOTHERLOAD PLAY \u2014 massive asymmetric upside with real money behind it (8.1x payout). Overlooked underdog \u2014 only 11% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 8.1x payout with 11% chance of winning; favorite-longshot bias suggests this price range historically underprices the true probability of winning; volume spike detected \u2014 24h trading is well above normal, suggesting new information is being priced in.",
       "mode": "best",
       "market_url": "https://kalshi.com/markets/sol-eoy26/sol-500-eoy26",
       "plan": {
@@ -56,7 +56,7 @@
       "volume_24h": 5500,
       "open_interest": 5200,
       "close_time": "2026-06-22T00:00:00Z",
-      "score": 0.6667,
+      "score": 0.6668,
       "signals": {
         "value": 0.6571,
         "momentum": 0.9,
@@ -103,7 +103,7 @@
         "longshot_edge": 0.44,
         "volume_spike": 0.4513
       },
-      "narrative": "Overlooked underdog \u2014 only 14% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 6.1x payout with 14% chance of winning; favorite-longshot bias suggests this price range historically underprices the true probability of winning; volume spike detected \u2014 24h trading is well above normal, suggesting new information is being priced in.",
+      "narrative": "MOTHERLOAD PLAY \u2014 massive asymmetric upside with real money behind it (6.1x payout). Overlooked underdog \u2014 only 14% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 6.1x payout with 14% chance of winning; favorite-longshot bias suggests this price range historically underprices the true probability of winning; volume spike detected \u2014 24h trading is well above normal, suggesting new information is being priced in.",
       "mode": "best",
       "market_url": "https://kalshi.com/markets/gdp-26q2/gdp-26q2-negative",
       "plan": {

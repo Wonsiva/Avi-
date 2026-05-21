@@ -78,6 +78,7 @@ class ScoredBet:
     signals: dict[str, float] = field(default_factory=dict)
     narrative: str = ""
     mode: str = "best"
+    is_motherload: bool = False  # True for 5x+ payout with strong volume
 
     @property
     def profit_per_contract_cents(self) -> int:
@@ -86,6 +87,16 @@ class ScoredBet:
     @property
     def implied_probability_pct(self) -> float:
         return self.implied_probability * 100.0
+
+    @property
+    def take_profit_cents(self) -> int:
+        """Price at which to sell for profit (halfway to max payout)."""
+        return int((100 + self.price_cents) / 2)
+
+    @property
+    def cut_loss_cents(self) -> int:
+        """Price at which to cut losses (half your entry cost)."""
+        return max(1, int(self.price_cents / 2))
 
 
 # --------------------------------------------------- individual signal fns
@@ -281,6 +292,14 @@ def _generate_narrative(
 
 # -------------------------------------------------------- composite scoring
 
+# Minimum payout multiple to qualify (50% return above stake = 1.5x).
+MIN_PAYOUT_MULTIPLE = 1.5
+
+# MOTHERLOAD threshold: bets paying 5x or more with real volume.
+MOTHERLOAD_PAYOUT_THRESHOLD = 5.0
+MOTHERLOAD_VOLUME_THRESHOLD = 1000
+
+
 def _score_side(
     market: dict,
     side: str,
@@ -293,8 +312,10 @@ def _score_side(
     p = ask_cents / 100.0
     payout_multiple = (100.0 - ask_cents) / ask_cents
 
-    if mode == "safe" and p < 0.55:
+    # Hard floor: skip anything below 50% return above stake.
+    if payout_multiple < MIN_PAYOUT_MULTIPLE:
         return None
+
     if mode == "underdog" and p > 0.35:
         return None
 
@@ -318,7 +339,18 @@ def _score_side(
 
     vol24 = int(market.get("volume_24h") or market.get("volume") or 0)
 
+    # Flag high-upside asymmetric plays as MOTHERLOAD.
+    is_motherload = (
+        payout_multiple >= MOTHERLOAD_PAYOUT_THRESHOLD
+        and volume >= MOTHERLOAD_VOLUME_THRESHOLD
+    )
+
     narrative = _generate_narrative(side, p, payout_multiple, signals)
+    if is_motherload:
+        narrative = (
+            "MOTHERLOAD PLAY — massive asymmetric upside with real money "
+            f"behind it ({payout_multiple:.1f}x payout). " + narrative
+        )
 
     return ScoredBet(
         ticker=str(market.get("ticker") or ""),
@@ -337,6 +369,7 @@ def _score_side(
         signals=signals,
         narrative=narrative,
         mode=mode,
+        is_motherload=is_motherload,
     )
 
 

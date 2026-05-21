@@ -3,15 +3,15 @@
 > Analyzed 23 tradable Kalshi markets from bundled sample data. Mode: best overall.
 >
 > Top 3 most interesting bets, sized for a hypothetical **$10** stake per bet.
-> Last updated: **2026-05-21 00:05 UTC**
+> Last updated: **2026-05-21 00:18 UTC**
 
 ---
 
-### #1 — Will Solana close above $500 on December 31, 2026?
+### #1 — MOTHERLOAD Will Solana close above $500 on December 31, 2026?
 
 `SOL-500-EOY26` | Crypto
 
-> Overlooked underdog — only 11% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 8.1x payout with 11% chance of winning; favorite-longshot bias suggests this price range historically underprices the true probability of winning; volume spike detected — 24h trading is well above normal, suggesting new information is being priced in.
+> MOTHERLOAD PLAY — massive asymmetric upside with real money behind it (8.1x payout). Overlooked underdog — only 11% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 8.1x payout with 11% chance of winning; favorite-longshot bias suggests this price range historically underprices the true probability of winning; volume spike detected — 24h trading is well above normal, suggesting new information is being priced in.
 
 | | |
 |---|---|
@@ -33,6 +33,10 @@
 5. If it resolves **NO** → contracts expire worthless (loss $9.90)
 
 </details>
+
+**Exit strategy:**
+- Take profit: sell if price rises to **55¢** (locks in ~50% of max gain)
+- Cut losses: sell if price drops to **5¢** (limits loss to ~50% of entry cost)
 
 ---
 
@@ -63,13 +67,17 @@
 
 </details>
 
+**Exit strategy:**
+- Take profit: sell if price rises to **63¢** (locks in ~50% of max gain)
+- Cut losses: sell if price drops to **13¢** (limits loss to ~50% of entry cost)
+
 ---
 
-### #3 — Will U.S. Q2 2026 GDP growth come in negative (recession signal)?
+### #3 — MOTHERLOAD Will U.S. Q2 2026 GDP growth come in negative (recession signal)?
 
 `GDP-26Q2-NEGATIVE` | Economics
 
-> Overlooked underdog — only 14% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 6.1x payout with 14% chance of winning; favorite-longshot bias suggests this price range historically underprices the true probability of winning; volume spike detected — 24h trading is well above normal, suggesting new information is being priced in.
+> MOTHERLOAD PLAY — massive asymmetric upside with real money behind it (6.1x payout). Overlooked underdog — only 14% implied odds but trading volume suggests real conviction behind this outcome. Also: price has been climbing recently, suggesting new favorable information; unusually active market right now with heavy recent trading; tight bid-ask spread means you can enter and exit efficiently; strong risk-reward sweet spot at 6.1x payout with 14% chance of winning; favorite-longshot bias suggests this price range historically underprices the true probability of winning; volume spike detected — 24h trading is well above normal, suggesting new information is being priced in.
 
 | | |
 |---|---|
@@ -91,6 +99,10 @@
 5. If it resolves **NO** → contracts expire worthless (loss $9.94)
 
 </details>
+
+**Exit strategy:**
+- Take profit: sell if price rises to **57¢** (locks in ~50% of max gain)
+- Cut losses: sell if price drops to **7¢** (limits loss to ~50% of entry cost)
 
 ---
 

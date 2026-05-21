@@ -85,7 +85,8 @@ def _format_close_time(close_time: str | None) -> str:
 def _format_bet_text(rank: int, bet: ScoredBet, stake_dollars: float) -> str:
     plan = _bet_plan(bet, stake_dollars)
     lines: list[str] = []
-    lines.append(f"#{rank}  {bet.ticker}  —  {bet.title}")
+    tag = "MOTHERLOAD " if bet.is_motherload else ""
+    lines.append(f"#{rank}  {tag}{bet.ticker}  —  {bet.title}")
     if bet.category:
         lines.append(f"      Category: {bet.category}")
     if bet.narrative:
@@ -128,6 +129,16 @@ def _format_bet_text(rank: int, bet: ScoredBet, stake_dollars: float) -> str:
     lines.append(
         f"        5. If it resolves {plan['other_side']}, the contracts expire "
         f"worthless (net loss ${plan['cost_dollars']:.2f})"
+    )
+    lines.append("")
+    lines.append("      Exit strategy:")
+    lines.append(
+        f"        Take profit: sell if price rises to {bet.take_profit_cents}¢ "
+        f"(locks in ~50% of max gain)"
+    )
+    lines.append(
+        f"        Cut losses:  sell if price drops to {bet.cut_loss_cents}¢ "
+        f"(limits loss to ~50% of entry cost)"
     )
     return "\n".join(lines)
 
@@ -417,7 +428,8 @@ def _format_bet_markdown(rank: int, bet: ScoredBet, stake_dollars: float) -> str
     side_emoji = "+" if bet.side == "YES" else "-"
 
     narrative = bet.narrative or ""
-    return f"""### #{rank} — {bet.title}
+    tag = "MOTHERLOAD " if bet.is_motherload else ""
+    return f"""### #{rank} — {tag}{bet.title}
 
 `{bet.ticker}`{category}
 
@@ -442,7 +454,11 @@ def _format_bet_markdown(rank: int, bet: ScoredBet, stake_dollars: float) -> str
 4. If it resolves **{bet.side}** → you receive **${plan['payout_dollars']:.2f}** (profit ${plan['profit_dollars']:.2f}, a {bet.payout_multiple:.2f}x return)
 5. If it resolves **{other_side}** → contracts expire worthless (loss ${plan['cost_dollars']:.2f})
 
-</details>"""
+</details>
+
+**Exit strategy:**
+- Take profit: sell if price rises to **{bet.take_profit_cents}¢** (locks in ~50% of max gain)
+- Cut losses: sell if price drops to **{bet.cut_loss_cents}¢** (limits loss to ~50% of entry cost)"""
 
 
 def format_recommendations_markdown(
